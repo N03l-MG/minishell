@@ -6,34 +6,11 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:21:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/06 16:08:53 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/06 17:07:31 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	build_path(char *full_path, const char *path, const char *cmd)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (path[i] != '\0')
-	{
-		full_path[i] = path[i];
-		i++;
-	}
-	full_path[i] = '/';
-	i++;
-	while (cmd[j] != '\0')
-	{
-		full_path[i] = cmd[j];
-		i++;
-		j++;
-	}
-	full_path[i] = '\0';
-}
 
 static bool	is_command_valid(const char *command)
 {

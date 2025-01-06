@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:53:33 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/06 15:56:00 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/06 17:07:57 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,6 @@ int		handle_error(t_error error, char *current_token);
 /*			Utils			*/
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strtok(char *str, const char *delim);
+void	build_path(char *full_path, const char *path, const char *cmd);
 
 #endif
