@@ -1,5 +1,5 @@
 
-####### GITIGNORE for 42 by nmonzon #######
+####### GITIGNORE for 42 #######
 
 # Objects
 *.o
@@ -11,7 +11,7 @@
 *.lib
 
 # Folders
-.vscode/
+.vs_code/
 tests/
 
 # MAC Finder
