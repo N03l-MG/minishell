@@ -3,130 +3,114 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tokensplit.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/11 08:10:37 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/06 12:33:48 by nmonzon          ###   ########.fr       */
+/*   Created: 2025/01/07 08:26:25 by jgraf             #+#    #+#             */
+/*   Updated: 2025/01/07 08:26:29 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	free_mem(char **ptr, int x)
+void	free_tokens(char **ptr, int x)
 {
 	while (x > 0)
 		free(ptr[--x]);
 	free(ptr);
 }
 
-static size_t	calcsubstrlen(const char *s, int c, int i, int totlen)
+static size_t	sublen(const char *s, int i, int totlen)
 {
 	int	len;
-	int	inquote;
-	int	indquote;
+	int	dquote;
+	int	squote;
 
 	len = 0;
-	inquote = 0;
-	indquote = 0;
-	while (i < totlen && (s[i] == c && !inquote && !indquote))
-	{
-		if (s[i] == '"' && !inquote)
-			indquote = 1 - indquote;
-		if (s[i] == '\'' && !indquote)
-			inquote = 1 - inquote;
+	dquote = 0;
+	squote = 0;
+	while (i < totlen && s[i] == ' ')
 		i ++;
-	}
-	while (i < totlen && s[i] != c)
+	while (i < totlen && (s[i] != ' ' || dquote || squote))
 	{
 		len ++;
+		if (s[i] == '"')
+			dquote = !dquote;
+		if (s[i] == '\'')
+			squote = !squote;
 		i ++;
 	}
 	return (len);
 }
 
-static size_t	spltnmb(const char *s, int c, int totlen)
+/*
+ * Because of the 25 lines limit. I really don't like doing
+ * this but you're forcing me, hope that makes you happy :D
+*/
+size_t	spltnmb(const char *s, int totlen)
 {
-	int	i;
-	int	nmb;
-	int	inquote;
-	int	indquote;
+	int	i[4];
 
-	i = 0;
-	nmb = 0;
-	inquote = 0;
-	indquote = 0;
-	while (i < totlen)
+	i[0] = 0;
+	i[1] = 0;
+	i[2] = 0;
+	i[3] = 0;
+	while (i[0] < totlen)
 	{
-		while (i < totlen && (s[i] == c && !inquote && !indquote))
+		while (i[0] < totlen && s[i[0]] == ' ')
+			i[0]++;
+		if (i[0] < totlen && s[i[0]] != ' ')
 		{
-			if (s[i] == '"' && !inquote)
-				indquote = 1 - indquote;
-			if (s[i] == '\'' && !indquote)
-				inquote = 1 - inquote;
-			i ++;
-		}
-		if (i < totlen && s[i] != c)
-		{
-			nmb ++;
-			while (i < totlen && s[i] != c)
-				i ++;
+			while (i[0] < totlen && s[i[0]] != ' ')
+			{
+				if (s[i[0]] == '"' && !i[3])
+					i[2] = !i[2];
+				if (s[i[0]] == '\'' && !i[2])
+					i[3] = !i[3];
+				i[0]++;
+			}
+			if (!i[2] && !i[3])
+				i[1]++;
 		}
 	}
-	return (nmb);
+	return (i[1]);
 }
 
-static char	**copy(char **ptr, const char *s, char c, size_t i)
+static char	**copy(t_quote *q, const char *s, char **ptr, size_t *i)
 {
-	int	x;
-	int	y;
-
-	x = 0;
-	y = 0;
-	while (i < ft_strlen(s))
+	while (*i < ft_strlen(s) && (s[*i] != ' ' || q->dquote || q->squote))
 	{
-		if (s[i] != c)
-		{
-			ptr[x] = malloc(calcsubstrlen(s, c, i, ft_strlen(s)) + 1);
-			if (ptr[x] == NULL)
-			{
-				free_mem(ptr, x);
-				return (NULL);
-			}
-			y = 0;
-			while (s[i] != c && i < ft_strlen(s))
-				ptr[x][y++] = s[i++];
-			ptr[x++][y] = 0;
-		}
-		i ++;
+		if (s[*i] == '"')
+			q->dquote = !q->dquote;
+		if (s[*i] == '\'')
+			q->squote = !q->squote;
+		ptr[q->x][q->y ++] = s[(*i)++];
 	}
-	ptr[x] = NULL;
+	ptr[q->x ++][q->y] = '\0';
 	return (ptr);
 }
 
-char	**ft_tokensplit(const	char *s, char c)
+char	**token_copy(char **ptr, const char *s, size_t i)
 {
-	char	**ptr;
-	int		i;
-	int		x;
-	int		totlen;
+	t_quote	q;
 
-	if (s == NULL)
-		return (NULL);
-	i = 0;
-	x = 0;
-	totlen = ft_strlen(s);
-	if (totlen == 0)
+	q.x = 0;
+	q.dquote = 0;
+	q.squote = 0;
+	while (i < ft_strlen(s))
 	{
-		ptr = malloc(sizeof(char *));
-		if (ptr == NULL)
-			return (NULL);
-		ptr[0] = 0;
-		return (ptr);
+		while (i < ft_strlen(s) && s[i] == ' ')
+			i ++;
+		if (i < ft_strlen(s) && s[i] != ' ')
+		{
+			ptr[q.x] = malloc(sublen(s, i, ft_strlen(s)) + 1);
+			if (ptr[q.x] == NULL)
+				return (free_tokens(ptr, q.x), NULL);
+			q.y = 0;
+			ptr = copy(&q, s, ptr, &i);
+		}
+		else
+			i ++;
 	}
-	ptr = malloc(sizeof(char *) * (spltnmb(s, c, totlen) + 1));
-	if (ptr == NULL)
-		return (NULL);
-	while (s[i] == c)
-		i ++;
-	return (copy(ptr, s, c, i));
+	ptr[q.x] = NULL;
+	return (ptr);
 }

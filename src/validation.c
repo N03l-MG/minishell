@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:21:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/06 17:07:31 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/07 15:49:42 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ static bool	is_command_valid(const char *command)
 	char	*dir;
 	char	full_path[1024];
 
-	if (command == NULL || *command == '\0')
-		return (false);
 	path_env = getenv("PATH");
 	if (path_env == NULL)
 	{
@@ -43,25 +41,6 @@ static bool	is_command_valid(const char *command)
 	return (false);
 }
 
-static int	check_valid_chars(t_token tokens)
-{
-	int		i;
-	char	*c;
-
-	i = -1;
-	while (++i < tokens.token_count)
-	{
-		c = tokens.tokens[i];
-		while (*c != '\0')
-		{
-			if (!ft_isalnum(*c) && !ft_strchr("-_/.|<>", *c))
-				return (handle_error(INVALID_INPUT, tokens.tokens[i]));
-			c++;
-		}
-	}
-	return (0);
-}
-
 static int	check_valid_pipes(t_token tokens)
 {
 	int		i;
@@ -76,7 +55,8 @@ static int	check_valid_pipes(t_token tokens)
 			if (i > 0 && ft_strcmp(tokens.tokens[i - 1], "|") == 0)
 				return (handle_error(INVALID_INPUT, tokens.tokens[i]));
 		}
-		if (ft_strcmp(tokens.tokens[i], "<") == 0 || ft_strcmp(tokens.tokens[i], ">") == 0)
+		if (ft_strcmp(tokens.tokens[i], "<") == 0
+			|| ft_strcmp(tokens.tokens[i], ">") == 0)
 		{
 			if (i == tokens.token_count - 1)
 				return (handle_error(INVALID_INPUT, tokens.tokens[i]));
@@ -93,8 +73,6 @@ int	validate_input(t_token tokens)
 
 	if (tokens.token_count == 0)
 		return (1);
-	if (check_valid_chars(tokens) > 0)
-		return (1);
 	if (check_valid_pipes(tokens) > 0)
 		return (1);
 	i = -1;
@@ -106,6 +84,24 @@ int	validate_input(t_token tokens)
 				return (handle_error(COMMAND_NOT_FOUND, tokens.tokens[i]));
 		}
 	}
-	//printf("Input validation passed.\n");
 	return (0);
 }
+
+// static int	check_valid_chars(t_token tokens)
+// {
+// 	int		i;
+// 	char	*c;
+
+// 	i = -1;
+// 	while (++i < tokens.token_count)
+// 	{
+// 		c = tokens.tokens[i];
+// 		while (*c != '\0')
+// 		{
+// 			if (!ft_isalnum(*c) && !ft_strchr("-_/.|<>", *c))
+// 				return (handle_error(INVALID_INPUT, tokens.tokens[i]));
+// 			c++;
+// 		}
+// 	}
+// 	return (0);
+// }
