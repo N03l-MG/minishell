@@ -17,6 +17,8 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/wait.h>
+# include <signal.h>
 
 /*			ENUM			*/
 
@@ -45,13 +47,13 @@ typedef struct s_quote
 	int	squote;
 }	t_quote;
 
-typedef struct s_execvars
+typedef struct s_data
 {
+	int		prev_fd;
 	int		pipe_fds[2];
-	char	*full_path;
 	char	**cmd;
-	pid_t	pid;
-}	t_execvars;
+	char	*full_path;
+}	t_data;
 
 /*			FUNCTIONS		*/
 
@@ -70,6 +72,7 @@ void	execute_input(t_token tokens);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strtok(char *str, const char *delim);
 void	build_path(char *full_path, const char *path, const char *cmd);
+char	*resolve_command_path(const char *command);
 
 /*	Error Handling		*/
 int		handle_error(t_error error, char *current_token);

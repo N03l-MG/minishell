@@ -44,13 +44,11 @@ static char	**ft_tokensplit(const char *str, int *splt_nmb)
 {
 	char	**ptr;
 	int		i;
-	int		x;
 	int		totlen;
 
 	if (str == NULL)
 		return (NULL);
 	i = 0;
-	x = 0;
 	totlen = ft_strlen(str);
 	if (totlen == 0)
 	{
