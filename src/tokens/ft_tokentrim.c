@@ -59,7 +59,6 @@ char	*ft_tokentrim(char *str)
 	if (!trimmed_s)
 		return (NULL);
 	ft_strlcpy(trimmed_s, &str[find_start(str)], l + 1);
-	free(str);
 	if (find_start(str) != 0)
 		return (trimmed_s);
 	result = ft_strtrim(trimmed_s, " ");
