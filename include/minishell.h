@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:53:33 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/07 16:33:17 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/01/09 17:09:03 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef enum e_error
 	FILE_NOT_FOUND,
 	COMMAND_NOT_FOUND,
 	INVALID_INPUT,
+	INVALID_FILE,
 	PIPE,
 	FORK,
 	EXEC,
@@ -69,13 +70,14 @@ void	free_tokens(char **ptr, int x);
 
 /*	Shell functionality	*/
 int		validate_input(t_token tokens);
+void	handle_redirections(char *input_file, char *output_file);
 void	execute_input(t_token tokens);
 
 /*	Execution functions	*/
 void	set_i(int *i, t_token *tokens);
 char	**parse_command(t_token tokens, int cmd_start, int cmd_end);
 void	setup_pipe(int *pipe_fds);
-void	handle_child(t_data *data, int is_last);
+void	handle_child(t_data *data, int is_last, char *infile, char *outfile);
 void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last);
 
 /*		Signals		*/

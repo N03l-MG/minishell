@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:39:02 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/09 16:04:26 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/09 17:00:02 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	handle_error(t_error error, char *current)
 		ft_fprintf(2, "Error: %s: Command not found.\n", current);
 	else if (error == INVALID_INPUT)
 		ft_fprintf(2, "Error: %s: Invalid input.\n", current);
+	else if (error == INVALID_FILE)
+		ft_fprintf(2, "Error: %s: No such file or directory.", current);
 	else if (error == PIPE)
 		ft_fprintf(2, "Error: Pipe failure.\n");
 	else if (error == FORK)
