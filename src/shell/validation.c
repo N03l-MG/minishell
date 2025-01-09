@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:21:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/07 15:49:42 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/09 15:49:45 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,22 +86,3 @@ int	validate_input(t_token tokens)
 	}
 	return (0);
 }
-
-// static int	check_valid_chars(t_token tokens)
-// {
-// 	int		i;
-// 	char	*c;
-
-// 	i = -1;
-// 	while (++i < tokens.token_count)
-// 	{
-// 		c = tokens.tokens[i];
-// 		while (*c != '\0')
-// 		{
-// 			if (!ft_isalnum(*c) && !ft_strchr("-_/.|<>", *c))
-// 				return (handle_error(INVALID_INPUT, tokens.tokens[i]));
-// 			c++;
-// 		}
-// 	}
-// 	return (0);
-// }

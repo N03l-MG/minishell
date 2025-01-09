@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   create_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 08:27:00 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/09 13:00:00 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/07 15:22:12 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	check_quote_valid(const char *str)
+static int	check_quote_closed(const char *str)
 {
 	int	i;
 	int	dquote;
@@ -55,12 +55,12 @@ static char	**ft_tokensplit(const char *str, int *splt_nmb)
 		ptr = malloc(sizeof(char *));
 		if (ptr == NULL)
 			return (NULL);
-		ptr[0] = 0;
+		ptr[0] = NULL;
 		return (ptr);
 	}
 	ptr = malloc(sizeof(char *) * (spltnmb(str, totlen) + 1));
 	if (ptr == NULL)
-		return (NULL); // Handle MEMORY
+		return (NULL);
 	while (str[i] == ' ')
 		i ++;
 	*splt_nmb = spltnmb(str, totlen);
@@ -74,14 +74,21 @@ t_token	create_tokens(const char *input)
 
 	i = 0;
 	tok.tokens = ft_tokensplit(input, &tok.token_count);
-	if (check_quote_valid(input) != 0)
+	tok.is_string = malloc(sizeof(bool *) * tok.token_count);
+	if (tok.is_string == NULL)
 	{
-		printf("Opened string never closed.");
-		exit(1); // Change
+		handle_error(MEMORY, "");
+		free_tokens(tok.tokens, tok.token_count);
+		exit(EXIT_FAILURE);
 	}
+	if (check_quote_closed(input) != 0)
+		handle_error(INVALID_INPUT, tok.tokens[0]);
 	while (i < tok.token_count)
 	{
-		tok.tokens[i] = ft_tokentrim(tok.tokens[i], "\"'");
+		tok.is_string[i] = false;
+		if (tok.tokens[i][0] != '\'')
+			tok.is_string[i] = true;
+		tok.tokens[i] = ft_tokentrim(tok.tokens[i]);
 		i ++;
 	}
 	return (tok);

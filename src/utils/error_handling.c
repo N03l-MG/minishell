@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:39:02 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/09 13:26:33 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/09 16:04:26 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,10 @@ void	free_allocated(t_data *data, t_token *tokens, t_error error)
 		free(data->cmd);
 		free(data->full_path);
 	}
+}
+
+void	free_check_char(char *str)
+{
+	if (str != NULL)
+		free(str);
 }

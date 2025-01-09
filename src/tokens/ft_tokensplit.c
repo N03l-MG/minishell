@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tokensplit.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 08:26:25 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/07 08:26:29 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/01/07 15:04:20 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,14 @@
 
 void	free_tokens(char **ptr, int x)
 {
-	while (x > 0)
-		free(ptr[--x]);
-	free(ptr);
+	while (x >= 0)
+	{
+		if (ptr[x] != NULL)
+			free(ptr[x]);
+		x --;
+	}
+	if (ptr != NULL)
+		free(ptr);
 }
 
 static size_t	sublen(const char *s, int i, int totlen)
@@ -104,7 +109,7 @@ char	**token_copy(char **ptr, const char *s, size_t i)
 		{
 			ptr[q.x] = malloc(sublen(s, i, ft_strlen(s)) + 1);
 			if (ptr[q.x] == NULL)
-				return (free_tokens(ptr, q.x), NULL);
+				return (free_tokens(ptr, q.x - 1), NULL);
 			q.y = 0;
 			ptr = copy(&q, s, ptr, &i);
 		}
