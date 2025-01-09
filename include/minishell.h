@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:53:33 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/07 16:23:42 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/09 13:46:54 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,11 @@ typedef enum e_error
 	FILE_NOT_FOUND,
 	COMMAND_NOT_FOUND,
 	INVALID_INPUT,
-	MEMORY
+	PIPE,
+	FORK,
+	EXEC,
+	MEMORY,
+	NOTANERROR
 }	t_error;
 
 /*			STRUCTS			*/
@@ -68,6 +72,13 @@ void	free_tokens(char **ptr, int x);
 int		validate_input(t_token tokens);
 void	execute_input(t_token tokens);
 
+/*	Execution functions	*/
+void	set_i(int *i, t_token *tokens);
+char	**parse_command(t_token tokens, int cmd_start, int cmd_end);
+void	setup_pipe(int *pipe_fds);
+void	handle_child(t_data *data, int is_last);
+void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last);
+
 /*		Utils			*/
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strtok(char *str, const char *delim);
@@ -75,6 +86,8 @@ void	build_path(char *full_path, const char *path, const char *cmd);
 char	*resolve_command_path(const char *command);
 
 /*	Error Handling		*/
-int		handle_error(t_error error, char *current_token);
+int		handle_error(t_error error, char *current);
+void	handle_mem_error(t_token *tokens);
+void	free_allocated(t_data *data, t_token *tokens, t_error error);
 
 #endif

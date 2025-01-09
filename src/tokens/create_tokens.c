@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 08:27:00 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/07 15:52:33 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/09 13:00:00 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static char	**ft_tokensplit(const char *str, int *splt_nmb)
 	}
 	ptr = malloc(sizeof(char *) * (spltnmb(str, totlen) + 1));
 	if (ptr == NULL)
-		return (NULL);
+		return (NULL); // Handle MEMORY
 	while (str[i] == ' ')
 		i ++;
 	*splt_nmb = spltnmb(str, totlen);
@@ -77,7 +77,7 @@ t_token	create_tokens(const char *input)
 	if (check_quote_valid(input) != 0)
 	{
 		printf("Opened string never closed.");
-		exit(1);
+		exit(1); // Change
 	}
 	while (i < tok.token_count)
 	{

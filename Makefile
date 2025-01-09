@@ -6,7 +6,7 @@
 #    By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/03 10:07:27 by jgraf             #+#    #+#              #
-#    Updated: 2025/01/07 15:53:26 by nmonzon          ###   ########.fr        #
+#    Updated: 2025/01/09 13:45:46 by nmonzon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,10 +30,11 @@ SOURCE = main.c \
          validation.c \
          error_handling.c \
          execution.c \
+		 execution_utils.c \
          utils.c
 
 MAIN_SRC := $(addprefix $(MAIN_SRC_DIR)/, main.c)
-FUNCTIONALITY_SRC := $(addprefix $(FUNCTIONALITY_SRC_DIR)/, error_handling.c validation.c execution.c)
+FUNCTIONALITY_SRC := $(addprefix $(FUNCTIONALITY_SRC_DIR)/, error_handling.c validation.c execution.c execution_utils.c)
 TOKENS_SRC := $(addprefix $(TOKENS_SRC_DIR)/, create_tokens.c ft_tokensplit.c ft_tokentrim.c)
 UTILS_SRC := $(addprefix $(UTILS_SRC_DIR)/, utils.c)
 
