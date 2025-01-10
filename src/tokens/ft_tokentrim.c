@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tokentrim.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:42:54 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/06 14:42:57 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/01/10 12:34:39 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ char	*ft_tokentrim(char *str)
 	if (!trimmed_s)
 		return (NULL);
 	ft_strlcpy(trimmed_s, &str[find_start(str)], l + 1);
-	free(str);
 	if (find_start(str) != 0)
-		return (trimmed_s);
+		return (free(str), trimmed_s);
+	free(str);
 	result = ft_strtrim(trimmed_s, " ");
 	free(trimmed_s);
 	return (result);

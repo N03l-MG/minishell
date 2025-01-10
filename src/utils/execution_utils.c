@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 13:33:19 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/09 17:01:30 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/10 13:45:02 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ void	handle_child(t_data *data, int is_last, char *infile, char *outfile)
 {
 	if (data->prev_fd != -1)
 	{
-		dup2(data->prev_fd, 0);
+		dup2(data->prev_fd, STDIN_FILENO);
 		close(data->prev_fd);
 	}
 	if (!is_last)
 	{
 		close(data->pipe_fds[0]);
-		dup2(data->pipe_fds[1], 1);
+		dup2(data->pipe_fds[1], STDOUT_FILENO);
 		close(data->pipe_fds[1]);
 	}
 	handle_redirections(infile, outfile);

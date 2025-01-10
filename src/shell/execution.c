@@ -6,33 +6,41 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:03:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/09 17:08:36 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/10 13:33:40 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*get_redir(t_token tokens, int *cmd_start, int *cmd_end, char *type)
+static void get_redir(t_token tokens, int *cmd_start, int *cmd_end, char **infile, char **outfile)
 {
-	char	*filename;
-	int		i;
+	int	i;
 
-	filename = NULL;
 	i = *cmd_start;
+	*infile = NULL;
+	*outfile = NULL;
 	while (i < *cmd_end)
 	{
-		if (ft_strcmp(tokens.tokens[i], ">") == 0
-			|| ft_strcmp(tokens.tokens[i], "<") == 0)
+		if (ft_strcmp(tokens.tokens[i], ">") == 0 || ft_strcmp(tokens.tokens[i], "<") == 0)
 		{
-			*type = tokens.tokens[i][0];
 			if (i + 1 < *cmd_end)
-				filename = tokens.tokens[i + 1];
-			*cmd_end -= 2;
-			break ;
+			{
+				if (ft_strcmp(tokens.tokens[i], ">") == 0)
+					*outfile = tokens.tokens[i + 1];
+				else if (ft_strcmp(tokens.tokens[i], "<") == 0)
+					*infile = tokens.tokens[i + 1];
+				for (int j = i; j + 2 < *cmd_end; j++)
+					tokens.tokens[j] = tokens.tokens[j + 2];
+				*cmd_end -= 2;
+			}
+			else
+			{
+				handle_error(INVALID_INPUT, tokens.tokens[i]);
+			}
 		}
-		i++;
+		else
+			i++;
 	}
-	return (filename);
 }
 
 void	handle_redirections(char *input_file, char *output_file)
@@ -44,13 +52,15 @@ void	handle_redirections(char *input_file, char *output_file)
 		fd = open(input_file, O_RDONLY);
 		if (fd == -1)
 			handle_error(INVALID_FILE, input_file);
-		dup2(fd, STDIN_FILENO);
+		dup2(fd, 0);
 		close(fd);
 	}
 	if (output_file)
 	{
 		fd = open(output_file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		dup2(fd, STDOUT_FILENO);
+		if (fd == -1)
+			handle_error(INVALID_FILE, output_file);
+		dup2(fd, 1);
 		close(fd);
 	}
 }
@@ -61,10 +71,8 @@ void	execute_input(t_token tokens)
 	int		i;
 	int		cmd_start;
 	pid_t	pid;
-	char	*file;
 	char	*infile;
 	char	*outfile;
-	char	redirection_type;
 
 	data.prev_fd = -1;
 	i = 0;
@@ -72,18 +80,9 @@ void	execute_input(t_token tokens)
 	{
 		cmd_start = i;
 		set_i(&i, &tokens);
-		redirection_type = '\0';
 		infile = NULL;
 		outfile = NULL;
-		if (ft_strchr(tokens.tokens[cmd_start], '>')
-			|| ft_strchr(tokens.tokens[cmd_start], '<'))
-		{
-			file = get_redir(tokens, &cmd_start, &i, &redirection_type);
-			if (redirection_type == '>')
-				outfile = file;
-			else if (redirection_type == '<')
-				infile = file;
-		}
+		get_redir(tokens, &cmd_start, &i, &infile, &outfile);
 		data.cmd = parse_command(tokens, cmd_start, i);
 		data.full_path = resolve_command_path(data.cmd[0]);
 		if (!(i == tokens.token_count))
