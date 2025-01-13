@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tokensplit.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 08:26:25 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/07 15:04:20 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/01/13 15:38:47 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_tokens(char **ptr, int x)
+void	free_tokens(t_token **ptr, int x)
 {
 	while (x >= 0)
 	{
-		if (ptr[x] != NULL)
-			free(ptr[x]);
+		if (ptr[x]->token != NULL)
+			free(ptr[x]->token);
 		x --;
 	}
 	if (ptr != NULL)

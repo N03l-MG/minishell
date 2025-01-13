@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:39:02 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/09 17:00:02 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/13 15:35:58 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,25 +22,25 @@ int	handle_error(t_error error, char *current)
 		ft_fprintf(2, "Error: %s: Invalid input.\n", current);
 	else if (error == INVALID_FILE)
 		ft_fprintf(2, "Error: %s: No such file or directory.", current);
-	else if (error == PIPE)
+	else if (error == PIPE_ERROR)
 		ft_fprintf(2, "Error: Pipe failure.\n");
-	else if (error == FORK)
+	else if (error == FORK_ERROR)
 		ft_fprintf(2, "Error: Fork failure.\n");
-	else if (error == EXEC)
+	else if (error == EXEC_ERROR)
 		ft_fprintf(2, "Error: %s: Failed to execute command.\n", current);
 	return (1);
 }
 
-void	handle_mem_error(t_token *tokens)
+void	handle_mem_error(t_input *tokens)
 {
 	ft_fprintf(2, "Fatal Error: Memory allocation failed.\n");
-	free_allocated(NULL, tokens, MEMORY);
+	free_allocated(NULL, tokens, MEMORY_ERROR);
 	exit(EXIT_FAILURE);
 }
 
-void	free_allocated(t_data *data, t_token *tokens, t_error error)
+void	free_allocated(t_data *data, t_input *tokens, t_error error)
 {
-	if (error == MEMORY)
+	if (error == MEMORY_ERROR || error == EXEC_ERROR)
 		free_tokens(tokens->tokens, tokens->token_count);
 	if (data->cmd && data->full_path)
 	{

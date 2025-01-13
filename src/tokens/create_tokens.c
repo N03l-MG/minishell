@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 08:27:00 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/07 15:22:12 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/01/13 15:59:15 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,29 +67,39 @@ static char	**ft_tokensplit(const char *str, int *splt_nmb)
 	return (token_copy(ptr, str, i));
 }
 
-t_token	create_tokens(const char *input)
+t_input	create_tokens(const char *input)
 {
-	t_token	tok;
+	t_input	tok;
 	int		i;
+	char	**split_tokens;
 
 	i = 0;
-	tok.tokens = ft_tokensplit(input, &tok.token_count);
-	tok.is_string = malloc(sizeof(bool *) * tok.token_count);
-	if (tok.is_string == NULL)
+	split_tokens = ft_tokensplit(input, &tok.token_count);
+	tok.tokens = malloc(sizeof(t_token) * tok.token_count);
+	if (tok.tokens == NULL)
 	{
-		handle_error(MEMORY, "");
-		free_tokens(tok.tokens, tok.token_count);
+		handle_error(MEMORY_ERROR, "");
 		exit(EXIT_FAILURE);
 	}
 	if (check_quote_closed(input) != 0)
-		handle_error(INVALID_INPUT, tok.tokens[0]);
+		handle_error(INVALID_INPUT, split_tokens[0]);
 	while (i < tok.token_count)
 	{
-		tok.is_string[i] = false;
-		if (tok.tokens[i][0] != '\'')
-			tok.is_string[i] = true;
-		tok.tokens[i] = ft_tokentrim(tok.tokens[i]);
-		i ++;
+		tok.tokens[i].token = ft_tokentrim(split_tokens[i]);
+		if (ft_strcmp(tok.tokens[i].token, "|") == 0)
+			tok.tokens[i].type = PIPE;
+		else if (ft_strcmp(tok.tokens[i].token, "<") == 0)
+			tok.tokens[i].type = REDIR_IN;
+		else if (ft_strcmp(tok.tokens[i].token, ">") == 0)
+			tok.tokens[i].type = REDIR_OUT;
+		else if (ft_strcmp(tok.tokens[i].token, ">>") == 0)
+			tok.tokens[i].type = REDIR_APPEND;
+		else if (ft_strcmp(tok.tokens[i].token, ";") == 0)
+			tok.tokens[i].type = SEMICOLON;
+		else
+			tok.tokens[i].type = STRING;
+		i++;
 	}
+	free(split_tokens);
 	return (tok);
 }

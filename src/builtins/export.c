@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:46:50 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/08 14:46:51 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/01/13 14:09:32 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	export_variable(char **env, char *var)
 	free(content);
 	if (var_name == NULL || var_con == NULL)
 	{
-		handle_error(MEMORY, "");
+		handle_error(MEMORY_ERROR, "");
 		free_check_char(var_name);
 		free_check_char(var_con);
 	}

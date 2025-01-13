@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 10:38:52 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/08 10:38:54 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/01/13 15:44:51 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*get_var_from_string(char *str, int *i)
 	variable = malloc(len + 1);
 	if (variable == NULL)
 	{
-		handle_error(MEMORY, "");
+		handle_error(MEMORY_ERROR, "");
 		return (NULL);
 	}
 	while (ft_isalpha(str[*i]) && str[*i] != '\0')
@@ -53,7 +53,7 @@ static void	print_env(char *str, int *i)
 		(*i)--;
 }
 
-void	buildin_echo(t_token tok, int no_nl, int start_token)
+void	buildin_echo(t_input tok, int no_nl, int start_token)
 {
 	int	i;
 	int	j;
@@ -62,12 +62,9 @@ void	buildin_echo(t_token tok, int no_nl, int start_token)
 	while (i < tok.token_count)
 	{
 		j = 0;
-		while (tok.tokens[i][j] != '\0')
+		while (tok.tokens[i].token[j] != '\0')
 		{
-			if (tok.tokens[i][j] == '$' && tok.is_string[i])
-				print_env(tok.tokens[i], &j);
-			else
-				printf("%c", tok.tokens[i][j]);
+			printf("%c", tok.tokens[i].token[j]);
 			j ++;
 		}
 		if (i < tok.token_count - 1)
