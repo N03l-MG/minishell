@@ -41,7 +41,7 @@ void	handle_mem_error(t_input *tokens)
 void	free_allocated(t_data *data, t_input *tokens, t_error error)
 {
 	if (error == MEMORY_ERROR || error == EXEC_ERROR)
-		free_tokens(tokens->tokens, tokens->token_count);
+		free_tokens(&tokens->tokens, tokens->token_count);
 	if (data->cmd && data->full_path)
 	{
 		free(data->cmd);

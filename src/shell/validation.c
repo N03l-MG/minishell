@@ -67,7 +67,32 @@ static int	check_valid_pipes(t_input tokens)
 	return (0);
 }
 
-int	validate_input(t_input tokens)
+static int	check_for_builtin(t_input tokens)
+{
+	int	i;
+
+	i = -1;
+	while (++i < tokens.token_count)
+	{
+		if (ft_strcmp(tokens.tokens[i].token, "exit") == 0)
+			return (1);
+		else if (ft_strcmp(tokens.tokens[i].token, "cd") == 0)
+			return (1);
+		else if (ft_strcmp(tokens.tokens[i].token, "echo") == 0)
+			return (1);
+		else if (ft_strcmp(tokens.tokens[i].token, "pwd") == 0)
+			return (1);
+		else if (ft_strcmp(tokens.tokens[i].token, "env") == 0)
+			return (1);
+		else if (ft_strcmp(tokens.tokens[i].token, "export") == 0)
+			return (1);
+		else if (ft_strcmp(tokens.tokens[i].token, "unset") == 0)
+			return (1);
+	}
+	return (0);
+}
+
+int	validate_input(t_input tokens, char **env)
 {
 	int	i;
 
@@ -75,6 +100,11 @@ int	validate_input(t_input tokens)
 		return (1);
 	if (check_valid_pipes(tokens) > 0)
 		return (1);
+	if (check_for_builtin(tokens))
+	{
+		execute_buildin(tokens, env);
+		return (1);
+	}
 	i = -1;
 	while (++i < tokens.token_count)
 	{

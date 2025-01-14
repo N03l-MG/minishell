@@ -15,7 +15,7 @@
 int	execute_buildin(t_input tokens, char **env)
 {
 	if (ft_strcmp(tokens.tokens[0].token, "exit") == 0)
-		return (-1);
+		exit(EXIT_SUCCESS);
 	if (ft_strcmp(tokens.tokens[0].token, "cd") == 0)
 	{
 		if (tokens.token_count >= 2)

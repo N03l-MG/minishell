@@ -39,19 +39,19 @@ char	*get_var_from_string(char *str, int *i)
 	return (variable);
 }
 
-static void	print_env(char *str, int *i)
-{
-	char	*variable;
+// static void	print_env(char *str, int *i)
+// {
+// 	char	*variable;
 
-	variable = get_var_from_string(str, i);
-	if (getenv(variable) != NULL)
-	{
-		printf("%s", getenv(variable));
-		free(variable);
-	}
-	else
-		(*i)--;
-}
+// 	variable = get_var_from_string(str, i);
+// 	if (getenv(variable) != NULL)
+// 	{
+// 		printf("%s", getenv(variable));
+// 		free(variable);
+// 	}
+// 	else
+// 		(*i)--;
+// }
 
 void	buildin_echo(t_input tok, int no_nl, int start_token)
 {

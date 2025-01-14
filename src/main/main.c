@@ -37,7 +37,7 @@ int	main(int ac, char **av, char **env)
 			}
 			tokens = create_tokens(prompt);
 			add_history(prompt);
-			if (validate_input(tokens) == 0)
+			if (validate_input(tokens, env) == 0)
 				execute_input(tokens, env);
 			free(prompt);
 			free_tokens(&tokens.tokens, tokens.token_count - 1);

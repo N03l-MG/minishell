@@ -19,6 +19,7 @@
 /*			FUNCTION PROTOTYPES		*/
 
 /*		Token management		*/
+//t_input	create_tokens(const char *input);
 t_input	create_tokens(const char *input);
 char	**token_copy(char **ptr, const char *s, size_t i);
 size_t	spltnmb(const char *s, int totlen);
@@ -26,7 +27,7 @@ char	*ft_tokentrim(char *str);
 void	free_tokens(t_token **ptr, int x);
 
 /*	Shell functionality	*/
-int		validate_input(t_input tokens);
+int		validate_input(t_input tokens, char **env);
 void	handle_redirections(char *input_file, char *output_file);
 void	execute_input(t_input tokens, char **env);
 

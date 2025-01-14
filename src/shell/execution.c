@@ -12,16 +12,6 @@
 
 #include "minishell.h"
 
-static bool	check_for_builtin(t_input tokens, char **env)
-{
-	if (execute_buildin(tokens, env) == -1)
-	{
-		free_allocated(NULL, &tokens, EXEC_ERROR);
-		return (false);
-	}
-	return (true);
-}
-
 static void get_redir(t_input tokens, int *cmd_start, int *cmd_end, char **infile, char **outfile)
 {
 	int	i;
@@ -81,8 +71,6 @@ void	execute_input(t_input tokens, char **env)
 	pid_t	pid;
 	t_file	files;
 
-	if (check_for_builtin(tokens, env))
-		return ;
 	i = 0;
 	data.prev_fd = -1;
 	while (i < tokens.token_count)
