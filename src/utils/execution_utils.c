@@ -20,28 +20,70 @@ void	set_i(int *i, t_input *tokens)
 
 char	**parse_command(t_input tokens, int cmd_start, int cmd_end)
 {
-	char	**cmd;
-	int		j;
-	int		size;
+	char    **cmd;
+	int     j;
+	int     valid_tokens;
 
-	size = cmd_end - cmd_start + 1;
-	cmd = malloc(size * sizeof(char *));
-	if (!cmd)
-		handle_mem_error(&tokens);
-	j = 0;
-	while (j < cmd_end - cmd_start)
+	valid_tokens = 0;
+	for (int i = cmd_start; i < cmd_end; i++)
 	{
-		cmd[j] = tokens.tokens[cmd_start + j].token;
-		j++;
+		if (tokens.tokens[i].type == REDIR_IN || 
+			tokens.tokens[i].type == REDIR_OUT ||
+			tokens.tokens[i].type == REDIR_APPEND)
+		{
+			i++;
+			continue ;
+		}
+		if (tokens.tokens[i].type == STRING)
+			valid_tokens++;
+	}
+	if (valid_tokens == 0)
+		return NULL;
+	cmd = malloc((valid_tokens + 1) * sizeof(char *));
+	if (!cmd)
+		return NULL;
+	j = 0;
+	for (int i = cmd_start; i < cmd_end && j < valid_tokens; i++)
+	{
+		if (tokens.tokens[i].type == REDIR_IN || 
+			tokens.tokens[i].type == REDIR_OUT ||
+			tokens.tokens[i].type == REDIR_APPEND)
+		{
+			i++;
+			continue ;
+		}
+		if (tokens.tokens[i].type == STRING)
+		{
+			cmd[j] = ft_strdup(tokens.tokens[i].token);
+			if (!cmd[j])
+			{
+				while (--j >= 0)
+					free(cmd[j]);
+				free(cmd);
+				return NULL;
+			}
+			j++;
+		}
 	}
 	cmd[j] = NULL;
-	return (cmd);
+	return cmd;
 }
 
 void	setup_pipe(int *pipe_fds)
 {
 	if (pipe(pipe_fds) == -1)
 		handle_error(PIPE_ERROR, NULL);
+}
+
+static bool	is_builtin(const char *cmd)
+{
+	return (ft_strcmp(cmd, "echo") == 0 ||
+			ft_strcmp(cmd, "cd") == 0 ||
+			ft_strcmp(cmd, "pwd") == 0 ||
+			ft_strcmp(cmd, "export") == 0 ||
+			ft_strcmp(cmd, "unset") == 0 ||
+			ft_strcmp(cmd, "env") == 0 ||
+			ft_strcmp(cmd, "exit") == 0);
 }
 
 void	handle_child(t_data *data, int is_last, t_file *files, char **env)
@@ -57,9 +99,17 @@ void	handle_child(t_data *data, int is_last, t_file *files, char **env)
 		dup2(data->pipe_fds[1], STDOUT_FILENO);
 		close(data->pipe_fds[1]);
 	}
-	handle_redirections(files->infile, files->outfile);
-	if (execve(data->full_path, data->cmd, env) == -1)
-		handle_error(EXEC_ERROR, data->cmd[0]);
+	handle_redir(files->infile, files->outfile, files->out_type);
+	if (is_builtin(data->cmd[0]))
+	{
+		execute_builtin_piped(data->cmd, env);
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		if (execve(data->full_path, data->cmd, env) == -1)
+			handle_error(EXEC_ERROR, data->cmd[0]);
+	}
 }
 
 void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last)

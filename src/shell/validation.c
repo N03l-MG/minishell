@@ -92,27 +92,62 @@ static int	check_for_builtin(t_input tokens)
 	return (0);
 }
 
-int	validate_input(t_input tokens, char **env)
+static int	validate_command(t_input tokens, int start, int end)
 {
-	int	i;
+	while (start < end)
+	{
+		if (tokens.tokens[start].type == REDIR_IN || 
+			tokens.tokens[start].type == REDIR_OUT ||
+			tokens.tokens[start].type == REDIR_APPEND)
+		{
+			start += 2;
+			continue ;
+		}
+		if (tokens.tokens[start].type == STRING)
+		{
+			if (!is_command_valid(tokens.tokens[start].token))
+				return (handle_error(COMMAND_NOT_FOUND, tokens.tokens[start].token));
+			return (0);
+		}
+		start++;
+	}
+	return (1);
+}
+
+static bool has_pipe(t_input tokens)
+{
+	for (int i = 0; i < tokens.token_count; i++)
+	{
+		if (tokens.tokens[i].type == PIPE)
+			return true;
+	}
+	return false;
+}
+
+int validate_input(t_input tokens, char **env)
+{
+	int i;
+	int cmd_start;
 
 	if (tokens.token_count == 0)
 		return (1);
 	if (check_valid_pipes(tokens) > 0)
 		return (1);
-	if (check_for_builtin(tokens))
+	if (check_for_builtin(tokens) && !has_pipe(tokens))
 	{
-		execute_buildin(tokens, env);
+		execute_builtin(tokens, env);
 		return (1);
 	}
-	i = -1;
-	while (++i < tokens.token_count)
+	i = 0;
+	while (i < tokens.token_count)
 	{
-		if (i == 0 || (ft_strcmp(tokens.tokens[i - 1].token, "|") == 0))
-		{
-			if (!is_command_valid(tokens.tokens[i].token))
-				return (handle_error(COMMAND_NOT_FOUND, tokens.tokens[i].token));
-		}
+		cmd_start = i;
+		while (i < tokens.token_count && tokens.tokens[i].type != PIPE)
+			i++;
+		if (validate_command(tokens, cmd_start, i) != 0)
+			return (1);
+		if (i < tokens.token_count && tokens.tokens[i].type == PIPE)
+			i++;
 	}
 	return (0);
 }

@@ -47,7 +47,6 @@ static int count_tokens(const char *input)
 		}
 		else if (!in_quotes && is_special_char(input[i]))
 		{
-			// Handle '>>' as single token
 			if (input[i] == '>' && input[i + 1] == '>')
 				i++;
 			count++;

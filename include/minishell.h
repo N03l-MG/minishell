@@ -28,7 +28,7 @@ void	free_tokens(t_token **ptr, int x);
 
 /*	Shell functionality	*/
 int		validate_input(t_input tokens, char **env);
-void	handle_redirections(char *input_file, char *output_file);
+void	handle_redir(char *input_file, char *output_file, t_token_type out_type);
 void	execute_input(t_input tokens, char **env);
 
 /*	Execution functions	*/
@@ -49,7 +49,8 @@ char	*resolve_command_path(const char *command);
 void	free_check_char(char *str);
 
 /*		Builtins		*/
-int		execute_buildin(t_input tokens, char **env);
+int		execute_builtin(t_input tokens, char **env);
+void	execute_builtin_piped(char **cmd, char **env);
 void	change_directory(char *pth);
 void	buildin_echo(t_input tok, int no_nl, int start_token);
 void	print_working_dir(void);

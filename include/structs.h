@@ -73,8 +73,9 @@ typedef struct s_data
 
 typedef struct s_file
 {
-	char	*infile;
-	char	*outfile;
+	char			*infile;
+	char			*outfile;
+	t_token_type	out_type;
 }	t_file;
 
 #endif
