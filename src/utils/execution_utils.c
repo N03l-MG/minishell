@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 13:33:19 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/13 15:50:07 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 13:28:36 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,45 @@
 
 void	set_i(int *i, t_input *tokens)
 {
-	while (*i < tokens->token_count && ft_strcmp(tokens->tokens[*i].token, "|") != 0)
+	while (*i < tokens->token_count
+		&& ft_strcmp(tokens->tokens[*i].token, "|") != 0)
 		(*i)++;
 }
 
 char	**parse_command(t_input tokens, int cmd_start, int cmd_end)
 {
-	char    **cmd;
-	int     j;
-	int     valid_tokens;
+	char	**cmd;
+	int		i;
+	int		j;
+	int		valid_tokens;
 
 	valid_tokens = 0;
-	for (int i = cmd_start; i < cmd_end; i++)
+	i = cmd_start;
+	while (i < cmd_end)
 	{
-		if (tokens.tokens[i].type == REDIR_IN || 
-			tokens.tokens[i].type == REDIR_OUT ||
-			tokens.tokens[i].type == REDIR_APPEND)
+		if (tokens.tokens[i].type == REDIR_IN
+			|| tokens.tokens[i].type == REDIR_OUT
+			|| tokens.tokens[i].type == REDIR_APPEND)
 		{
 			i++;
 			continue ;
 		}
 		if (tokens.tokens[i].type == STRING)
 			valid_tokens++;
+		i++;
 	}
 	if (valid_tokens == 0)
-		return NULL;
+		return (NULL);
 	cmd = malloc((valid_tokens + 1) * sizeof(char *));
 	if (!cmd)
-		return NULL;
+		return (NULL);
 	j = 0;
-	for (int i = cmd_start; i < cmd_end && j < valid_tokens; i++)
+	i = cmd_start;
+	while (i < cmd_end && j < valid_tokens)
 	{
-		if (tokens.tokens[i].type == REDIR_IN || 
-			tokens.tokens[i].type == REDIR_OUT ||
-			tokens.tokens[i].type == REDIR_APPEND)
+		if (tokens.tokens[i].type == REDIR_IN
+			|| tokens.tokens[i].type == REDIR_OUT
+			|| tokens.tokens[i].type == REDIR_APPEND)
 		{
 			i++;
 			continue ;
@@ -60,30 +65,20 @@ char	**parse_command(t_input tokens, int cmd_start, int cmd_end)
 				while (--j >= 0)
 					free(cmd[j]);
 				free(cmd);
-				return NULL;
+				return (NULL);
 			}
 			j++;
 		}
+		i++;
 	}
 	cmd[j] = NULL;
-	return cmd;
+	return (cmd);
 }
 
 void	setup_pipe(int *pipe_fds)
 {
 	if (pipe(pipe_fds) == -1)
 		handle_error(PIPE_ERROR, NULL);
-}
-
-static bool	is_builtin(const char *cmd)
-{
-	return (ft_strcmp(cmd, "echo") == 0 ||
-			ft_strcmp(cmd, "cd") == 0 ||
-			ft_strcmp(cmd, "pwd") == 0 ||
-			ft_strcmp(cmd, "export") == 0 ||
-			ft_strcmp(cmd, "unset") == 0 ||
-			ft_strcmp(cmd, "env") == 0 ||
-			ft_strcmp(cmd, "exit") == 0);
 }
 
 void	handle_child(t_data *data, int is_last, t_file *files, char **env)

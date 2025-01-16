@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:21:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/13 15:41:33 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 13:30:29 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,9 @@ static int	validate_command(t_input tokens, int start, int end)
 {
 	while (start < end)
 	{
-		if (tokens.tokens[start].type == REDIR_IN || 
-			tokens.tokens[start].type == REDIR_OUT ||
-			tokens.tokens[start].type == REDIR_APPEND)
+		if (tokens.tokens[start].type == REDIR_IN
+			|| tokens.tokens[start].type == REDIR_OUT
+			|| tokens.tokens[start].type == REDIR_APPEND)
 		{
 			start += 2;
 			continue ;
@@ -106,7 +106,8 @@ static int	validate_command(t_input tokens, int start, int end)
 		if (tokens.tokens[start].type == STRING)
 		{
 			if (!is_command_valid(tokens.tokens[start].token))
-				return (handle_error(COMMAND_NOT_FOUND, tokens.tokens[start].token));
+				return (handle_error(COMMAND_NOT_FOUND,
+						tokens.tokens[start].token));
 			return (0);
 		}
 		start++;
@@ -114,20 +115,24 @@ static int	validate_command(t_input tokens, int start, int end)
 	return (1);
 }
 
-static bool has_pipe(t_input tokens)
+static bool	has_pipe(t_input tokens)
 {
-	for (int i = 0; i < tokens.token_count; i++)
+	int	i;
+
+	i = 0;
+	while (i < tokens.token_count)
 	{
 		if (tokens.tokens[i].type == PIPE)
-			return true;
+			return (true);
+		i++;
 	}
-	return false;
+	return (false);
 }
 
-int validate_input(t_input tokens, char **env)
+int	validate_input(t_input tokens, char **env)
 {
-	int i;
-	int cmd_start;
+	int	i;
+	int	cmd_start;
 
 	if (tokens.token_count == 0)
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:44:32 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/13 15:56:08 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 13:19:18 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,5 @@ int	main(int ac, char **av, char **env)
 			free_tokens(&tokens.tokens, tokens.token_count - 1);
 		}
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }

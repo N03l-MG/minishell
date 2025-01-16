@@ -6,11 +6,31 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:39:02 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/13 15:35:58 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 13:41:27 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_tokens(t_token **tokens, int count)
+{
+	int	i;
+
+	if (!tokens || !*tokens)
+		return ;
+	i = 0;
+	while (i <= count)
+	{
+		if ((*tokens)[i].token)
+		{
+			free((*tokens)[i].token);
+			(*tokens)[i].token = NULL;
+		}
+		i++;
+	}
+	free(*tokens);
+	*tokens = NULL;
+}
 
 int	handle_error(t_error error, char *current)
 {

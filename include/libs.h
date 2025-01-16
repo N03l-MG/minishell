@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 13:44:07 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/13 13:51:09 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 13:19:26 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,5 @@
 # ifdef __linux__
 #  include <wait.h>
 # endif
-
-# define FAILURE 1
-# define SUCCESS 0
 
 #endif

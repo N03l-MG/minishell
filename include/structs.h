@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 13:52:14 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/13 15:25:07 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 13:13:55 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /*			ENUM			*/
 
-typedef enum e_token_type
+typedef enum e_ttype
 {
 	STRING,
 	PIPE,
@@ -24,7 +24,7 @@ typedef enum e_token_type
 	REDIR_APPEND,
 	SEMICOLON,
 	END
-}	t_token_type;
+}	t_ttype;
 
 typedef enum e_error
 {
@@ -44,9 +44,9 @@ typedef enum e_error
 
 typedef struct s_token
 {
-	t_token_type	type;
-	bool			is_string;
-	char			*token;
+	t_ttype	type;
+	bool	is_string;
+	char	*token;
 }	t_token;
 
 typedef struct s_input
@@ -73,9 +73,9 @@ typedef struct s_data
 
 typedef struct s_file
 {
-	char			*infile;
-	char			*outfile;
-	t_token_type	out_type;
+	char	*infile;
+	char	*outfile;
+	t_ttype	out_type;
 }	t_file;
 
 #endif

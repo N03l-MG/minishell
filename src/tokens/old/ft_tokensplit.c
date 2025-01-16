@@ -6,31 +6,11 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 08:26:25 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/13 15:38:47 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 13:41:11 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_tokens(t_token **tokens, int count)
-{
-	int	i;
-
-	if (!tokens || !*tokens)
-		return ;
-	i = 0;
-	while (i <= count)
-	{
-		if ((*tokens)[i].token)
-		{
-			free((*tokens)[i].token);
-			(*tokens)[i].token = NULL;
-		}
-		i++;
-	}
-	free(*tokens);
-	*tokens = NULL;
-}
 
 static size_t	sublen(const char *s, int i, int totlen)
 {
@@ -116,8 +96,8 @@ char	**token_copy(char **ptr, const char *s, size_t i)
 		if (i < ft_strlen(s) && s[i] != ' ')
 		{
 			ptr[q.x] = malloc(sublen(s, i, ft_strlen(s)) + 1);
-			// if (ptr[q.x] == NULL)
-			// 	return (free_tokens(ptr, q.x - 1), NULL);
+			if (ptr[q.x] == NULL)
+				return (free_tokens(ptr, q.x - 1), NULL);
 			q.y = 0;
 			ptr = copy(&q, s, ptr, &i);
 		}

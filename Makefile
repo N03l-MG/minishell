@@ -6,7 +6,7 @@
 #    By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/03 10:07:27 by jgraf             #+#    #+#              #
-#    Updated: 2025/01/10 13:43:53 by nmonzon          ###   ########.fr        #
+#    Updated: 2025/01/16 13:39:13 by nmonzon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ BUILTIN_SRC_DIR = src/builtins
 
 MAIN_SRC := $(addprefix $(MAIN_SRC_DIR)/, main.c)
 SHELL_SRC := $(addprefix $(SHELL_SRC_DIR)/, validation.c execution.c)
-TOKENS_SRC := $(addprefix $(TOKENS_SRC_DIR)/, token_lexer.c create_tokens.c ft_tokensplit.c ft_tokentrim.c)
+TOKENS_SRC := $(addprefix $(TOKENS_SRC_DIR)/, token_lexer.c) # create_tokens.c ft_tokensplit.c ft_tokentrim.c
 UTILS_SRC := $(addprefix $(UTILS_SRC_DIR)/, utils.c execution_utils.c error_handling.c)
 SIGNAL_SRC := $(addprefix $(SIGNAL_SRC_DIR)/, signal_handler.c)
 BUILTIN_SRC := $(addprefix $(BUILTIN_SRC_DIR)/, cd.c env.c export.c unset.c echo.c execute_buildin.c pwd.c)

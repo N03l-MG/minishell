@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 14:24:45 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/13 15:21:55 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 13:37:05 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ int	execute_builtin(t_input tokens, char **env)
 }
 
 // Example of modified builtin function
-void print_working_dir_piped(void)
+void	print_working_dir_piped(void)
 {
-	char cwd[1024];
+	char	cwd[1024];
 
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		printf("%s\n", cwd);
@@ -50,11 +50,14 @@ void print_working_dir_piped(void)
 		handle_error(EXEC_ERROR, "pwd");
 }
 
-void builtin_echo_piped(char **cmd, int no_nl)
+void	builtin_echo_piped(char **cmd, int no_nl)
 {
-	int i;
+	int	i;
 
-	i = no_nl ? 2 : 1;
+	if (no_nl)
+		i = 2;
+	else
+		i = 1;
 	while (cmd[i])
 	{
 		printf("%s", cmd[i]);
@@ -66,9 +69,9 @@ void builtin_echo_piped(char **cmd, int no_nl)
 		printf("\n");
 }
 
-void print_envs_piped(char **env)
+void	print_envs_piped(char **env)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (env[i])
@@ -78,6 +81,7 @@ void print_envs_piped(char **env)
 	}
 }
 
+// Add other builtins that can output to pipes
 void	execute_builtin_piped(char **cmd, char **env)
 {
 	if (ft_strcmp(cmd[0], "echo") == 0)
@@ -91,5 +95,4 @@ void	execute_builtin_piped(char **cmd, char **env)
 		print_working_dir_piped();
 	else if (ft_strcmp(cmd[0], "env") == 0)
 		print_envs_piped(env);
-	// Add other builtins that can output to pipes
 }

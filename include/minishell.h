@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:53:33 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/13 16:02:22 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 13:27:28 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	free_tokens(t_token **ptr, int x);
 
 /*	Shell functionality	*/
 int		validate_input(t_input tokens, char **env);
-void	handle_redir(char *input_file, char *output_file, t_token_type out_type);
+void	handle_redir(char *input_file, char *output_file, t_ttype out_type);
 void	execute_input(t_input tokens, char **env);
 
 /*	Execution functions	*/
@@ -47,6 +47,7 @@ char	*ft_strtok(char *str, const char *delim);
 void	build_path(char *full_path, const char *path, const char *cmd);
 char	*resolve_command_path(const char *command);
 void	free_check_char(char *str);
+bool	is_builtin(const char *cmd);
 
 /*		Builtins		*/
 int		execute_builtin(t_input tokens, char **env);

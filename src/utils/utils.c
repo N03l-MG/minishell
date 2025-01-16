@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:53:58 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/06 17:07:44 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 13:27:13 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,15 @@ char	*resolve_command_path(const char *command)
 	}
 	free(path);
 	return (NULL);
+}
+
+bool	is_builtin(const char *cmd)
+{
+	return (ft_strcmp(cmd, "echo") == 0
+		|| ft_strcmp(cmd, "cd") == 0
+		|| ft_strcmp(cmd, "pwd") == 0
+		|| ft_strcmp(cmd, "export") == 0
+		|| ft_strcmp(cmd, "unset") == 0
+		|| ft_strcmp(cmd, "env") == 0
+		|| ft_strcmp(cmd, "exit") == 0);
 }

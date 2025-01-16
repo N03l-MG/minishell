@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_lexer.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/16 13:14:17 by nmonzon           #+#    #+#             */
+/*   Updated: 2025/01/16 13:16:40 by nmonzon          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static bool is_special_char(char c)
+static bool	is_special_char(char c)
 {
 	return (c == '|' || c == '<' || c == '>' || c == ';' || c == ' ');
 }
 
-static t_token_type get_token_type(const char *str)
+static t_ttype	get_token_type(const char *str)
 {
 	if (!str || !*str)
 		return (END);
@@ -22,7 +34,7 @@ static t_token_type get_token_type(const char *str)
 	return (STRING);
 }
 
-static int count_tokens(const char *input)
+static int	count_tokens(const char *input)
 {
 	int count = 0;
 	int i = 0;
@@ -34,7 +46,7 @@ static int count_tokens(const char *input)
 		while (input[i] == ' ' && !in_quotes)
 			i++;
 		if (!input[i])
-			break;
+			break ;
 		if ((input[i] == '"' || input[i] == '\'') && !in_quotes)
 		{
 			in_quotes = true;
@@ -54,8 +66,8 @@ static int count_tokens(const char *input)
 		}
 		else
 		{
-			while (input[i] && ((in_quotes && input[i] != quote_char) || 
-				(!in_quotes && !is_special_char(input[i]))))
+			while (input[i] && ((in_quotes && input[i] != quote_char)
+					|| (!in_quotes && !is_special_char(input[i]))))
 				i++;
 			count++;
 		}
@@ -63,7 +75,7 @@ static int count_tokens(const char *input)
 	return (count);
 }
 
-static char *extract_token(const char *input, int *i)
+static char	*extract_token(const char *input, int *i)
 {
 	int start = *i;
 	int len = 0;
@@ -92,7 +104,7 @@ static char *extract_token(const char *input, int *i)
 		else if (in_quotes && input[*i] == quote_char)
 			in_quotes = false;
 		else if (!in_quotes && is_special_char(input[*i]))
-			break;
+			break ;
 		len++;
 		(*i)++;
 	}
@@ -103,7 +115,7 @@ static char *extract_token(const char *input, int *i)
 	return (result);
 }
 
-t_input create_tokens(const char *input)
+t_input	create_tokens(const char *input)
 {
 	t_input tok;
 	int i = 0;
@@ -129,7 +141,7 @@ t_input create_tokens(const char *input)
 		while (input[i] == ' ')
 			i++;
 		if (!input[i])
-			break;
+			break ;
 
 		tok.tokens[token_index].token = extract_token(input, &i);
 		tok.tokens[token_index].type = get_token_type(tok.tokens[token_index].token);
