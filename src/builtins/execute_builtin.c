@@ -38,7 +38,7 @@ static int	execute_exe(char *path, char **op, char **env)
 	return (1);
 }
 
-int	execute_builtin(t_input tokens, char **env)
+int	execute_builtin(t_input tokens)
 {
 	if (ft_strcmp(tokens.tokens[0].token, "exit") == 0)
 		exit(EXIT_SUCCESS);
@@ -59,11 +59,11 @@ int	execute_builtin(t_input tokens, char **env)
 	else if (ft_strcmp(tokens.tokens[0].token, "pwd") == 0)
 		print_working_dir();
 	else if (ft_strcmp(tokens.tokens[0].token, "env") == 0)
-		print_envs(env);
+		print_envs(tokens.env);
 	else if (ft_strcmp(tokens.tokens[0].token, "export") == 0)
-		export_variable(env, tokens.tokens[1].token, tokens);
+		export_variable(tokens.tokens[1].token, tokens);
 	else if (ft_strncmp(tokens.tokens[0].token, "./", 2) == 0)
-		execute_exe(tokens.tokens[0].token, &tokens.tokens->token, env);
+		execute_exe(tokens.tokens[0].token, &tokens.tokens->token, tokens.env);
 	return (1);
 }
 

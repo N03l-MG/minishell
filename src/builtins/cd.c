@@ -24,6 +24,6 @@ void	change_dir(t_input *tok, char *path)
 	{
 		chdir(path);
 		if (getcwd(pwd, sizeof(pwd)) != NULL)
-			tok->env = export_variable_sep(tok->env, "PWD", pwd, *tok);
+			export_variable_sep("PWD", pwd, *tok);
 	}
 }

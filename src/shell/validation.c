@@ -129,7 +129,7 @@ static bool	has_pipe(t_input tokens)
 	return (false);
 }
 
-int	validate_input(t_input tokens, char **env)
+int	validate_input(t_input tokens)
 {
 	int	i;
 	int	cmd_start;
@@ -140,7 +140,7 @@ int	validate_input(t_input tokens, char **env)
 		return (1);
 	if (check_for_builtin(tokens) && !has_pipe(tokens))
 	{
-		execute_builtin(tokens, env);
+		execute_builtin(tokens);
 		return (1);
 	}
 	i = 0;

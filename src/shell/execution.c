@@ -71,7 +71,6 @@ void	handle_redir(char *input_file, char *output_file, t_ttype out_type)
 			flags |= O_APPEND;
 		else
 			flags |= O_TRUNC;
-
 		fd = open(output_file, flags, 0644);
 		if (fd == -1)
 			handle_error(INVALID_FILE, output_file);
@@ -80,7 +79,7 @@ void	handle_redir(char *input_file, char *output_file, t_ttype out_type)
 	}
 }
 
-void	execute_input(t_input tokens, char **env)
+void	execute_input(t_input tokens)
 {
 	t_data	data;
 	int		i;
@@ -114,7 +113,7 @@ void	execute_input(t_input tokens, char **env)
 		if (pid == -1)
 			handle_error(FORK_ERROR, NULL);
 		else if (pid == 0)
-			handle_child(&data, (i == tokens.token_count), &files, env);
+			handle_child(&data, (i == tokens.token_count), &files, tokens.env);
 		else
 			handle_parent(&data, &data.prev_fd, pid, (i == tokens.token_count));
 		if (data.cmd)

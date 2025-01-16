@@ -91,9 +91,7 @@ char	*replace_env(t_input token, char *tok)
 {
 	char	*new_tok;
 	int		i;
-	int		len;
 
-	len = 0;
 	new_tok = malloc(1);
 	if (new_tok == NULL)
 		handle_mem_error(&token);

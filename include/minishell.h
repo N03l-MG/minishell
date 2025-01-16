@@ -27,12 +27,12 @@ t_input	create_tokens(const char *input);
 void	free_tokens(t_token **ptr, int x);
 
 /*	Shell functionality	*/
-int		validate_input(t_input tokens, char **env);
+int		validate_input(t_input tokens);
 void	handle_redir(char *input_file, char *output_file, t_ttype out_type);
-void	execute_input(t_input tokens, char **env);
+void	execute_input(t_input tokens);
 char	**init_env(char **environ);
-char	**add_envvar(t_input tok, char **environ, char *name, char *con);
-char	**replace_envvar(t_input tok, char **env, char *name, char *con);
+char	**add_envvar(t_input tok, char *name, char *con);
+char	**replace_envvar(t_input tok, char *name, char *con);
 char	*my_getenv(char **env, char *name);
 
 /*	Execution functions	*/
@@ -54,14 +54,14 @@ void	free_check_char(char *str);
 bool	is_builtin(const char *cmd);
 
 /*		Builtins		*/
-int		execute_builtin(t_input tokens, char **env);
+int		execute_builtin(t_input tokens);
 void	execute_builtin_piped(char **cmd, char **env);
 void	change_dir(t_input *tok, char *path);
 void	buildin_echo(t_input tok, int no_nl, int start_token);
 void	print_working_dir(void);
 void	print_envs(char **env);
-char	**export_variable(char **env, char *var, t_input tok);
-char	**export_variable_sep(char **env, char *var, char *con, t_input tok);
+void	export_variable(char *var, t_input tok);
+void	export_variable_sep(char *var, char *con, t_input tok);
 char	**unset_variable(char **env, char *var, t_input tok);
 
 /*	Error Handling		*/

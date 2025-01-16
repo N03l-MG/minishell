@@ -60,18 +60,18 @@ static char	*replace_and_add_new(char *repl, char *name, char *con, char *env)
 	return (repl);
 }
 
-char	**add_envvar(t_input tok, char **environ, char *name, char *con)
+char	**add_envvar(t_input tok, char *name, char *con)
 {
 	char	**env;
 	int		i;
 
-	env = malloc(sizeof(char *) * (get_entry_number(environ) + 2));
+	env = malloc(sizeof(char *) * (get_entry_number(tok.env) + 2));
 	if (env == NULL)
 		handle_mem_error(&tok);
 	i = 0;
-	while (environ[i] != NULL)
+	while (tok.env[i] != NULL)
 	{
-		env[i] = ft_strdup(environ[i]);
+		env[i] = ft_strdup(tok.env[i]);
 		i ++;
 	}
 	env[i] = malloc(ft_strlen(name) + ft_strlen(con) + 2);
@@ -82,24 +82,24 @@ char	**add_envvar(t_input tok, char **environ, char *name, char *con)
 	}
 	create_and_add_new(env[i], name, con);
 	env[i + 1] = NULL;
-	free_env(environ);
+	free_env(tok.env);
 	return (env);
 }
 
-char	**replace_envvar(t_input tok, char **env, char *name, char *con)
+char	**replace_envvar(t_input tok, char *name, char *con)
 {
 	int		i;
 	char	*replacement;
 
 	i = 0;
-	while (ft_strncmp(env[i], name, ft_strlen(name)) != 0
-		&& env[i] != NULL)
+	while (ft_strncmp(tok.env[i], name, ft_strlen(name)) != 0
+		&& tok.env[i] != NULL)
 		i ++;
-	if (env[i] == NULL)
-		return (add_envvar(tok, env, name, con));
+	if (tok.env[i] == NULL)
+		return (add_envvar(tok, name, con));
 	replacement = malloc(ft_strlen(name) + ft_strlen(con) + 2);
 	if (replacement == NULL)
 		handle_mem_error(&tok);
-	env[i] = replace_and_add_new(replacement, name, con, env[i]);
-	return (env);
+	tok.env[i] = replace_and_add_new(replacement, name, con, tok.env[i]);
+	return (tok.env);
 }

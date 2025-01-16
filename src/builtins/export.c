@@ -78,7 +78,7 @@ static char	*get_var_con(char *str)
 	return (var);
 }
 
-char	**export_variable(char **env, char *var, t_input tok)
+void	export_variable(char *var, t_input tok)
 {
 	char	*var_name;
 	char	*var_con;
@@ -95,13 +95,15 @@ char	**export_variable(char **env, char *var, t_input tok)
 		handle_mem_error(&tok);
 	}
 	if (my_getenv(tok.env, var_name) == NULL)
-		env = add_envvar(tok, env, var_name, var_con);
+		tok.env = add_envvar(tok, var_name, var_con);
 	else
-		env = replace_envvar(tok, env, var_name, var_con);
-	return (free(var_name), free(var_con), env);
+		tok.env = replace_envvar(tok, var_name, var_con);
+	free(var_name);
+	free(var_con);
+	//return (free(var_name), free(var_con), tok.env);
 }
 
-char	**export_variable_sep(char **env, char *var, char *con, t_input tok)
+void	export_variable_sep(char *var, char *con, t_input tok)
 {
 	char	*var_con;
 
@@ -112,8 +114,9 @@ char	**export_variable_sep(char **env, char *var, char *con, t_input tok)
 		handle_mem_error(&tok);
 	}
 	if (my_getenv(tok.env, var) == NULL)
-		env = add_envvar(tok, env, var, var_con);
+		tok.env = add_envvar(tok, var, var_con);
 	else
-		env = replace_envvar(tok, env, var, var_con);
-	return (free(var_con), env);
+		tok.env = replace_envvar(tok, var, var_con);
+	free(var_con);
+	//return (free(var_con), tok.env);
 }

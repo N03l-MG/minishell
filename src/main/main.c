@@ -16,11 +16,12 @@ int	main(int ac, char **av, char **env)
 {
 	char	*prompt;
 	t_input	tokens;
+	char	**env_copy;
 
 	(void)ac, (void)av;
 	signal(SIGINT, sig_sigint);
 	signal(SIGQUIT, SIG_IGN);
-	tokens.env = init_env(env);
+	env_copy = init_env(env);
 	while (true)
 	{
 		prompt = readline("minishell> ");
@@ -37,11 +38,13 @@ int	main(int ac, char **av, char **env)
 				continue ;
 			}
 			tokens = create_tokens(prompt);
+			tokens.env = env_copy;
 			add_history(prompt);
-			if (validate_input(tokens, env) == 0)
-				execute_input(tokens, env);
+			if (validate_input(tokens) == 0)
+				execute_input(tokens);
 			free(prompt);
 			free_tokens(&tokens.tokens, tokens.token_count - 1);
+			env_copy = tokens.env;
 		}
 	}
 	free_env(tokens.env);
