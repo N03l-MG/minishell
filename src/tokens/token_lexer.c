@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 13:14:17 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/16 13:16:40 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 17:25:49 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,15 @@ static t_ttype	get_token_type(const char *str)
 
 static int	count_tokens(const char *input)
 {
-	int count = 0;
-	int i = 0;
-	bool in_quotes = false;
-	char quote_char = 0;
+	int		count;
+	int		i;
+	bool	in_quotes;
+	char	quote_char;
 
+	count = 0;
+	i = 0;
+	in_quotes = false;
+	quote_char = 0;
 	while (input[i])
 	{
 		while (input[i] == ' ' && !in_quotes)
@@ -77,12 +81,16 @@ static int	count_tokens(const char *input)
 
 static char	*extract_token(const char *input, int *i)
 {
-	int start = *i;
-	int len = 0;
-	bool in_quotes = false;
-	char quote_char = 0;
-	char *result;
+	int		start;
+	int		len;
+	bool	in_quotes;
+	char	quote_char;
+	char	*result;
 
+	start = *i;
+	len = 0;
+	in_quotes = false;
+	quote_char = 0;
 	if (is_special_char(input[start]) && input[start] != ' ')
 	{
 		if (input[start] == '>' && input[start + 1] == '>')
@@ -117,10 +125,14 @@ static char	*extract_token(const char *input, int *i)
 
 t_input	create_tokens(const char *input)
 {
-	t_input tok;
-	int i = 0;
-	int token_index = 0;
+	t_input	tok;
+	int		i;
+	int		j;
+	int		token_index;
 
+	i = 0;
+	j = 0;
+	token_index = 0;
 	tok.token_count = count_tokens(input);
 	tok.tokens = malloc(sizeof(t_token) * (tok.token_count + 1));
 	if (!tok.tokens)
@@ -128,11 +140,12 @@ t_input	create_tokens(const char *input)
 		handle_error(MEMORY_ERROR, "");
 		exit(EXIT_FAILURE);
 	}
-	for (int j = 0; j <= tok.token_count; j++)
+	while (j <= tok.token_count)
 	{
 		tok.tokens[j].token = NULL;
 		tok.tokens[j].type = END;
 		tok.tokens[j].is_string = false;
+		j++;
 	}
 	while (input[i] == ' ')
 		i++;
@@ -142,12 +155,12 @@ t_input	create_tokens(const char *input)
 			i++;
 		if (!input[i])
 			break ;
-
 		tok.tokens[token_index].token = extract_token(input, &i);
-		tok.tokens[token_index].type = get_token_type(tok.tokens[token_index].token);
-		tok.tokens[token_index].is_string = (tok.tokens[token_index].type == STRING);
+		tok.tokens[token_index].type
+			= get_token_type(tok.tokens[token_index].token);
+		tok.tokens[token_index].is_string
+			= (tok.tokens[token_index].type == STRING);
 		token_index++;
 	}
-
 	return (tok);
 }

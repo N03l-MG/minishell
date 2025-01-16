@@ -6,7 +6,7 @@
 #    By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/03 10:07:27 by jgraf             #+#    #+#              #
-#    Updated: 2025/01/16 13:39:13 by nmonzon          ###   ########.fr        #
+#    Updated: 2025/01/16 16:38:08 by nmonzon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,11 +26,11 @@ SIGNAL_SRC_DIR = src/signals
 BUILTIN_SRC_DIR = src/builtins
 
 MAIN_SRC := $(addprefix $(MAIN_SRC_DIR)/, main.c)
-SHELL_SRC := $(addprefix $(SHELL_SRC_DIR)/, validation.c execution.c)
-TOKENS_SRC := $(addprefix $(TOKENS_SRC_DIR)/, token_lexer.c) # create_tokens.c ft_tokensplit.c ft_tokentrim.c
+SHELL_SRC := $(addprefix $(SHELL_SRC_DIR)/, validation.c execution.c init_env.c)
+TOKENS_SRC := $(addprefix $(TOKENS_SRC_DIR)/, token_lexer.c get_env_variables.c) # create_tokens.c ft_tokensplit.c ft_tokentrim.c
 UTILS_SRC := $(addprefix $(UTILS_SRC_DIR)/, utils.c execution_utils.c error_handling.c)
 SIGNAL_SRC := $(addprefix $(SIGNAL_SRC_DIR)/, signal_handler.c)
-BUILTIN_SRC := $(addprefix $(BUILTIN_SRC_DIR)/, cd.c env.c export.c unset.c echo.c execute_buildin.c pwd.c)
+BUILTIN_SRC := $(addprefix $(BUILTIN_SRC_DIR)/, cd.c env.c export.c unset.c echo.c execute_builtin.c pwd.c update_env.c)
 
 SRC_FILES = $(MAIN_SRC) $(SHELL_SRC) $(TOKENS_SRC) $(UTILS_SRC) $(SIGNAL_SRC) $(BUILTIN_SRC)
 OBJ = $(SRC_FILES:.c=.o)

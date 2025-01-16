@@ -6,11 +6,25 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:46:50 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/13 14:09:32 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 17:14:48 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*my_getenv(char **env, char *name)
+{
+	int	i;
+
+	i = 0;
+	while (env[i] != NULL)
+	{
+		if (ft_strncmp(env[i], name, ft_strlen(name)) == 0)
+			return (env[i] + ft_strlen(name) + 1);
+		i ++;
+	}
+	return (NULL);
+}
 
 static char	*get_var_name(char *str)
 {
@@ -44,13 +58,11 @@ static char	*get_var_con(char *str)
 	int		i;
 	char	*var;
 
-	i = 0;
 	len = 0;
 	while (str[len] != '=')
 	{
-		if (str[len] == '\0')
+		if (str[len++] == '\0')
 			return (NULL);
-		len ++;
 	}
 	i = len + 1;
 	len = 0;
@@ -61,33 +73,47 @@ static char	*get_var_con(char *str)
 		return (NULL);
 	len = 0;
 	while (str[i] != '\0')
-	{
-		var[len] = str[i];
-		i ++;
-		len ++;
-	}
+		var[len++] = str[i++];
 	var[len] = '\0';
 	return (var);
 }
 
-void	export_variable(char **env, char *var)
+char	**export_variable(char **env, char *var, t_input tok)
 {
 	char	*var_name;
 	char	*var_con;
 	char	*content;
 
-	(void)env;
 	var_name = get_var_name(var);
 	content = get_var_con(var);
 	var_con = ft_strtrim(content, "\"'");
 	free(content);
 	if (var_name == NULL || var_con == NULL)
 	{
-		handle_error(MEMORY_ERROR, "");
 		free_check_char(var_name);
 		free_check_char(var_con);
+		handle_mem_error(&tok);
 	}
-	printf("%s\n%s\n", var_name, var_con);
-	free(var_name);
-	free(var_con);
+	if (my_getenv(tok.env, var_name) == NULL)
+		env = add_envvar(tok, env, var_name, var_con);
+	else
+		env = replace_envvar(tok, env, var_name, var_con);
+	return (free(var_name), free(var_con), env);
+}
+
+char	**export_variable_sep(char **env, char *var, char *con, t_input tok)
+{
+	char	*var_con;
+
+	var_con = ft_strtrim(con, "\"'");
+	if (var_con == NULL)
+	{
+		free(var_con);
+		handle_mem_error(&tok);
+	}
+	if (my_getenv(tok.env, var) == NULL)
+		env = add_envvar(tok, env, var, var_con);
+	else
+		env = replace_envvar(tok, env, var, var_con);
+	return (free(var_con), env);
 }

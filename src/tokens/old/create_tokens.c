@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 08:27:00 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/16 13:39:36 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 16:33:48 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,39 +67,29 @@ static char	**ft_tokensplit(const char *str, int *splt_nmb)
 	return (token_copy(ptr, str, i));
 }
 
-t_input	create_tokens(const char *input) // Bad version, replace with OG
-{
-	t_input	tok;
-	int		i;
-	char	**split_tokens;
+// t_token	create_tokens(const char *input, char **env)
+// {
+// 	t_token	tok;
+// 	int		i;
 
-	i = 0;
-	split_tokens = ft_tokensplit(input, &tok.token_count);
-	tok.tokens = malloc(sizeof(t_token) * tok.token_count);
-	if (tok.tokens == NULL)
-	{
-		handle_error(MEMORY_ERROR, "");
-		exit(EXIT_FAILURE);
-	}
-	if (check_quote_closed(input) != 0)
-		handle_error(INVALID_INPUT, split_tokens[0]);
-	while (i < tok.token_count)
-	{
-		tok.tokens[i].token = ft_tokentrim(split_tokens[i]);
-		if (ft_strcmp(tok.tokens[i].token, "|") == 0)
-			tok.tokens[i].type = PIPE;
-		else if (ft_strcmp(tok.tokens[i].token, "<") == 0)
-			tok.tokens[i].type = REDIR_IN;
-		else if (ft_strcmp(tok.tokens[i].token, ">") == 0)
-			tok.tokens[i].type = REDIR_OUT;
-		else if (ft_strcmp(tok.tokens[i].token, ">>") == 0)
-			tok.tokens[i].type = REDIR_APPEND;
-		else if (ft_strcmp(tok.tokens[i].token, ";") == 0)
-			tok.tokens[i].type = SEMICOLON;
-		else
-			tok.tokens[i].type = STRING;
-		i++;
-	}
-	free(split_tokens);
-	return (tok);
-}
+// 	i = 0;
+// 	tok.tokens = ft_tokensplit(input, &tok.token_count);
+// 	tok.is_string = malloc(sizeof(bool *) * tok.token_count);
+// 	if (tok.is_string == NULL)
+// 		handle_mem_error(tok);
+// 	if (check_quote_closed(input) != 0)
+// 		handle_error(INVALID_INPUT, tok.tokens[0]);
+// 	tok.env = env;
+// 	while (i < tok.token_count)
+// 	{
+// 		tok.is_string[i] = false;
+// 		if (tok.tokens[i][0] != '\'')
+// 		{
+// 			tok.is_string[i] = true;
+// 			tok.tokens[i] = replace_env(tok, tok.tokens[i]);
+// 		}
+// 		tok.tokens[i] = ft_tokentrim(tok.tokens[i]);
+// 		i ++;
+// 	}
+// 	return (tok);
+// }

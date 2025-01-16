@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 13:52:14 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/16 13:13:55 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 16:28:06 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_token
 
 typedef struct s_input
 {
+	char	**env;
 	t_token	*tokens;
 	int		token_count;
 }	t_input;

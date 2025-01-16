@@ -1,16 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_buildin.c                                  :+:      :+:    :+:   */
+/*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 14:24:45 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/16 13:37:05 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 17:03:15 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	execute_exe(char *path, char **op, char **env)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	status = INT_MIN;
+	if (pid == -1)
+	{
+		ft_fprintf(2, "Failed to create child process.\n");
+		return (0);
+	}
+	if (pid == 0)
+	{
+		if (execve(path, op, env) == -1)
+		{
+			ft_fprintf(2, "Failed to execute %s\n", path);
+			exit(EXIT_SUCCESS);
+		}
+	}
+	else
+		wait(&status);
+	printf("%i\n", status);		//Placehilder. Add struct for this
+	return (1);
+}
 
 int	execute_builtin(t_input tokens, char **env)
 {
@@ -19,9 +45,9 @@ int	execute_builtin(t_input tokens, char **env)
 	if (ft_strcmp(tokens.tokens[0].token, "cd") == 0)
 	{
 		if (tokens.token_count >= 2)
-			change_directory(tokens.tokens[1].token);
+			change_dir(&tokens, tokens.tokens[1].token);
 		else if (tokens.token_count == 1)
-			change_directory(getenv("HOME"));
+			change_dir(&tokens, getenv("HOME"));
 	}
 	else if (ft_strcmp(tokens.tokens[0].token, "echo") == 0)
 	{
@@ -35,7 +61,9 @@ int	execute_builtin(t_input tokens, char **env)
 	else if (ft_strcmp(tokens.tokens[0].token, "env") == 0)
 		print_envs(env);
 	else if (ft_strcmp(tokens.tokens[0].token, "export") == 0)
-		export_variable(env, tokens.tokens[1].token);
+		export_variable(env, tokens.tokens[1].token, tokens);
+	else if (ft_strncmp(tokens.tokens[0].token, "./", 2) == 0)
+		execute_exe(tokens.tokens[0].token, &tokens.tokens->token, env);
 	return (1);
 }
 

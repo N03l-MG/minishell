@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:44:32 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/16 13:19:18 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/16 17:34:54 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	main(int ac, char **av, char **env)
 	(void)ac, (void)av;
 	signal(SIGINT, sig_sigint);
 	signal(SIGQUIT, SIG_IGN);
+	tokens.env = init_env(env);
 	while (true)
 	{
 		prompt = readline("minishell> ");
@@ -43,5 +44,6 @@ int	main(int ac, char **av, char **env)
 			free_tokens(&tokens.tokens, tokens.token_count - 1);
 		}
 	}
+	free_env(tokens.env);
 	return (EXIT_SUCCESS);
 }
