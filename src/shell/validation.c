@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:21:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/17 13:04:00 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/17 15:25:48 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,8 @@ int	validate_input(t_input *tokens)
 	int	cmd_start;
 
 	if (tokens->token_count == 0)
+		return (1);
+	if (check_quote_closed(tokens) != 0)
 		return (1);
 	if (check_valid_pipes(*tokens) > 0)
 		return (1);

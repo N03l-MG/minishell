@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 13:14:17 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/17 13:32:22 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/17 15:14:36 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ static char	*extract_token(const char *input, int *i)
 	return (result);
 }
 
-t_input	create_tokens(const char *input)
+t_input	create_tokens(const char *input, char **env_copy)
 {
 	t_input	tok;
 	int		i;
@@ -133,6 +133,7 @@ t_input	create_tokens(const char *input)
 	i = 0;
 	j = 0;
 	token_index = 0;
+	tok.env = env_copy;
 	tok.token_count = count_tokens(input);
 	tok.tokens = malloc(sizeof(t_token) * (tok.token_count + 1));
 	if (!tok.tokens)
@@ -154,7 +155,10 @@ t_input	create_tokens(const char *input)
 			i++;
 		if (!input[i])
 			break ;
-		tok.tokens[token_index].token = ft_tokentrim(replace_env(tok, extract_token(input, &i)));
+		tok.tokens[token_index].token = extract_token(input, &i);
+		if (tok.tokens[token_index].token[0] != '\'')
+			tok.tokens[token_index].token = replace_env(tok, tok.tokens[token_index].token);
+		tok.tokens[token_index].token = ft_tokentrim(tok.tokens[token_index].token);
 		tok.tokens[token_index].type
 			= get_token_type(tok.tokens[token_index].token);
 		token_index++;
