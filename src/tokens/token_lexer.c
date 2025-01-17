@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 13:14:17 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/16 17:25:49 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/17 13:32:22 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,6 @@ t_input	create_tokens(const char *input)
 	{
 		tok.tokens[j].token = NULL;
 		tok.tokens[j].type = END;
-		tok.tokens[j].is_string = false;
 		j++;
 	}
 	while (input[i] == ' ')
@@ -155,11 +154,9 @@ t_input	create_tokens(const char *input)
 			i++;
 		if (!input[i])
 			break ;
-		tok.tokens[token_index].token = extract_token(input, &i);
+		tok.tokens[token_index].token = ft_tokentrim(replace_env(tok, extract_token(input, &i)));
 		tok.tokens[token_index].type
 			= get_token_type(tok.tokens[token_index].token);
-		tok.tokens[token_index].is_string
-			= (tok.tokens[token_index].type == STRING);
 		token_index++;
 	}
 	return (tok);

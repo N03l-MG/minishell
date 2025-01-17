@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:44:32 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/17 13:04:37 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/17 13:24:04 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,3 +50,13 @@ int	main(int ac, char **av, char **env)
 	free_env(tokens.env);
 	return (EXIT_SUCCESS);
 }
+
+// void	print_tokens(t_input tokens)
+// {
+// 	int i = 0;
+// 	while(i < tokens.token_count)
+// 	{
+// 		printf("Token %d: %s\n", i, tokens.tokens[i].token);
+// 		i++;
+// 	}
+// }

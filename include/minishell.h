@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:53:33 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/17 13:10:22 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/17 13:31:47 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,9 @@
 /*			FUNCTION PROTOTYPES		*/
 
 /*		Token management		*/
-//t_input	create_tokens(const char *input);
 t_input	create_tokens(const char *input);
-// char	**token_copy(char **ptr, const char *s, size_t i);
-// size_t	spltnmb(const char *s, int totlen);
-// char	*ft_tokentrim(char *str);
+char	*ft_tokentrim(char *str);
+char	*replace_env(t_input token, char *tok);
 void	free_tokens(t_token **ptr, int x);
 
 /*	Shell functionality	*/

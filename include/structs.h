@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 13:52:14 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/16 16:28:06 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/17 13:29:48 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ typedef enum e_error
 typedef struct s_token
 {
 	t_ttype	type;
-	bool	is_string;
 	char	*token;
 }	t_token;
 
