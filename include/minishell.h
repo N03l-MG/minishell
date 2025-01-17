@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:53:33 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/16 16:48:34 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/17 13:10:22 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_input	create_tokens(const char *input);
 void	free_tokens(t_token **ptr, int x);
 
 /*	Shell functionality	*/
-int		validate_input(t_input tokens);
+int		validate_input(t_input *tokens);
 void	handle_redir(char *input_file, char *output_file, t_ttype out_type);
 void	execute_input(t_input tokens);
 char	**init_env(char **environ);
@@ -54,15 +54,15 @@ void	free_check_char(char *str);
 bool	is_builtin(const char *cmd);
 
 /*		Builtins		*/
-int		execute_builtin(t_input tokens);
+int		execute_builtin(t_input *tokens);
 void	execute_builtin_piped(char **cmd, char **env);
 void	change_dir(t_input *tok, char *path);
 void	buildin_echo(t_input tok, int no_nl, int start_token);
 void	print_working_dir(void);
 void	print_envs(char **env);
-void	export_variable(char *var, t_input tok);
-void	export_variable_sep(char *var, char *con, t_input tok);
-char	**unset_variable(char **env, char *var, t_input tok);
+char	**export_variable(char *var, t_input tok);
+char	**export_variable_sep(char *var, char *con, t_input tok);
+char	**unset_variable(char *var, t_input tok);
 
 /*	Error Handling		*/
 int		handle_error(t_error error, char *current);

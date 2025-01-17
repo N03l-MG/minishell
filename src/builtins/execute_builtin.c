@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 14:24:45 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/16 17:03:15 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/17 13:12:00 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,32 +38,34 @@ static int	execute_exe(char *path, char **op, char **env)
 	return (1);
 }
 
-int	execute_builtin(t_input tokens)
+int	execute_builtin(t_input *tokens)
 {
-	if (ft_strcmp(tokens.tokens[0].token, "exit") == 0)
+	if (ft_strcmp(tokens->tokens[0].token, "exit") == 0)
 		exit(EXIT_SUCCESS);
-	if (ft_strcmp(tokens.tokens[0].token, "cd") == 0)
+	if (ft_strcmp(tokens->tokens[0].token, "cd") == 0)
 	{
-		if (tokens.token_count >= 2)
-			change_dir(&tokens, tokens.tokens[1].token);
-		else if (tokens.token_count == 1)
-			change_dir(&tokens, getenv("HOME"));
+		if (tokens->token_count >= 2)
+			change_dir(tokens, tokens->tokens[1].token);
+		else if (tokens->token_count == 1)
+			change_dir(tokens, getenv("HOME"));
 	}
-	else if (ft_strcmp(tokens.tokens[0].token, "echo") == 0)
+	else if (ft_strcmp(tokens->tokens[0].token, "echo") == 0)
 	{
-		if (ft_strcmp(tokens.tokens[1].token, "-n") == 0)
-			buildin_echo(tokens, 1, 0);
+		if (ft_strcmp(tokens->tokens[1].token, "-n") == 0)
+			buildin_echo(*tokens, 1, 0);
 		else
-			buildin_echo(tokens, 0, 0);
+			buildin_echo(*tokens, 0, 0);
 	}
-	else if (ft_strcmp(tokens.tokens[0].token, "pwd") == 0)
+	else if (ft_strcmp(tokens->tokens[0].token, "pwd") == 0)
 		print_working_dir();
-	else if (ft_strcmp(tokens.tokens[0].token, "env") == 0)
-		print_envs(tokens.env);
-	else if (ft_strcmp(tokens.tokens[0].token, "export") == 0)
-		export_variable(tokens.tokens[1].token, tokens);
-	else if (ft_strncmp(tokens.tokens[0].token, "./", 2) == 0)
-		execute_exe(tokens.tokens[0].token, &tokens.tokens->token, tokens.env);
+	else if (ft_strcmp(tokens->tokens[0].token, "env") == 0)
+		print_envs(tokens->env);
+	else if (ft_strcmp(tokens->tokens[0].token, "export") == 0)
+		tokens->env = export_variable(tokens->tokens[1].token, *tokens);
+	else if (ft_strcmp(tokens->tokens[0].token, "unset") == 0)
+		tokens->env = unset_variable(tokens->tokens[1].token, *tokens);
+	else if (ft_strncmp(tokens->tokens[0].token, "./", 2) == 0)
+		execute_exe(tokens->tokens[0].token, &tokens->tokens->token, tokens->env);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:21:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/16 13:30:29 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/17 13:04:00 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,29 +129,29 @@ static bool	has_pipe(t_input tokens)
 	return (false);
 }
 
-int	validate_input(t_input tokens)
+int	validate_input(t_input *tokens)
 {
 	int	i;
 	int	cmd_start;
 
-	if (tokens.token_count == 0)
+	if (tokens->token_count == 0)
 		return (1);
-	if (check_valid_pipes(tokens) > 0)
+	if (check_valid_pipes(*tokens) > 0)
 		return (1);
-	if (check_for_builtin(tokens) && !has_pipe(tokens))
+	if (check_for_builtin(*tokens) && !has_pipe(*tokens))
 	{
 		execute_builtin(tokens);
 		return (1);
 	}
 	i = 0;
-	while (i < tokens.token_count)
+	while (i < tokens->token_count)
 	{
 		cmd_start = i;
-		while (i < tokens.token_count && tokens.tokens[i].type != PIPE)
+		while (i < tokens->token_count && tokens->tokens[i].type != PIPE)
 			i++;
-		if (validate_command(tokens, cmd_start, i) != 0)
+		if (validate_command(*tokens, cmd_start, i) != 0)
 			return (1);
-		if (i < tokens.token_count && tokens.tokens[i].type == PIPE)
+		if (i < tokens->token_count && tokens->tokens[i].type == PIPE)
 			i++;
 	}
 	return (0);

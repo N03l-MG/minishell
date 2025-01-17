@@ -6,7 +6,7 @@
 #    By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/03 10:07:27 by jgraf             #+#    #+#              #
-#    Updated: 2025/01/16 16:38:08 by nmonzon          ###   ########.fr        #
+#    Updated: 2025/01/17 12:45:43 by nmonzon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ $(LIB):
 	$(MAKE) -C libft
 
 $(NAME): $(OBJ) $(LIB)
-	$(CC) $(FLAGS) -o $(NAME) $(OBJ) $(LIB) -lreadline
+	$(CC) $(FLAGS) -o $(NAME) $(OBJ) $(LIB) -lreadline -fsanitize=address
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)

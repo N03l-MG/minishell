@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 08:14:13 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/16 16:52:30 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/17 13:14:07 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@ void	change_dir(t_input *tok, char *path)
 	{
 		chdir(path);
 		if (getcwd(pwd, sizeof(pwd)) != NULL)
-			export_variable_sep("PWD", pwd, *tok);
+			tok->env = export_variable_sep("PWD", pwd, *tok);
 	}
 }

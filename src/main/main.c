@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:44:32 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/16 17:34:54 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/17 13:04:37 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	main(int ac, char **av, char **env)
 			tokens = create_tokens(prompt);
 			tokens.env = env_copy;
 			add_history(prompt);
-			if (validate_input(tokens) == 0)
+			if (validate_input(&tokens) == 0)
 				execute_input(tokens);
 			free(prompt);
 			free_tokens(&tokens.tokens, tokens.token_count - 1);

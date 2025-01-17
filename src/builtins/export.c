@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:46:50 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/16 17:14:48 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/17 13:07:10 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static char	*get_var_con(char *str)
 	return (var);
 }
 
-void	export_variable(char *var, t_input tok)
+char	**export_variable(char *var, t_input tok)
 {
 	char	*var_name;
 	char	*var_con;
@@ -98,12 +98,10 @@ void	export_variable(char *var, t_input tok)
 		tok.env = add_envvar(tok, var_name, var_con);
 	else
 		tok.env = replace_envvar(tok, var_name, var_con);
-	free(var_name);
-	free(var_con);
-	//return (free(var_name), free(var_con), tok.env);
+	return (free(var_name), free(var_con), tok.env);
 }
 
-void	export_variable_sep(char *var, char *con, t_input tok)
+char	**export_variable_sep(char *var, char *con, t_input tok)
 {
 	char	*var_con;
 
@@ -117,6 +115,5 @@ void	export_variable_sep(char *var, char *con, t_input tok)
 		tok.env = add_envvar(tok, var, var_con);
 	else
 		tok.env = replace_envvar(tok, var, var_con);
-	free(var_con);
-	//return (free(var_con), tok.env);
+	return (free(var_con), tok.env);
 }
