@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 13:33:19 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/16 13:28:36 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/20 13:47:07 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	**parse_command(t_input tokens, int cmd_start, int cmd_end)
 void	setup_pipe(int *pipe_fds)
 {
 	if (pipe(pipe_fds) == -1)
-		handle_error(PIPE_ERROR, NULL);
+		handle_error(PIPE_ERROR, NULL, NULL);
 }
 
 void	handle_child(t_data *data, int is_last, t_file *files, char **env)
@@ -103,7 +103,7 @@ void	handle_child(t_data *data, int is_last, t_file *files, char **env)
 	else
 	{
 		if (execve(data->full_path, data->cmd, env) == -1)
-			handle_error(EXEC_ERROR, data->cmd[0]);
+			handle_error(EXEC_ERROR, data->cmd[0], NULL);
 	}
 }
 

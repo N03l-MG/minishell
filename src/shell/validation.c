@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:21:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/17 15:25:48 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/20 13:46:32 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static bool	is_command_valid(const char *command)
 	path_env = getenv("PATH");
 	if (path_env == NULL)
 	{
-		handle_error(ENV_NOT_FOUND, NULL);
+		handle_error(ENV_NOT_FOUND, "PATH", NULL);
 		return (false);
 	}
 	path = ft_strdup(path_env);
@@ -51,17 +51,17 @@ static int	check_valid_pipes(t_input tokens)
 		if (ft_strcmp(tokens.tokens[i].token, "|") == 0)
 		{
 			if (i == 0 || i == tokens.token_count - 1)
-				return (handle_error(INVALID_INPUT, tokens.tokens[i].token));
+				return (handle_error(INVALID_INPUT, tokens.tokens[i].token, &tokens));
 			if (i > 0 && ft_strcmp(tokens.tokens[i - 1].token, "|") == 0)
-				return (handle_error(INVALID_INPUT, tokens.tokens[i].token));
+				return (handle_error(INVALID_INPUT, tokens.tokens[i].token, &tokens));
 		}
 		if (ft_strcmp(tokens.tokens[i].token, "<") == 0
 			|| ft_strcmp(tokens.tokens[i].token, ">") == 0)
 		{
 			if (i == tokens.token_count - 1)
-				return (handle_error(INVALID_INPUT, tokens.tokens[i].token));
+				return (handle_error(INVALID_INPUT, tokens.tokens[i].token, &tokens));
 			if (ft_strcmp(tokens.tokens[i + 1].token, "|") == 0)
-				return (handle_error(INVALID_INPUT, tokens.tokens[i].token));
+				return (handle_error(INVALID_INPUT, tokens.tokens[i].token, &tokens));
 		}
 	}
 	return (0);
@@ -88,6 +88,11 @@ static int	check_for_builtin(t_input tokens)
 			return (1);
 		else if (ft_strcmp(tokens.tokens[i].token, "unset") == 0)
 			return (1);
+		else if (ft_strncmp(tokens.tokens[i].token, "./", 2) == 0)
+		{
+			if (access(tokens.tokens[i].token, X_OK) == 0)
+				return (1);
+		}
 	}
 	return (0);
 }
@@ -107,7 +112,7 @@ static int	validate_command(t_input tokens, int start, int end)
 		{
 			if (!is_command_valid(tokens.tokens[start].token))
 				return (handle_error(COMMAND_NOT_FOUND,
-						tokens.tokens[start].token));
+						tokens.tokens[start].token, &tokens));
 			return (0);
 		}
 		start++;

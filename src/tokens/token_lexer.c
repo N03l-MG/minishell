@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 13:14:17 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/17 15:14:36 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/20 15:21:12 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ t_input	create_tokens(const char *input, char **env_copy)
 	tok.tokens = malloc(sizeof(t_token) * (tok.token_count + 1));
 	if (!tok.tokens)
 	{
-		handle_error(MEMORY_ERROR, "");
+		handle_mem_error(&tok);
 		exit(EXIT_FAILURE);
 	}
 	while (j <= tok.token_count)

@@ -3,23 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:16:35 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/08 14:16:36 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/01/20 16:18:03 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_envs(char **env)
+void	print_envs(t_input *tok)
 {
 	int	i;
 
 	i = 0;
-	while (env[i] != NULL)
+	while (tok->env[i] != NULL)
 	{
-		printf("%s\n", env[i]);
+		printf("%s\n", tok->env[i]);
 		i ++;
 	}
+	tok->env = export_variable_sep("LASTSTATUS", "0", *tok);
 }

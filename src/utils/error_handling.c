@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:39:02 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/16 13:41:27 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/20 15:11:57 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,47 @@ void	free_tokens(t_token **tokens, int count)
 	*tokens = NULL;
 }
 
-int	handle_error(t_error error, char *current)
+int	handle_error(t_error error, char *current, t_input *tok)
 {
+	int	status;
+
+	status = 0;
 	if (error == ENV_NOT_FOUND)
-		ft_fprintf(2, "Error: PATH environment variable not found.\n");
+	{
+		ft_fprintf(2, "Error: %s: Environment variable not found.\n", current);
+		status = 1;
+	}
 	else if (error == COMMAND_NOT_FOUND)
+	{
 		ft_fprintf(2, "Error: %s: Command not found.\n", current);
+		status = 127;
+	}
 	else if (error == INVALID_INPUT)
+	{
 		ft_fprintf(2, "Error: %s: Invalid input.\n", current);
+		status = 1;
+	}
 	else if (error == INVALID_FILE)
-		ft_fprintf(2, "Error: %s: No such file or directory.", current);
+	{
+		ft_fprintf(2, "Error: %s: No such file or directory.\n", current);
+		status = 1;
+	}
 	else if (error == PIPE_ERROR)
+	{
 		ft_fprintf(2, "Error: Pipe failure.\n");
+		status = 1;
+	}
 	else if (error == FORK_ERROR)
+	{
 		ft_fprintf(2, "Error: Fork failure.\n");
+		status = 1;
+	}
 	else if (error == EXEC_ERROR)
+	{
 		ft_fprintf(2, "Error: %s: Failed to execute command.\n", current);
+		status = 256;
+	}
+	tok->env = export_variable_sep("LASTSTATUS", ft_itoa(status), *tok);
 	return (1);
 }
 

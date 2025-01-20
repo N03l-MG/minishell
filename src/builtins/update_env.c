@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 16:42:26 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/17 12:32:09 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/20 15:31:49 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	get_entry_number(char **environ)
 	return (n);
 }
 
-static void	create_and_add_new(char *env, char *name, char *con)
+void	create_and_add_new(char *env, char *name, char *con)
 {
 	int	i;
 	int	j;
@@ -40,7 +40,7 @@ static void	create_and_add_new(char *env, char *name, char *con)
 	env[i] = '\0';
 }
 
-static char	*replace_and_add_new(char *repl, char *name, char *con, char *env)
+char	*replace_and_add_new(char *repl, char *name, char *con, char *env)
 {
 	int	j;
 	int	k;

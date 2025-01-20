@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:53:58 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/16 13:27:13 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/20 13:47:41 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*resolve_command_path(const char *command)
 	path_env = getenv("PATH");
 	if (path_env == NULL)
 	{
-		handle_error(ENV_NOT_FOUND, NULL);
+		handle_error(ENV_NOT_FOUND, "PATH", NULL);
 		return (NULL);
 	}
 	path = ft_strdup(path_env);

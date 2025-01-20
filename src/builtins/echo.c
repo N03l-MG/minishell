@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 10:38:52 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/16 16:41:42 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/20 16:05:12 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,13 @@ void	buildin_echo(t_input tok, int no_nl, int start_token)
 		j = 0;
 		while (tok.tokens[i].token[j] != '\0')
 		{
-			printf("%c", tok.tokens[i].token[j]);
+			if (tok.tokens[i].token[j] == '$' && tok.tokens[i].token[j + 1] == '?')
+			{
+				printf("%s", my_getenv(tok.env, "LASTSTATUS"));
+				j += 2;
+			}
+			else
+				printf("%c", tok.tokens[i].token[j]);
 			j ++;
 		}
 		if (i < tok.token_count - 1)
@@ -32,4 +38,5 @@ void	buildin_echo(t_input tok, int no_nl, int start_token)
 	}
 	if (!no_nl)
 		printf("\n");
+	tok.env = export_variable_sep("LASTSTATUS", "0", tok);
 }

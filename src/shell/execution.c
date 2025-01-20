@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:03:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/16 13:32:55 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/20 17:44:51 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	get_redir(t_input tokens, int *cmd_start, int *cmd_end, t_file *file
 			}
 			else
 			{
-				handle_error(INVALID_INPUT, tokens.tokens[i].token);
+				handle_error(INVALID_INPUT, tokens.tokens[i].token, &tokens);
 				return ;
 			}
 		}
@@ -60,7 +60,7 @@ void	handle_redir(char *input_file, char *output_file, t_ttype out_type)
 	{
 		fd = open(input_file, O_RDONLY);
 		if (fd == -1)
-			handle_error(INVALID_FILE, input_file);
+			handle_error(INVALID_FILE, input_file, NULL);
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
@@ -73,7 +73,7 @@ void	handle_redir(char *input_file, char *output_file, t_ttype out_type)
 			flags |= O_TRUNC;
 		fd = open(output_file, flags, 0644);
 		if (fd == -1)
-			handle_error(INVALID_FILE, output_file);
+			handle_error(INVALID_FILE, output_file, NULL);
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
@@ -86,9 +86,12 @@ void	execute_input(t_input tokens)
 	int		cmd_start;
 	pid_t	pid;
 	t_file	files;
+	int		status;
+	int		last_status;
 
 	i = 0;
 	data.prev_fd = -1;
+	last_status = 0;
 	while (i < tokens.token_count)
 	{
 		cmd_start = i;
@@ -99,11 +102,6 @@ void	execute_input(t_input tokens)
 		files.out_type = REDIR_OUT;
 		get_redir(tokens, &cmd_start, &i, &files);
 		data.cmd = parse_command(tokens, cmd_start, i);
-		if (!data.cmd || !data.cmd[0])
-		{
-			handle_error(INVALID_INPUT, "Missing command");
-			continue ;
-		}
 		data.full_path = resolve_command_path(data.cmd[0]);
 		if (!data.full_path)
 			continue ;
@@ -111,11 +109,16 @@ void	execute_input(t_input tokens)
 			setup_pipe(data.pipe_fds);
 		pid = fork();
 		if (pid == -1)
-			handle_error(FORK_ERROR, NULL);
+			handle_error(FORK_ERROR, NULL, &tokens);
 		else if (pid == 0)
 			handle_child(&data, (i == tokens.token_count), &files, tokens.env);
 		else
+		{
+			waitpid(pid, &status, 0);
+			if (((*(int *)&(status)) & 0177) == 0)
+				last_status = WEXITSTATUS(status);
 			handle_parent(&data, &data.prev_fd, pid, (i == tokens.token_count));
+		}
 		if (data.cmd)
 		{
 			free(data.cmd);
@@ -129,4 +132,5 @@ void	execute_input(t_input tokens)
 		if (i < tokens.token_count && tokens.tokens[i].type == PIPE)
 			i++;
 	}
+	tokens.env = export_variable_sep("LASTSTATUS", ft_itoa(last_status), tokens);
 }

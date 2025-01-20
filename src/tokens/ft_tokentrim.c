@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:42:54 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/17 15:26:53 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/20 13:50:02 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	check_quote_closed(t_input *tokens)
 			j ++;
 			if (open_quote != 0)
 			{
-				handle_error(INVALID_INPUT, tokens->tokens[i].token);
+				handle_error(INVALID_INPUT, tokens->tokens[i].token, tokens);
 				return (1);
 			}
 		}

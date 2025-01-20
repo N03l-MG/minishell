@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:53:33 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/17 15:26:29 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/20 16:19:15 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@
 # include "structs.h"
 
 /*			FUNCTION PROTOTYPES		*/
+
+char	**add_envvar_pre(char **env, char *name, char *con);
+char	**replace_envvar_pre(char **env, char *name, char *con);
+void	create_and_add_new(char *env, char *name, char *con);
+char	*replace_and_add_new(char *repl, char *name, char *con, char *env);
 
 /*		Token management		*/
 t_input	create_tokens(const char *input, char **env_copy);
@@ -57,14 +62,14 @@ int		execute_builtin(t_input *tokens);
 void	execute_builtin_piped(char **cmd, char **env);
 void	change_dir(t_input *tok, char *path);
 void	buildin_echo(t_input tok, int no_nl, int start_token);
-void	print_working_dir(void);
-void	print_envs(char **env);
+void	print_working_dir(t_input *tok);
+void	print_envs(t_input *tok);
 char	**export_variable(char *var, t_input tok);
 char	**export_variable_sep(char *var, char *con, t_input tok);
 char	**unset_variable(char *var, t_input tok);
 
 /*	Error Handling		*/
-int		handle_error(t_error error, char *current);
+int		handle_error(t_error error, char *current, t_input *tok);
 void	handle_mem_error(t_input *tokens);
 void	free_allocated(t_data *data, t_input *tokens, t_error error);
 void	free_env(char **env);
