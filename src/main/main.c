@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:44:32 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/17 14:49:53 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/21 16:13:37 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ int	main(int ac, char **av, char **env)
 	env_copy = init_env(env);
 	while (true)
 	{
-		prompt = readline("minishell> ");
+		prompt = readline(TEAL "ᴍɪɴɪsʜᴇʟʟ❯ " RESET);
 		if (prompt == NULL)
 		{
-			ft_fprintf(2, "exiting...\n");
+			ft_fprintf(2, "Exiting...\n");
 			break ;
 		}
 		else

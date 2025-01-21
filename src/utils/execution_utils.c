@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 13:33:19 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/20 13:47:07 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/21 14:05:37 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	handle_child(t_data *data, int is_last, t_file *files, char **env)
 	}
 }
 
-void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last)
+void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last, int *status)
 {
 	if (!is_last)
 		close(data->pipe_fds[1]);
@@ -117,5 +117,5 @@ void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last)
 		*prev_fd = data->pipe_fds[0];
 	else
 		*prev_fd = -1;
-	waitpid(pid, NULL, 0);
+	waitpid(pid, status, 0);
 }

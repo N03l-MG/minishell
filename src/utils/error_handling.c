@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:39:02 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/20 15:11:57 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/21 15:47:36 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,37 +39,37 @@ int	handle_error(t_error error, char *current, t_input *tok)
 	status = 0;
 	if (error == ENV_NOT_FOUND)
 	{
-		ft_fprintf(2, "Error: %s: Environment variable not found.\n", current);
+		ft_fprintf(2, RED "Error: %s: Environment variable not found.\n" RESET, current);
 		status = 1;
 	}
 	else if (error == COMMAND_NOT_FOUND)
 	{
-		ft_fprintf(2, "Error: %s: Command not found.\n", current);
+		ft_fprintf(2, RED "Error: %s: Command not found.\n" RESET, current);
 		status = 127;
 	}
 	else if (error == INVALID_INPUT)
 	{
-		ft_fprintf(2, "Error: %s: Invalid input.\n", current);
+		ft_fprintf(2, RED "Error: %s: Invalid input.\n" RESET, current);
 		status = 1;
 	}
 	else if (error == INVALID_FILE)
 	{
-		ft_fprintf(2, "Error: %s: No such file or directory.\n", current);
+		ft_fprintf(2, RED "Error: %s: No such file or directory.\n" RESET, current);
 		status = 1;
 	}
 	else if (error == PIPE_ERROR)
 	{
-		ft_fprintf(2, "Error: Pipe failure.\n");
+		ft_fprintf(2, RED "Error: Pipe failure.\n" RESET);
 		status = 1;
 	}
 	else if (error == FORK_ERROR)
 	{
-		ft_fprintf(2, "Error: Fork failure.\n");
+		ft_fprintf(2, RED "Error: Fork failure.\n" RESET);
 		status = 1;
 	}
 	else if (error == EXEC_ERROR)
 	{
-		ft_fprintf(2, "Error: %s: Failed to execute command.\n", current);
+		ft_fprintf(2, RED "Error: %s: Failed to execute command.\n" RESET, current);
 		status = 256;
 	}
 	tok->env = export_variable_sep("LASTSTATUS", ft_itoa(status), *tok);
@@ -78,7 +78,7 @@ int	handle_error(t_error error, char *current, t_input *tok)
 
 void	handle_mem_error(t_input *tokens)
 {
-	ft_fprintf(2, "Fatal Error: Memory allocation failed.\n");
+	ft_fprintf(2, "Fatal Error: Memory allocation failed!\n");
 	free_allocated(NULL, tokens, MEMORY_ERROR);
 	exit(EXIT_FAILURE);
 }

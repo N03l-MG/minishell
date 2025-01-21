@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:53:58 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/20 13:47:41 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/21 14:43:42 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ char	*resolve_command_path(const char *command)
 	char	*dir;
 	char	full_path[1024];
 
+	if (access(command, X_OK) == 0)
+		return (ft_strdup(command));
 	path_env = getenv("PATH");
 	if (path_env == NULL)
 	{

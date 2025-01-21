@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:53:33 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/20 16:19:15 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/21 15:45:27 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 # include "libs.h"
 # include "structs.h"
+
+# define TEAL "\033[0;36m"
+# define RED "\033[0;31m"
+# define RESET "\033[0m"
 
 /*			FUNCTION PROTOTYPES		*/
 
@@ -44,7 +48,7 @@ void	set_i(int *i, t_input *tokens);
 char	**parse_command(t_input tokens, int cmd_start, int cmd_end);
 void	setup_pipe(int *pipe_fds);
 void	handle_child(t_data *data, int is_last, t_file *files, char **env);
-void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last);
+void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last, int *status);
 
 /*		Signals		*/
 void	sig_sigint(int sig);

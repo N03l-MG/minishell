@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:03:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/20 17:44:51 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/21 15:03:51 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,20 +104,26 @@ void	execute_input(t_input tokens)
 		data.cmd = parse_command(tokens, cmd_start, i);
 		data.full_path = resolve_command_path(data.cmd[0]);
 		if (!data.full_path)
-			continue ;
-		if (i < tokens.token_count && tokens.tokens[i].type == PIPE)
-			setup_pipe(data.pipe_fds);
-		pid = fork();
-		if (pid == -1)
-			handle_error(FORK_ERROR, NULL, &tokens);
-		else if (pid == 0)
-			handle_child(&data, (i == tokens.token_count), &files, tokens.env);
+		{
+			handle_error(COMMAND_NOT_FOUND, data.cmd[0], &tokens);
+			if (i == tokens.token_count)
+				last_status = 127;
+		}
 		else
 		{
-			waitpid(pid, &status, 0);
-			if (((*(int *)&(status)) & 0177) == 0)
-				last_status = WEXITSTATUS(status);
-			handle_parent(&data, &data.prev_fd, pid, (i == tokens.token_count));
+			if (i < tokens.token_count && tokens.tokens[i].type == PIPE)
+				setup_pipe(data.pipe_fds);
+			pid = fork();
+			if (pid == -1)
+				handle_error(FORK_ERROR, NULL, &tokens);
+			else if (pid == 0)
+				handle_child(&data, (i == tokens.token_count), &files, tokens.env);
+			else
+			{
+				handle_parent(&data, &data.prev_fd, pid, (i == tokens.token_count), &status);
+				if (i == tokens.token_count && WEXITSTATUS(status))
+					last_status = WEXITSTATUS(status);
+			}
 		}
 		if (data.cmd)
 		{
