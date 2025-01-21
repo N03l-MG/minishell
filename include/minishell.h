@@ -49,6 +49,7 @@ char	**parse_command(t_input tokens, int cmd_start, int cmd_end);
 void	setup_pipe(int *pipe_fds);
 void	handle_child(t_data *data, int is_last, t_file *files, char **env);
 void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last, int *status);
+char	*handle_heredoc(char *delimiter);
 
 /*		Signals		*/
 void	sig_sigint(int sig);

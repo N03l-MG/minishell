@@ -22,6 +22,7 @@ typedef enum e_ttype
 	REDIR_IN,
 	REDIR_OUT,
 	REDIR_APPEND,
+	REDIR_HEREDOC,
 	SEMICOLON,
 	END
 }	t_ttype;

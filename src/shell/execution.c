@@ -14,7 +14,7 @@
 
 static void	get_redir(t_input tokens, int *cmd_start, int *cmd_end, t_file *files)
 {
-	int	i;
+	int i;
 
 	i = *cmd_start;
 	files->infile = NULL;
@@ -24,7 +24,8 @@ static void	get_redir(t_input tokens, int *cmd_start, int *cmd_end, t_file *file
 	{
 		if (tokens.tokens[i].type == REDIR_IN
 			|| tokens.tokens[i].type == REDIR_OUT
-			|| tokens.tokens[i].type == REDIR_APPEND)
+			|| tokens.tokens[i].type == REDIR_APPEND
+			|| tokens.tokens[i].type == REDIR_HEREDOC)
 		{
 			if (i + 1 < *cmd_end)
 			{
@@ -36,6 +37,20 @@ static void	get_redir(t_input tokens, int *cmd_start, int *cmd_end, t_file *file
 				}
 				else if (tokens.tokens[i].type == REDIR_IN)
 					files->infile = tokens.tokens[i + 1].token;
+				else if (tokens.tokens[i].type == REDIR_HEREDOC)
+				{
+					if (files->infile)
+					{
+						unlink(files->infile);
+						free(files->infile);
+					}
+					files->infile = handle_heredoc(tokens.tokens[i + 1].token);
+					if (!files->infile)
+					{
+						handle_error(INVALID_INPUT, tokens.tokens[i + 1].token, &tokens);
+						return ;
+					}
+				}
 				tokens.tokens[i].type = END;
 				tokens.tokens[i + 1].type = END;
 				i += 2;

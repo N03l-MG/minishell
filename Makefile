@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-#														COMPILATION INFORMATION
+#					COMPILATION INFORMATION
 CC = cc
 FLAGS = -Wall -Wextra -Werror -Iinclude
 NAME = minishell
@@ -26,7 +26,7 @@ SIGNAL_SRC_DIR = src/signals
 BUILTIN_SRC_DIR = src/builtins
 
 MAIN_SRC := $(addprefix $(MAIN_SRC_DIR)/, main.c)
-SHELL_SRC := $(addprefix $(SHELL_SRC_DIR)/, validation.c execution.c init_env.c)
+SHELL_SRC := $(addprefix $(SHELL_SRC_DIR)/, validation.c execution.c init_env.c heredoc.c)
 TOKENS_SRC := $(addprefix $(TOKENS_SRC_DIR)/, token_lexer.c get_env_variables.c ft_tokentrim.c) # create_tokens.c ft_tokensplit.c
 UTILS_SRC := $(addprefix $(UTILS_SRC_DIR)/, utils.c execution_utils.c error_handling.c)
 SIGNAL_SRC := $(addprefix $(SIGNAL_SRC_DIR)/, signal_handler.c)
@@ -44,7 +44,7 @@ $(LIB):
 	git clone https://github.com/N03l-MG/libft.git libft
 	$(MAKE) -C libft
 
-$(NAME): $(OBJ) $(LIB)
+$(NAME): $(OBJ) $(LIB) # -fsanitize=address
 	$(CC) $(FLAGS) -o $(NAME) $(OBJ) $(LIB) -lreadline -fsanitize=address
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c

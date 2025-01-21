@@ -29,6 +29,8 @@ static t_ttype	get_token_type(const char *str)
 		return (REDIR_OUT);
 	if (!strcmp(str, ">>"))
 		return (REDIR_APPEND);
+	if (!strcmp(str, "<<"))
+		return (REDIR_HEREDOC);
 	if (!strcmp(str, ";"))
 		return (SEMICOLON);
 	return (STRING);
@@ -97,6 +99,11 @@ static char	*extract_token(const char *input, int *i)
 		{
 			*i += 2;
 			return (ft_strdup(">>"));
+		}
+		if (input[start] == '<' && input[start + 1] == '<')
+		{
+			*i += 2;
+			return (ft_strdup("<<"));
 		}
 		char tmp[2] = {input[start], '\0'};
 		*i += 1;

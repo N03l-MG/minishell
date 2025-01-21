@@ -19,19 +19,22 @@ static int	check_valid_pipes(t_input tok)
 	i = -1;
 	while (++i < tok.token_count)
 	{
+		if (!tok.tokens[i].token)
+			continue ;
 		if (ft_strcmp(tok.tokens[i].token, "|") == 0)
 		{
 			if (i == 0 || i == tok.token_count - 1)
 				return (handle_error(INVALID_INPUT, tok.tokens[i].token, &tok));
-			if (i > 0 && ft_strcmp(tok.tokens[i - 1].token, "|") == 0)
+			if (i > 0 && tok.tokens[i - 1].token
+				&& ft_strcmp(tok.tokens[i - 1].token, "|") == 0)
 				return (handle_error(INVALID_INPUT, tok.tokens[i].token, &tok));
 		}
-		if (ft_strcmp(tok.tokens[i].token, "<") == 0
-			|| ft_strcmp(tok.tokens[i].token, ">") == 0)
+		if (tok.tokens[i].token && (ft_strcmp(tok.tokens[i].token, "<") == 0
+				|| ft_strcmp(tok.tokens[i].token, ">") == 0))
 		{
 			if (i == tok.token_count - 1)
 				return (handle_error(INVALID_INPUT, tok.tokens[i].token, &tok));
-			if (ft_strcmp(tok.tokens[i + 1].token, "|") == 0)
+			if (tok.tokens[i + 1].token && ft_strcmp(tok.tokens[i + 1].token, "|") == 0)
 				return (handle_error(INVALID_INPUT, tok.tokens[i].token, &tok));
 		}
 	}
@@ -45,6 +48,8 @@ static int	check_for_builtin(t_input tokens)
 	i = -1;
 	while (++i < tokens.token_count)
 	{
+		if (!tokens.tokens[i].token)
+			continue ;
 		if (ft_strcmp(tokens.tokens[i].token, "exit") == 0)
 			return (1);
 		else if (ft_strcmp(tokens.tokens[i].token, "cd") == 0)
@@ -79,7 +84,7 @@ static bool	has_pipe(t_input tokens)
 
 int	validate_input(t_input *tokens)
 {
-	if (tokens->token_count == 0
+	if (!tokens || !tokens->tokens || tokens->token_count == 0
 		|| check_quote_closed(tokens) != 0
 		|| check_valid_pipes(*tokens) > 0)
 		return (1);

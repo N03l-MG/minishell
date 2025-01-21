@@ -78,6 +78,11 @@ int	check_quote_closed(t_input *tokens)
 	i = 0;
 	while (i < tokens->token_count)
 	{
+		if (!tokens->tokens[i].token)
+		{
+			i++;
+			continue ;
+		}
 		dquote = -1;
 		squote = -1;
 		open_quote = 0;

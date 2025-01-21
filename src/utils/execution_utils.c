@@ -95,6 +95,11 @@ void	handle_child(t_data *data, int is_last, t_file *files, char **env)
 		close(data->pipe_fds[1]);
 	}
 	handle_redir(files->infile, files->outfile, files->out_type);
+	if (files->infile && strncmp(files->infile, "/tmp/.heredoc_", 13) == 0)
+	{
+		unlink(files->infile);
+		free(files->infile);
+	}
 	if (is_builtin(data->cmd[0]))
 	{
 		execute_builtin_piped(data->cmd, env);

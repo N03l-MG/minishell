@@ -24,7 +24,7 @@ int	main(int ac, char **av, char **env)
 	env_copy = init_env(env);
 	while (true)
 	{
-		prompt = readline(TEAL "ᴍɪɴɪsʜᴇʟʟ❯ " RESET);
+		prompt = readline(TEAL "MINISHELL❯ " RESET);
 		if (prompt == NULL)
 		{
 			ft_fprintf(2, "Exiting...\n");
