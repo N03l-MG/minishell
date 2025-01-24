@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 13:33:19 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/21 14:05:37 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/24 11:54:54 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,10 @@ void	set_i(int *i, t_input *tokens)
 		(*i)++;
 }
 
-char	**parse_command(t_input tokens, int cmd_start, int cmd_end)
+int	parse_part_1(int cmd_start, int cmd_end, t_input tokens)
 {
-	char	**cmd;
-	int		i;
-	int		j;
-	int		valid_tokens;
+	int	i;
+	int	valid_tokens;
 
 	valid_tokens = 0;
 	i = cmd_start;
@@ -41,11 +39,14 @@ char	**parse_command(t_input tokens, int cmd_start, int cmd_end)
 			valid_tokens++;
 		i++;
 	}
-	if (valid_tokens == 0)
-		return (NULL);
-	cmd = malloc((valid_tokens + 1) * sizeof(char *));
-	if (!cmd)
-		return (NULL);
+	return (valid_tokens);
+}
+
+char	**parse_part_2(int cmd_start, int cmd_end, t_input tokens, char **cmd, int valid_tokens)
+{
+	int	j;
+	int	i;
+
 	j = 0;
 	i = cmd_start;
 	while (i < cmd_end && j < valid_tokens)
@@ -61,17 +62,27 @@ char	**parse_command(t_input tokens, int cmd_start, int cmd_end)
 		{
 			cmd[j] = ft_strdup(tokens.tokens[i].token);
 			if (!cmd[j])
-			{
-				while (--j >= 0)
-					free(cmd[j]);
-				free(cmd);
-				return (NULL);
-			}
+				handle_mem_error(&tokens);
 			j++;
 		}
 		i++;
 	}
 	cmd[j] = NULL;
+	return (cmd);
+}
+
+char	**parse_command(t_input tokens, int cmd_start, int cmd_end)
+{
+	char	**cmd;
+	int		valid_tokens;
+
+	valid_tokens = parse_part_1(cmd_start, cmd_end, tokens);
+	if (valid_tokens == 0)
+		return (NULL);
+	cmd = malloc((valid_tokens + 1) * sizeof(char *));
+	if (!cmd)
+		return (NULL);
+	cmd = parse_part_2(cmd_start, cmd_end, tokens, cmd, valid_tokens);
 	return (cmd);
 }
 
@@ -112,7 +123,7 @@ void	handle_child(t_data *data, int is_last, t_file *files, char **env)
 	}
 }
 
-void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last, int *status)
+void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last)
 {
 	if (!is_last)
 		close(data->pipe_fds[1]);
@@ -122,5 +133,5 @@ void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last, int *stat
 		*prev_fd = data->pipe_fds[0];
 	else
 		*prev_fd = -1;
-	waitpid(pid, status, 0);
+	waitpid(pid, data->status, 0);
 }

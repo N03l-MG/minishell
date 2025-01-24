@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 14:24:45 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/21 15:18:27 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/24 11:27:50 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	execute_builtin(t_input *tokens)
 {
 	if (ft_strcmp(tokens->tokens[0].token, "exit") == 0)
-		exit(EXIT_SUCCESS);
+		clean_exit(EXIT_SUCCESS, tokens);
 	if (ft_strcmp(tokens->tokens[0].token, "cd") == 0)
 	{
 		if (tokens->token_count >= 2)
@@ -48,7 +48,7 @@ void	print_working_dir_piped(void)
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		printf("%s\n", cwd);
 	else
-		handle_error(EXEC_ERROR, "pwd",  NULL);
+		handle_error(EXEC_ERROR, "pwd", NULL);
 }
 
 void	builtin_echo_piped(char **cmd, int no_nl)

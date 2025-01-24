@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 13:14:17 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/24 09:36:10 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/24 12:13:25 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,18 +79,10 @@ static int	count_tokens(const char *input)
 	return (count);
 }
 
-static char	*extract_token(const char *input, int *i)
+static char	*handle_specials(const char *input, int start, int *i)
 {
-	int		start;
-	int		len;
-	bool	in_quotes;
-	char	quote_char;
-	char	*result;
+	char	*tmp;
 
-	start = *i;
-	len = 0;
-	in_quotes = false;
-	quote_char = 0;
 	if (is_special_char(input[start]) && input[start] != ' ')
 	{
 		if (input[start] == '>' && input[start + 1] == '>')
@@ -103,10 +95,29 @@ static char	*extract_token(const char *input, int *i)
 			*i += 2;
 			return (ft_strdup("<<"));
 		}
-		char tmp[2] = {input[start], '\0'};
+		tmp = (char *)malloc(2);
+		tmp[0] = input[start];
+		tmp[1] = '\0';
 		*i += 1;
-		return (ft_strdup(tmp));
+		return (tmp);
 	}
+	return (NULL);
+}
+
+static char	*extract_token(const char *input, int *i)
+{
+	int		start;
+	int		len;
+	bool	in_quotes;
+	char	quote_char;
+	char	*result;
+
+	start = *i;
+	len = 0;
+	in_quotes = false;
+	quote_char = 0;
+	if (handle_specials(input, start, i))
+		return (handle_specials(input, start, i));
 	while (input[*i])
 	{
 		if ((input[*i] == '"' || input[*i] == '\'') && !in_quotes)
@@ -122,8 +133,6 @@ static char	*extract_token(const char *input, int *i)
 		(*i)++;
 	}
 	result = malloc(sizeof(char) * (len + 1));
-	if (!result)
-		return (NULL);
 	ft_strlcpy(result, &input[start], len + 1);
 	return (result);
 }

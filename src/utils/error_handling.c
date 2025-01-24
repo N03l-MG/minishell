@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:39:02 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/21 15:47:36 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/24 11:09:59 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,11 @@ void	free_check_char(char *str)
 {
 	if (str != NULL)
 		free(str);
+}
+
+void	clean_exit(int status, t_input *tokens)
+{
+	free_env(tokens->env);
+	free_tokens(&tokens->tokens, tokens->token_count);
+	exit(status);
 }

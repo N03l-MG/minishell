@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 13:52:14 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/17 13:29:48 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/24 10:56:56 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef struct s_data
 	int		pipe_fds[2];
 	char	**cmd;
 	char	*full_path;
+	int		*status;
 }	t_data;
 
 typedef struct s_file

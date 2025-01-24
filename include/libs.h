@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 13:44:07 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/16 13:19:26 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/24 10:39:26 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIBS_H
 
 # include "../libft/include/libft.h"
+# include "../libft/include/ft_gc.h"
 # include <stdio.h>
 # include <signal.h>
 # include <errno.h>

@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:03:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/21 15:03:51 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/24 11:16:30 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	get_redir(t_input tokens, int *cmd_start, int *cmd_end, t_file *files)
 {
-	int i;
+	int	i;
 
 	i = *cmd_start;
 	files->infile = NULL;
@@ -101,7 +101,6 @@ void	execute_input(t_input tokens)
 	int		cmd_start;
 	pid_t	pid;
 	t_file	files;
-	int		status;
 	int		last_status;
 
 	i = 0;
@@ -135,9 +134,9 @@ void	execute_input(t_input tokens)
 				handle_child(&data, (i == tokens.token_count), &files, tokens.env);
 			else
 			{
-				handle_parent(&data, &data.prev_fd, pid, (i == tokens.token_count), &status);
-				if (i == tokens.token_count && WEXITSTATUS(status))
-					last_status = WEXITSTATUS(status);
+				handle_parent(&data, &data.prev_fd, pid, (i == tokens.token_count));
+				if (i == tokens.token_count && WEXITSTATUS(data.status))
+					last_status = WEXITSTATUS(data.status);
 			}
 		}
 		if (data.cmd)
