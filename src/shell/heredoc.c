@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/22 21:24:57 by nmonzon           #+#    #+#             */
+/*   Updated: 2025/01/24 09:40:16 by nmonzon          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static char	*create_heredoc_file(void)
 {
-	static int  heredoc_count = 0;
-	char        *number_str;
-	char        *filename;
+	static int	heredoc_count = 0;
+	char		*number_str;
+	char		*filename;
 
 	number_str = ft_itoa(heredoc_count++);
 	if (!number_str)
@@ -22,16 +34,16 @@ static void	cleanup_heredoc(char *filename, int fd)
 		close(fd);
 	if (filename)
 	{
-		unlink(filename);  // Delete the temporary file
+		unlink(filename);
 		free(filename);
 	}
 }
 
 char	*handle_heredoc(char *delimiter)
 {
-	char    *line;
-	char    *filename;
-	int     fd;
+	char	*line;
+	char	*filename;
+	int		fd;
 
 	if (!delimiter)
 		return (NULL);
@@ -55,7 +67,7 @@ char	*handle_heredoc(char *delimiter)
 		if (ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
-			break;
+			break ;
 		}
 		ft_putendl_fd(line, fd);
 		free(line);

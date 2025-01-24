@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:21:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/21 15:26:21 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/24 09:38:25 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,13 @@ static int	check_for_builtin(t_input tokens)
 	{
 		if (!tokens.tokens[i].token)
 			continue ;
-		if (ft_strcmp(tokens.tokens[i].token, "exit") == 0)
-			return (1);
-		else if (ft_strcmp(tokens.tokens[i].token, "cd") == 0)
-			return (1);
-		else if (ft_strcmp(tokens.tokens[i].token, "echo") == 0)
-			return (1);
-		else if (ft_strcmp(tokens.tokens[i].token, "pwd") == 0)
-			return (1);
-		else if (ft_strcmp(tokens.tokens[i].token, "env") == 0)
-			return (1);
-		else if (ft_strcmp(tokens.tokens[i].token, "export") == 0)
-			return (1);
-		else if (ft_strcmp(tokens.tokens[i].token, "unset") == 0)
+		if (ft_strcmp(tokens.tokens[i].token, "exit") == 0
+			|| ft_strcmp(tokens.tokens[i].token, "cd") == 0
+			|| ft_strcmp(tokens.tokens[i].token, "echo") == 0
+			|| ft_strcmp(tokens.tokens[i].token, "pwd") == 0
+			|| ft_strcmp(tokens.tokens[i].token, "env") == 0
+			|| ft_strcmp(tokens.tokens[i].token, "export") == 0
+			|| ft_strcmp(tokens.tokens[i].token, "unset") == 0)
 			return (1);
 	}
 	return (0);
