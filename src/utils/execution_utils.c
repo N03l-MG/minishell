@@ -92,6 +92,20 @@ void	setup_pipe(int *pipe_fds)
 		handle_error(PIPE_ERROR, NULL, NULL);
 }
 
+static void	execute_child(t_data *data, char **env)
+{
+	if (is_builtin(data->cmd[0]))
+	{
+		execute_builtin_piped(data->cmd, env);
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		if (execve(data->full_path, data->cmd, env) == -1)
+			handle_error(EXEC_ERROR, data->cmd[0], NULL);
+	}
+}
+
 void	handle_child(t_data *data, int is_last, t_file *files, char **env)
 {
 	if (data->prev_fd != -1)
@@ -111,16 +125,7 @@ void	handle_child(t_data *data, int is_last, t_file *files, char **env)
 		unlink(files->infile);
 		free(files->infile);
 	}
-	if (is_builtin(data->cmd[0]))
-	{
-		execute_builtin_piped(data->cmd, env);
-		exit(EXIT_SUCCESS);
-	}
-	else
-	{
-		if (execve(data->full_path, data->cmd, env) == -1)
-			handle_error(EXEC_ERROR, data->cmd[0], NULL);
-	}
+	execute_child(data, env);
 }
 
 void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last)
@@ -133,5 +138,5 @@ void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last)
 		*prev_fd = data->pipe_fds[0];
 	else
 		*prev_fd = -1;
-	waitpid(pid, data->status, 0);
+	waitpid(pid, &data->status, 0);
 }

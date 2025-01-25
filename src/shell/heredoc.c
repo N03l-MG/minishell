@@ -56,7 +56,7 @@ char	*handle_heredoc(char *delimiter)
 		cleanup_heredoc(filename, -1);
 		return (NULL);
 	}
-	while (1)
+	while (true)
 	{
 		line = readline("heredoc> ");
 		if (!line)

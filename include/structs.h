@@ -70,7 +70,7 @@ typedef struct s_data
 	int		pipe_fds[2];
 	char	**cmd;
 	char	*full_path;
-	int		*status;
+	int		status;
 }	t_data;
 
 typedef struct s_file

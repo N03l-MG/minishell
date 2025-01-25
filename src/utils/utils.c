@@ -110,3 +110,18 @@ bool	is_builtin(const char *cmd)
 		|| ft_strcmp(cmd, "env") == 0
 		|| ft_strcmp(cmd, "exit") == 0);
 }
+
+char	*ft_strndup(const char *s, size_t n)
+{
+	char	*result;
+	size_t	len;
+
+	len = ft_strlen(s);
+	if (len > n)
+		len = n;
+	result = malloc(len + 1);
+	if (!result)
+		return (NULL);
+	ft_strlcpy(result, s, len + 1);
+	return (result);
+}

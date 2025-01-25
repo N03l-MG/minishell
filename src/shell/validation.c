@@ -69,7 +69,10 @@ static bool	has_pipe(t_input tokens)
 	i = 0;
 	while (i < tokens.token_count)
 	{
-		if (tokens.tokens[i].type == PIPE)
+		if (tokens.tokens[i].type == PIPE
+			|| tokens.tokens[i].type == REDIR_IN
+			|| tokens.tokens[i].type == REDIR_OUT
+			|| tokens.tokens[i].type == REDIR_APPEND)
 			return (true);
 		i++;
 	}

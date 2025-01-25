@@ -61,6 +61,7 @@ void	build_path(char *full_path, const char *path, const char *cmd);
 char	*resolve_command_path(const char *command);
 void	free_check_char(char *str);
 bool	is_builtin(const char *cmd);
+char	*ft_strndup(const char *s, size_t n);
 
 /*		Builtins		*/
 int		execute_builtin(t_input *tokens);

@@ -19,10 +19,8 @@ int	main(int ac, char **av, char **env)
 	char	*prompt;
 	t_input	tokens;
 	char	**env_copy;
-	//t_gc	gc;
 
 	(void)ac, (void)av;
-	//gc_init(&gc);
 	signal(SIGINT, sig_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	env_copy = init_env(env);
@@ -52,7 +50,6 @@ int	main(int ac, char **av, char **env)
 		}
 	}
 	free_env(tokens.env);
-	//gc_collect(&gc);
 	return (EXIT_SUCCESS);
 }
 
