@@ -12,13 +12,13 @@
 
 #include "minishell.h"
 
-static int	get_entry_number(char **environ)
+int	get_entry_number(char **environ)
 {
 	int	n;
 
 	n = 0;
 	while (environ[n] != NULL)
-		n ++;
+		n++;
 	return (n);
 }
 

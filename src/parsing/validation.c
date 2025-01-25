@@ -34,7 +34,8 @@ static int	check_valid_pipes(t_input tok)
 		{
 			if (i == tok.token_count - 1)
 				return (handle_error(INVALID_INPUT, tok.tokens[i].token, &tok));
-			if (tok.tokens[i + 1].token && ft_strcmp(tok.tokens[i + 1].token, "|") == 0)
+			if (tok.tokens[i + 1].token
+				&& ft_strcmp(tok.tokens[i + 1].token, "|") == 0)
 				return (handle_error(INVALID_INPUT, tok.tokens[i].token, &tok));
 		}
 	}

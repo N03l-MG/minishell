@@ -12,53 +12,6 @@
 
 #include "minishell.h"
 
-static bool	is_special_char(char c)
-{
-	return (c == '|' || c == '<' || c == '>' || c == ';' || c == ' ');
-}
-
-static t_ttype	get_token_type(const char *str)
-{
-	if (!str || !*str)
-		return (END);
-	if (!strcmp(str, "|"))
-		return (PIPE);
-	if (!strcmp(str, "<"))
-		return (REDIR_IN);
-	if (!strcmp(str, ">"))
-		return (REDIR_OUT);
-	if (!strcmp(str, ">>"))
-		return (REDIR_APPEND);
-	if (!strcmp(str, "<<"))
-		return (REDIR_HEREDOC);
-	return (STRING);
-}
-
-static char	*handle_specials(const char *input, int start, int *i)
-{
-	char	*tmp;
-
-	if (is_special_char(input[start]) && input[start] != ' ')
-	{
-		if (input[start] == '>' && input[start + 1] == '>')
-		{
-			*i = start + 2;
-			return (ft_strdup(">>"));
-		}
-		if (input[start] == '<' && input[start + 1] == '<')
-		{
-			*i = start + 2;
-			return (ft_strdup("<<"));
-		}
-		tmp = (char *)malloc(2);
-		tmp[0] = input[start];
-		tmp[1] = '\0';
-		*i = start + 1;
-		return (tmp);
-	}
-	return (NULL);
-}
-
 static char	*extract_quoted(const char *input, int *i, bool *in_quotes,
 						char *quote_char)
 {
@@ -84,7 +37,7 @@ static char	*extract_quoted(const char *input, int *i, bool *in_quotes,
 	return (ft_strndup(&input[start], len));
 }
 
-static char	*extract_token(const char *input, int *i)
+char	*extract_token(const char *input, int *i)
 {
 	bool	in_quotes;
 	char	quote_char;
@@ -96,30 +49,6 @@ static char	*extract_token(const char *input, int *i)
 	in_quotes = false;
 	quote_char = 0;
 	return (extract_quoted(input, i, &in_quotes, &quote_char));
-}
-
-static int	count_tokens(const char *input)
-{
-	int		count;
-	int		i;
-	char	*token;
-
-	count = 0;
-	i = 0;
-	while (input[i])
-	{
-		while (input[i] == ' ')
-			i++;
-		if (!input[i])
-			break ;
-		token = extract_token(input, &i);
-		if (token)
-		{
-			free(token);
-			count++;
-		}
-	}
-	return (count);
 }
 
 static void	process_token(t_input *tok, int *index, const char *input, int *i)

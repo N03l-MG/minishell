@@ -18,20 +18,6 @@ void	free_check_char(char *str)
 		free(str);
 }
 
-char	*my_getenv(char **env, char *name)
-{
-	int	i;
-
-	i = 0;
-	while (env[i] != NULL)
-	{
-		if (ft_strncmp(env[i], name, ft_strlen(name)) == 0)
-			return (env[i] + ft_strlen(name) + 1);
-		i ++;
-	}
-	return (NULL);
-}
-
 static char	*get_var_name(char *str)
 {
 	int		i;

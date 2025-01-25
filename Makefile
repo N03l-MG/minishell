@@ -18,27 +18,30 @@ NAME = minishell
 #					SOURCE AND OBJECT FILES
 LIB = libft/libft.a
 SRC_DIR = src
-MAIN_SRC_DIR = src/main
-SHELL_SRC_DIR = src/shell
-TOKENS_SRC_DIR = src/tokens
+ENV_SRC_DIR = src/env_manipulation
+PARSING_SRC_DIR = src/parsing
+TOKEN_SRC_DIR = src/tokenizer
 UTILS_SRC_DIR = src/utils
 SIGNAL_SRC_DIR = src/signals
 BUILTIN_SRC_DIR = src/builtins
-ERROR_SRC_DIR = src/error
+EXEC_SRC_DIR = src/execution
+ERROR_SRC_DIR = src/error_cleanup
 
-MAIN_SRC := $(addprefix $(MAIN_SRC_DIR)/, main.c)
-SHELL_SRC := $(addprefix $(SHELL_SRC_DIR)/, validation.c execution.c init_env.c heredoc.c)
-TOKENS_SRC := $(addprefix $(TOKENS_SRC_DIR)/, token_lexer.c get_env_variables.c ft_tokentrim.c)
-UTILS_SRC := $(addprefix $(UTILS_SRC_DIR)/, utils.c execution_utils.c)
+EXEC_SRC := $(addprefix $(EXEC_SRC_DIR)/, execution.c execution_utils.c execute_builtin.c \
+                                        execute_builtin_pipe.c redirections.c heredoc.c)
+ENV_SRC := $(addprefix $(ENV_SRC_DIR)/, env_prechanges.c init_env.c update_env.c)
+TOKENS_SRC := $(addprefix $(TOKEN_SRC_DIR)/, token_lexer.c token_trim.c token_utils.c)
+PARSING_SRC := $(addprefix $(PARSING_SRC_DIR)/, get_env_variables.c validation.c)
+UTILS_SRC := $(addprefix $(UTILS_SRC_DIR)/, misc_utils.c path_construction.c)
 SIGNAL_SRC := $(addprefix $(SIGNAL_SRC_DIR)/, signal_handler.c)
-BUILTIN_SRC := $(addprefix $(BUILTIN_SRC_DIR)/, cd.c env.c export.c unset.c echo.c execute_builtin.c pwd.c update_env.c)
+BUILTIN_SRC := $(addprefix $(BUILTIN_SRC_DIR)/, cd.c env.c export.c unset.c echo.c pwd.c)
 ERROR_SRC := $(addprefix $(ERROR_SRC_DIR)/, error_handling.c cleanup.c)
 
-SRC_FILES = $(MAIN_SRC) $(SHELL_SRC) $(TOKENS_SRC) $(UTILS_SRC) $(SIGNAL_SRC) $(BUILTIN_SRC) $(ERROR_SRC)
+SRC_FILES = src/main.c $(EXEC_SRC) $(ENV_SRC) $(TOKENS_SRC) $(PARSING_SRC) \
+            $(UTILS_SRC) $(SIGNAL_SRC) $(BUILTIN_SRC) $(ERROR_SRC)
 OBJ = $(SRC_FILES:.c=.o)
 
 #					MAKEFILE CODE
-
 all: $(LIB) $(NAME)
 
 $(LIB):
@@ -46,7 +49,7 @@ $(LIB):
 	git clone https://github.com/N03l-MG/libft.git libft
 	$(MAKE) -C libft
 
-$(NAME): $(OBJ) $(LIB) # -fsanitize=address
+$(NAME): $(OBJ) $(LIB) # 
 	$(CC) $(FLAGS) -o $(NAME) $(OBJ) $(LIB) -lreadline -fsanitize=address
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c

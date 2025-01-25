@@ -12,16 +12,6 @@
 
 #include "minishell.h"
 
-static int	get_entry_number(char **environ)
-{
-	int	n;
-
-	n = 0;
-	while (environ[n] != NULL)
-		n ++;
-	return (n);
-}
-
 void	free_env(char **env)
 {
 	int	i;
@@ -30,20 +20,15 @@ void	free_env(char **env)
 	while (i < get_entry_number(env))
 	{
 		free(env[i]);
-		i ++;
+		i++;
 	}
 	free(env);
 }
 
-char	**init_env(char **environ)
+static char	**init_env_vars(char **env, char **environ)
 {
-	char	**env;
-	int		i;
-	char	*shlvl_str;
+	int	i;
 
-	env = malloc(sizeof(char *) * (get_entry_number(environ) + 3));
-	if (!env)
-		handle_fatal_error(MEMORY_ERROR, NULL, NULL);
 	i = 0;
 	while (environ[i])
 	{
@@ -56,7 +41,15 @@ char	**init_env(char **environ)
 		i++;
 	}
 	env[i] = NULL;
-	if (!(env = add_envvar_pre(env, "LASTSTATUS", "0")))
+	return (env);
+}
+
+static char	**add_default_vars(char **env)
+{
+	char	*shlvl_str;
+
+	env = add_envvar_pre(env, "LASTSTATUS", "0");
+	if (!env)
 		handle_fatal_error(MEMORY_ERROR, NULL, NULL);
 	shlvl_str = ft_itoa(ft_atoi(my_getenv(env, "SHLVL")) + 1);
 	if (!shlvl_str)
@@ -68,34 +61,14 @@ char	**init_env(char **environ)
 	return (env);
 }
 
-char	**add_envvar_pre(char **env, char *name, char *con)
+char	**init_env(char **environ)
 {
-	char	**env_new;
-	int		i;
+	char	**env;
 
-	env_new = malloc(sizeof(char *) * (get_entry_number(env) + 2));
-	i = 0;
-	while (env[i] != NULL)
-	{
-		env_new[i] = ft_strdup(env[i]);
-		i ++;
-	}
-	env_new[i] = malloc(ft_strlen(name) + ft_strlen(con) + 2);
-	create_and_add_new(env_new[i], name, con);
-	env_new[i + 1] = NULL;
-	return (env_new);
-}
-
-char	**replace_envvar_pre(char **env, char *name, char *con)
-{
-	int		i;
-	char	*replacement;
-
-	i = 0;
-	while (ft_strncmp(env[i], name, ft_strlen(name)) != 0
-		&& env[i] != NULL)
-		i ++;
-	replacement = malloc(ft_strlen(name) + ft_strlen(con) + 2);
-	env[i] = replace_and_add_new(replacement, name, con, env[i]);
+	env = malloc(sizeof(char *) * (get_entry_number(environ) + 3));
+	if (!env)
+		handle_fatal_error(MEMORY_ERROR, NULL, NULL);
+	env = init_env_vars(env, environ);
+	env = add_default_vars(env);
 	return (env);
 }

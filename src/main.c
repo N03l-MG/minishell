@@ -12,7 +12,17 @@
 
 #include "minishell.h"
 
-void	print_tokens(t_input tokens);
+void	print_tokens(t_input tokens)
+{
+	int	i;
+
+	i = 0;
+	while (i < tokens.token_count)
+	{
+		printf("Token %d: %s\n", i, tokens.tokens[i].token);
+		i++;
+	}
+}
 
 int	main(int ac, char **av, char **env)
 {
@@ -40,7 +50,7 @@ int	main(int ac, char **av, char **env)
 				continue ;
 			}
 			tokens = create_tokens(prompt, env_copy);
-			//print_tokens(tokens);
+			print_tokens(tokens);
 			add_history(prompt);
 			if (validate_input(&tokens) == 0)
 				execute_input(tokens);
@@ -51,14 +61,4 @@ int	main(int ac, char **av, char **env)
 	}
 	free_env(tokens.env);
 	return (EXIT_SUCCESS);
-}
-
-void	print_tokens(t_input tokens)
-{
-	int i = 0;
-	while(i < tokens.token_count)
-	{
-		printf("Token %d: %s\n", i, tokens.tokens[i].token);
-		i++;
-	}
 }

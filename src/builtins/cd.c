@@ -12,33 +12,45 @@
 
 #include "minishell.h"
 
-void	change_dir(t_input *tok, char *path)
+static int	check_path_access(char *path, t_input *tok)
 {
-	char	pwd[1024];
-
 	if (!path || path[0] == '\0')
 	{
 		handle_error(INVALID_INPUT, "cd: path required", tok);
-		return ;
+		return (0);
 	}
 	if (access(path, F_OK) != 0)
 	{
 		handle_error(INVALID_FILE, path, tok);
-		return ;
+		return (0);
 	}
 	if (access(path, X_OK) != 0)
 	{
 		handle_error(PERMISSION_ERROR, path, tok);
-		return ;
+		return (0);
 	}
-	if (chdir(path) != 0)
-	{
-		handle_error(EXEC_ERROR, path, tok);
-		return ;
-	}
+	return (1);
+}
+
+static void	update_pwd(t_input *tok)
+{
+	char	pwd[1024];
+
 	if (getcwd(pwd, sizeof(pwd)) != NULL)
 	{
 		tok->env = export_variable_sep("PWD", pwd, *tok);
 		tok->env = export_variable_sep("LASTSTATUS", "0", *tok);
 	}
+}
+
+void	change_dir(t_input *tok, char *path)
+{
+	if (!check_path_access(path, tok))
+		return ;
+	if (chdir(path) != 0)
+	{
+		handle_error(EXEC_ERROR, path, tok);
+		return ;
+	}
+	update_pwd(tok);
 }

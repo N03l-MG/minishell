@@ -12,6 +12,20 @@
 
 #include "minishell.h"
 
+char	*my_getenv(char **env, char *name)
+{
+	int	i;
+
+	i = 0;
+	while (env[i] != NULL)
+	{
+		if (ft_strncmp(env[i], name, ft_strlen(name)) == 0)
+			return (env[i] + ft_strlen(name) + 1);
+		i ++;
+	}
+	return (NULL);
+}
+
 void	print_envs(t_input *tok)
 {
 	int	i;

@@ -12,37 +12,67 @@
 
 #include "minishell.h"
 
-void	buildin_echo(t_input tok, int no_nl, int start_token)
+static void	print_last_status(char **env)
 {
-	int	i;
+	char	*status;
+
+	status = my_getenv(env, "LASTSTATUS");
+	printf("%s", status);
+}
+
+static void	print_token_content(char *token, char **env)
+{
 	int	j;
 
-	if (start_token == -1)
+	j = 0;
+	while (token[j])
+	{
+		if (token[j] == '$' && token[j + 1] == '?')
+		{
+			print_last_status(env);
+			j += 2;
+		}
+		else
+		{
+			printf("%c", token[j]);
+			j++;
+		}
+	}
+}
+
+static void	print_tokens(t_input tok, int start_idx)
+{
+	int	i;
+
+	i = start_idx;
+	while (i < tok.token_count)
+	{
+		if (tok.tokens[i].token)
+		{
+			print_token_content(tok.tokens[i].token, tok.env);
+			if (i < tok.token_count - 1)
+				printf(" ");
+		}
+		i++;
+	}
+}
+
+void	builtin_echo(t_input tok, int no_nl)
+{
+	int	start_idx;
+
+	if (tok.token_count == 1)
 	{
 		if (!no_nl)
 			printf("\n");
 		tok.env = export_variable_sep("LASTSTATUS", "0", tok);
 		return ;
 	}
-	i = start_token + 1 + no_nl;
-	while (i < tok.token_count)
-	{
-		j = 0;
-		while (tok.tokens[i].token && tok.tokens[i].token[j] != '\0')
-		{
-			if (tok.tokens[i].token[j] == '$'
-				&& tok.tokens[i].token[j + 1] == '?')
-			{
-				printf("%s", my_getenv(tok.env, "LASTSTATUS"));
-				j += 2;
-			}
-			else
-				printf("%c", tok.tokens[i].token[j++]);
-		}
-		if (i < tok.token_count - 1)
-			printf(" ");
-		i++;
-	}
+	if (no_nl)
+		start_idx = 2;
+	else
+		start_idx = 1;
+	print_tokens(tok, start_idx);
 	if (!no_nl)
 		printf("\n");
 	tok.env = export_variable_sep("LASTSTATUS", "0", tok);

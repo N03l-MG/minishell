@@ -26,12 +26,14 @@ char	**add_envvar_pre(char **env, char *name, char *con);
 char	**replace_envvar_pre(char **env, char *name, char *con);
 void	create_and_add_new(char *env, char *name, char *con);
 char	*replace_and_add_new(char *repl, char *name, char *con, char *env);
+int		get_entry_number(char **environ);
 
 /*		Token management		*/
 t_input	create_tokens(const char *input, char **env_copy);
 char	*ft_tokentrim(char *str);
 char	*replace_env(t_input token, char *tok);
 int		check_quote_closed(t_input *tokens);
+char	*extract_token(const char *input, int *i);
 void	free_tokens(t_token **ptr, int x);
 
 /*	Shell functionality	*/
@@ -50,6 +52,7 @@ void	setup_pipe(int *pipe_fds);
 void	handle_child(t_data *data, int is_last, t_file *files, char **env);
 void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last);
 char	*handle_heredoc(char *delimiter);
+void	get_redir(t_input tokens, int *cmd_start, int *cmd_end, t_file *files);
 
 /*		Signals		*/
 void	sig_sigint(int sig);
@@ -62,12 +65,16 @@ char	*resolve_command_path(const char *command);
 void	free_check_char(char *str);
 bool	is_builtin(const char *cmd);
 char	*ft_strndup(const char *s, size_t n);
+bool	is_special_char(char c);
+t_ttype	get_token_type(const char *str);
+char	*handle_specials(const char *input, int start, int *i);
+int		count_tokens(const char *input);
 
 /*		Builtins		*/
 int		execute_builtin(t_input *tokens);
 void	execute_builtin_piped(char **cmd, char **env);
 void	change_dir(t_input *tok, char *path);
-void	buildin_echo(t_input tok, int no_nl, int start_token);
+void	builtin_echo(t_input tok, int no_nl);
 void	print_working_dir(t_input *tok);
 void	print_envs(t_input *tok);
 void	print_sorted_env(char **env);

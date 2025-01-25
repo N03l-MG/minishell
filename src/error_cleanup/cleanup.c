@@ -77,6 +77,5 @@ void	clean_exit(int status, t_input *tokens)
 	signal(SIGQUIT, SIG_DFL);
 	free_input(tokens);
 	free_heredoc_files();
-	//free_env(tokens->env); // breaks for some reason???
 	exit(status);
 }
