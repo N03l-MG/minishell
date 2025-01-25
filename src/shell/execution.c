@@ -39,7 +39,8 @@ static void	init_files(t_file *files)
 	files->out_type = REDIR_OUT;
 }
 
-static void	get_redir(t_input tokens, int *cmd_start, int *cmd_end, t_file *files)
+static void	get_redir(t_input tokens, int *cmd_start,
+					int *cmd_end, t_file *files)
 {
 	int	i;
 

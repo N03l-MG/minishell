@@ -39,26 +39,32 @@ char	**init_env(char **environ)
 {
 	char	**env;
 	int		i;
+	char	*shlvl_str;
 
 	env = malloc(sizeof(char *) * (get_entry_number(environ) + 3));
-	if (env == NULL)
-		exit(EXIT_FAILURE);
+	if (!env)
+		handle_fatal_error(MEMORY_ERROR, NULL, NULL);
 	i = 0;
-	while (environ[i] != NULL)
+	while (environ[i])
 	{
 		env[i] = ft_strdup(environ[i]);
-		if (env[i] == NULL)
+		if (!env[i])
 		{
 			free_env(env);
-			exit(EXIT_FAILURE);
+			handle_fatal_error(MEMORY_ERROR, NULL, NULL);
 		}
-		i ++;
+		i++;
 	}
 	env[i] = NULL;
-	env = add_envvar_pre(env, "LASTSTATUS", "0");
-	env[++i] = NULL;
-	env = replace_envvar_pre(env, "SHLVL", ft_itoa(ft_atoi(my_getenv(env, "SHLVL")) + 1));
-	env[++i] = NULL;
+	if (!(env = add_envvar_pre(env, "LASTSTATUS", "0")))
+		handle_fatal_error(MEMORY_ERROR, NULL, NULL);
+	shlvl_str = ft_itoa(ft_atoi(my_getenv(env, "SHLVL")) + 1);
+	if (!shlvl_str)
+		handle_fatal_error(MEMORY_ERROR, NULL, NULL);
+	env = replace_envvar_pre(env, "SHLVL", shlvl_str);
+	free(shlvl_str);
+	if (!env)
+		handle_fatal_error(MEMORY_ERROR, NULL, NULL);
 	return (env);
 }
 

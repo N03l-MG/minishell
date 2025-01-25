@@ -1,0 +1,107 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_handling.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/06 14:39:02 by nmonzon           #+#    #+#             */
+/*   Updated: 2025/01/24 11:09:59 by nmonzon          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+static char	*get_error_message(t_error error)
+{
+	static char	*messages[] = {
+	[ENV_NOT_FOUND] = "Environment variable not found",
+	[COMMAND_NOT_FOUND] = "Command not found",
+	[INVALID_INPUT] = "Invalid input",
+	[INVALID_FILE] = "No such file or directory",
+	[PIPE_ERROR] = "Pipe failure",
+	[FORK_ERROR] = "Fork failure",
+	[EXEC_ERROR] = "Failed to execute command",
+	[MEMORY_ERROR] = "Memory allocation failed",
+	[PERMISSION_ERROR] = "Permission denied",
+	[SYNTAX_ERROR] = "Syntax error"
+	};
+
+	return (messages[error]);
+}
+
+static int	get_error_status(t_error error)
+{
+	static const int	status[] = {
+	[ENV_NOT_FOUND] = 1,
+	[COMMAND_NOT_FOUND] = 127,
+	[INVALID_INPUT] = 1,
+	[INVALID_FILE] = 1,
+	[PIPE_ERROR] = 1,
+	[FORK_ERROR] = 1,
+	[EXEC_ERROR] = 126,
+	[MEMORY_ERROR] = 1,
+	[PERMISSION_ERROR] = 1,
+	[SYNTAX_ERROR] = 1
+	};
+
+	return (status[error]);
+}
+
+void	print_error(t_error error, char *context)
+{
+	ft_putstr_fd("minishell: ", 2);
+	if (context)
+	{
+		ft_putstr_fd(context, 2);
+		ft_putstr_fd(": ", 2);
+	}
+	ft_putendl_fd(get_error_message(error), 2);
+}
+
+int	handle_error(t_error error, char *context, t_input *tok)
+{
+	int		status;
+	char	*status_str;
+
+	status = get_error_status(error);
+	print_error(error, context);
+	if (tok)
+	{
+		status_str = ft_itoa(status);
+		tok->env = export_variable_sep("LASTSTATUS", status_str, *tok);
+		free(status_str);
+	}
+	return (status);
+}
+
+void	handle_fatal_error(t_error error, char *context, t_input *tokens)
+{
+	handle_error(error, context, tokens);
+	clean_exit(EXIT_FAILURE, tokens);
+}
+
+// void	handle_mem_error(t_input *tokens)
+// {
+// 	ft_fprintf(2, "Fatal Error: Memory allocation failed!\n");
+// 	free_allocated(NULL, tokens, MEMORY_ERROR);
+// 	exit(EXIT_FAILURE);
+// }
+
+// void	free_allocated(t_data *data, t_input *tokens, t_error error)
+// {
+// 	if (error == MEMORY_ERROR || error == EXEC_ERROR)
+// 		free_tokens(&tokens->tokens, tokens->token_count);
+// 	if (data->cmd && data->full_path)
+// 	{
+// 		free(data->cmd);
+// 		free(data->full_path);
+// 	}
+// }
+
+// void	clean_exit(int status, t_input *tokens)
+// {
+// 	free_env(tokens->env);
+// 	free_tokens(&tokens->tokens, tokens->token_count);
+// 	exit(status);
+// }

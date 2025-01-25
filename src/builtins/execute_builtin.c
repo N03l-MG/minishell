@@ -14,6 +14,8 @@
 
 int	execute_builtin(t_input *tokens)
 {
+	if (!tokens || !tokens->tokens || !tokens->tokens[0].token)
+		return (1);
 	if (ft_strcmp(tokens->tokens[0].token, "exit") == 0)
 		clean_exit(EXIT_SUCCESS, tokens);
 	if (ft_strcmp(tokens->tokens[0].token, "cd") == 0)
@@ -25,7 +27,8 @@ int	execute_builtin(t_input *tokens)
 	}
 	else if (ft_strcmp(tokens->tokens[0].token, "echo") == 0)
 	{
-		if (ft_strcmp(tokens->tokens[1].token, "-n") == 0)
+		if (tokens->token_count > 1
+			&& ft_strcmp(tokens->tokens[1].token, "-n") == 0)
 			buildin_echo(*tokens, 1, 0);
 		else
 			buildin_echo(*tokens, 0, 0);
@@ -35,9 +38,17 @@ int	execute_builtin(t_input *tokens)
 	else if (ft_strcmp(tokens->tokens[0].token, "env") == 0)
 		print_envs(tokens);
 	else if (ft_strcmp(tokens->tokens[0].token, "export") == 0)
-		tokens->env = export_variable(tokens->tokens[1].token, *tokens);
+	{
+		if (tokens->token_count > 1)
+			tokens->env = export_variable(tokens->tokens[1].token, *tokens);
+		else
+			print_sorted_env(tokens->env);
+	}
 	else if (ft_strcmp(tokens->tokens[0].token, "unset") == 0)
-		tokens->env = unset_variable(tokens->tokens[1].token, *tokens);
+	{
+		if (tokens->token_count > 1)
+			tokens->env = unset_variable(tokens->tokens[1].token, *tokens);
+	}
 	return (1);
 }
 
@@ -85,6 +96,8 @@ void	print_envs_piped(char **env)
 // Add other builtins that can output to pipes
 void	execute_builtin_piped(char **cmd, char **env)
 {
+	if (!cmd || !cmd[0])
+		exit(handle_error(INVALID_INPUT, "empty command", NULL));
 	if (ft_strcmp(cmd[0], "echo") == 0)
 	{
 		if (cmd[1] && ft_strcmp(cmd[1], "-n") == 0)
@@ -96,4 +109,6 @@ void	execute_builtin_piped(char **cmd, char **env)
 		print_working_dir_piped();
 	else if (ft_strcmp(cmd[0], "env") == 0)
 		print_envs_piped(env);
+	else
+		exit(handle_error(COMMAND_NOT_FOUND, cmd[0], NULL));
 }

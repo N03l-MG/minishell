@@ -17,24 +17,31 @@ void	buildin_echo(t_input tok, int no_nl, int start_token)
 	int	i;
 	int	j;
 
+	if (start_token == -1)
+	{
+		if (!no_nl)
+			printf("\n");
+		tok.env = export_variable_sep("LASTSTATUS", "0", tok);
+		return ;
+	}
 	i = start_token + 1 + no_nl;
 	while (i < tok.token_count)
 	{
 		j = 0;
-		while (tok.tokens[i].token[j] != '\0')
+		while (tok.tokens[i].token && tok.tokens[i].token[j] != '\0')
 		{
-			if (tok.tokens[i].token[j] == '$' && tok.tokens[i].token[j + 1] == '?')
+			if (tok.tokens[i].token[j] == '$'
+				&& tok.tokens[i].token[j + 1] == '?')
 			{
 				printf("%s", my_getenv(tok.env, "LASTSTATUS"));
 				j += 2;
 			}
 			else
-				printf("%c", tok.tokens[i].token[j]);
-			j ++;
+				printf("%c", tok.tokens[i].token[j++]);
 		}
 		if (i < tok.token_count - 1)
 			printf(" ");
-		i ++;
+		i++;
 	}
 	if (!no_nl)
 		printf("\n");

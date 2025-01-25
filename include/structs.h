@@ -38,7 +38,8 @@ typedef enum e_error
 	FORK_ERROR,
 	EXEC_ERROR,
 	MEMORY_ERROR,
-	NOTANERROR
+	PERMISSION_ERROR,
+	SYNTAX_ERROR
 }	t_error;
 
 /*			STRUCTS			*/

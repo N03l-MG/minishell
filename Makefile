@@ -24,15 +24,17 @@ TOKENS_SRC_DIR = src/tokens
 UTILS_SRC_DIR = src/utils
 SIGNAL_SRC_DIR = src/signals
 BUILTIN_SRC_DIR = src/builtins
+ERROR_SRC_DIR = src/error
 
 MAIN_SRC := $(addprefix $(MAIN_SRC_DIR)/, main.c)
 SHELL_SRC := $(addprefix $(SHELL_SRC_DIR)/, validation.c execution.c init_env.c heredoc.c)
-TOKENS_SRC := $(addprefix $(TOKENS_SRC_DIR)/, token_lexer.c get_env_variables.c ft_tokentrim.c) # create_tokens.c ft_tokensplit.c
-UTILS_SRC := $(addprefix $(UTILS_SRC_DIR)/, utils.c execution_utils.c error_handling.c)
+TOKENS_SRC := $(addprefix $(TOKENS_SRC_DIR)/, token_lexer.c get_env_variables.c ft_tokentrim.c)
+UTILS_SRC := $(addprefix $(UTILS_SRC_DIR)/, utils.c execution_utils.c)
 SIGNAL_SRC := $(addprefix $(SIGNAL_SRC_DIR)/, signal_handler.c)
 BUILTIN_SRC := $(addprefix $(BUILTIN_SRC_DIR)/, cd.c env.c export.c unset.c echo.c execute_builtin.c pwd.c update_env.c)
+ERROR_SRC := $(addprefix $(ERROR_SRC_DIR)/, error_handling.c cleanup.c)
 
-SRC_FILES = $(MAIN_SRC) $(SHELL_SRC) $(TOKENS_SRC) $(UTILS_SRC) $(SIGNAL_SRC) $(BUILTIN_SRC)
+SRC_FILES = $(MAIN_SRC) $(SHELL_SRC) $(TOKENS_SRC) $(UTILS_SRC) $(SIGNAL_SRC) $(BUILTIN_SRC) $(ERROR_SRC)
 OBJ = $(SRC_FILES:.c=.o)
 
 #					MAKEFILE CODE

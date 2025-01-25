@@ -42,7 +42,8 @@ int	parse_part_1(int cmd_start, int cmd_end, t_input tokens)
 	return (valid_tokens);
 }
 
-char	**parse_part_2(int cmd_start, int cmd_end, t_input tokens, char **cmd, int valid_tokens)
+char	**parse_part_2(int cmd_start, int cmd_end, t_input tokens,
+					char **cmd, int valid_tokens)
 {
 	int	j;
 	int	i;
@@ -62,7 +63,7 @@ char	**parse_part_2(int cmd_start, int cmd_end, t_input tokens, char **cmd, int 
 		{
 			cmd[j] = ft_strdup(tokens.tokens[i].token);
 			if (!cmd[j])
-				handle_mem_error(&tokens);
+				handle_fatal_error(MEMORY_ERROR, NULL, &tokens);
 			j++;
 		}
 		i++;

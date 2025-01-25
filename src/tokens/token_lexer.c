@@ -59,7 +59,8 @@ static char	*handle_specials(const char *input, int start, int *i)
 	return (NULL);
 }
 
-static char	*extract_quoted(const char *input, int *i, bool *in_quotes, char *quote_char)
+static char	*extract_quoted(const char *input, int *i, bool *in_quotes,
+						char *quote_char)
 {
 	int	start;
 	int	len;
@@ -99,16 +100,24 @@ static char	*extract_token(const char *input, int *i)
 
 static int	count_tokens(const char *input)
 {
-	int	count;
-	int	i;
+	int		count;
+	int		i;
+	char	*token;
 
 	count = 0;
 	i = 0;
 	while (input[i])
 	{
-		if (extract_token(input, &i) != NULL)
+		while (input[i] == ' ')
+			i++;
+		if (!input[i])
+			break ;
+		token = extract_token(input, &i);
+		if (token)
+		{
+			free(token);
 			count++;
-		i++;
+		}
 	}
 	return (count);
 }
@@ -153,10 +162,7 @@ t_input	create_tokens(const char *input, char **env_copy)
 	tok.token_count = count_tokens(input);
 	tok.tokens = malloc(sizeof(t_token) * (tok.token_count + 1));
 	if (!tok.tokens)
-	{
-		handle_mem_error(&tok);
-		exit(EXIT_FAILURE);
-	}
+		handle_fatal_error(MEMORY_ERROR, NULL, &tok);
 	init_tokens(&tok, tok.token_count);
 	i = 0;
 	index = 0;

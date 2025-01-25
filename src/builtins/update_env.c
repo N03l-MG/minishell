@@ -67,7 +67,7 @@ char	**add_envvar(t_input tok, char *name, char *con)
 
 	env = malloc(sizeof(char *) * (get_entry_number(tok.env) + 2));
 	if (env == NULL)
-		handle_mem_error(&tok);
+		handle_fatal_error(MEMORY_ERROR, NULL, &tok);
 	i = 0;
 	while (tok.env[i] != NULL)
 	{
@@ -78,7 +78,7 @@ char	**add_envvar(t_input tok, char *name, char *con)
 	if (env[i] == NULL)
 	{
 		free(env);
-		handle_mem_error(&tok);
+		handle_fatal_error(MEMORY_ERROR, NULL, &tok);
 	}
 	create_and_add_new(env[i], name, con);
 	env[i + 1] = NULL;
@@ -99,7 +99,7 @@ char	**replace_envvar(t_input tok, char *name, char *con)
 		return (add_envvar(tok, name, con));
 	replacement = malloc(ft_strlen(name) + ft_strlen(con) + 2);
 	if (replacement == NULL)
-		handle_mem_error(&tok);
+		handle_fatal_error(MEMORY_ERROR, NULL, &tok);
 	tok.env[i] = replace_and_add_new(replacement, name, con, tok.env[i]);
 	return (tok.env);
 }

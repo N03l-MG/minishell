@@ -70,14 +70,15 @@ void	change_dir(t_input *tok, char *path);
 void	buildin_echo(t_input tok, int no_nl, int start_token);
 void	print_working_dir(t_input *tok);
 void	print_envs(t_input *tok);
+void	print_sorted_env(char **env);
 char	**export_variable(char *var, t_input tok);
 char	**export_variable_sep(char *var, char *con, t_input tok);
 char	**unset_variable(char *var, t_input tok);
 
 /*	Error Handling		*/
-int		handle_error(t_error error, char *current, t_input *tok);
-void	handle_mem_error(t_input *tokens);
-void	free_allocated(t_data *data, t_input *tokens, t_error error);
+void	print_error(t_error error, char *context);
+int		handle_error(t_error error, char *context, t_input *tok);
+void	handle_fatal_error(t_error error, char *context, t_input *tokens);
 void	free_env(char **env);
 void	clean_exit(int status, t_input *tokens);
 

@@ -39,9 +39,26 @@ static void	cleanup_heredoc(char *filename, int fd)
 	}
 }
 
-char	*handle_heredoc(char *delimiter)
+static int	write_heredoc_content(int fd, char *delimiter)
 {
 	char	*line;
+
+	while (true)
+	{
+		line = readline("heredoc> ");
+		if (!line || ft_strcmp(line, delimiter) == 0)
+		{
+			free(line);
+			return (0);
+		}
+		ft_putendl_fd(line, fd);
+		free(line);
+	}
+	return (1);
+}
+
+char	*handle_heredoc(char *delimiter)
+{
 	char	*filename;
 	int		fd;
 
@@ -56,21 +73,10 @@ char	*handle_heredoc(char *delimiter)
 		cleanup_heredoc(filename, -1);
 		return (NULL);
 	}
-	while (true)
+	if (write_heredoc_content(fd, delimiter) != 0)
 	{
-		line = readline("heredoc> ");
-		if (!line)
-		{
-			cleanup_heredoc(filename, fd);
-			return (NULL);
-		}
-		if (ft_strcmp(line, delimiter) == 0)
-		{
-			free(line);
-			break ;
-		}
-		ft_putendl_fd(line, fd);
-		free(line);
+		cleanup_heredoc(filename, fd);
+		return (NULL);
 	}
 	close(fd);
 	return (filename);

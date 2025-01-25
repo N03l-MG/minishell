@@ -12,6 +12,12 @@
 
 #include "minishell.h"
 
+void	free_check_char(char *str)
+{
+	if (str != NULL)
+		free(str);
+}
+
 char	*my_getenv(char **env, char *name)
 {
 	int	i;
@@ -84,21 +90,33 @@ char	**export_variable(char *var, t_input tok)
 	char	*var_con;
 	char	*content;
 
+	if (!var || !ft_strchr(var, '='))
+	{
+		handle_error(INVALID_INPUT, "export: invalid format", &tok);
+		return (tok.env);
+	}
 	var_name = get_var_name(var);
 	content = get_var_con(var);
-	var_con = ft_strtrim(content, "\"'");
-	free(content);
-	if (var_name == NULL || var_con == NULL)
+	if (!var_name || !content)
 	{
 		free_check_char(var_name);
-		free_check_char(var_con);
-		handle_mem_error(&tok);
+		free_check_char(content);
+		handle_fatal_error(MEMORY_ERROR, NULL, &tok);
 	}
-	if (my_getenv(tok.env, var_name) == NULL)
-		tok.env = add_envvar(tok, var_name, var_con);
-	else
+	var_con = ft_strtrim(content, "\"'");
+	free(content);
+	if (!var_con)
+	{
+		free(var_name);
+		handle_fatal_error(MEMORY_ERROR, NULL, &tok);
+	}
+	if (my_getenv(tok.env, var_name))
 		tok.env = replace_envvar(tok, var_name, var_con);
-	return (free(var_name), free(var_con), tok.env);
+	else
+		tok.env = add_envvar(tok, var_name, var_con);
+	free(var_name);
+	free(var_con);
+	return (tok.env);
 }
 
 char	**export_variable_sep(char *var, char *con, t_input tok)
@@ -109,7 +127,7 @@ char	**export_variable_sep(char *var, char *con, t_input tok)
 	if (var_con == NULL)
 	{
 		free(var_con);
-		handle_mem_error(&tok);
+		handle_fatal_error(MEMORY_ERROR, NULL, &tok);
 	}
 	if (my_getenv(tok.env, var) == NULL)
 		tok.env = add_envvar(tok, var, var_con);

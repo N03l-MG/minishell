@@ -30,7 +30,7 @@ static char	**unset_envvar(t_input tok, char **environ, char *name)
 
 	env = malloc(sizeof(char *) * get_entry_number(environ));
 	if (env == NULL)
-		handle_mem_error(&tok);
+		handle_fatal_error(MEMORY_ERROR, NULL, &tok);
 	i = 0;
 	j = 0;
 	while (environ[i] != NULL)

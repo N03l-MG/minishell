@@ -48,7 +48,7 @@ static char	*copy_envvar(char *old_tok, char *tok, int *i, t_input t)
 	v = 0;
 	new_tok = malloc(ft_strlen(old_tok) + get_varlen(t, tok, *i, name) + 1);
 	if (new_tok == NULL)
-		handle_mem_error(&t);
+		handle_fatal_error(MEMORY_ERROR, NULL, &t);
 	con = my_getenv(t.env, name);
 	while (old_tok[j] != '\0')
 	{
@@ -70,7 +70,7 @@ static char	*copy_string(char *old_tok, char *tok, int *i, t_input token)
 	j = 0;
 	new_tok = malloc(ft_strlen(old_tok) + get_len(tok, *i) + 1);
 	if (new_tok == NULL)
-		handle_mem_error(&token);
+		handle_fatal_error(MEMORY_ERROR, NULL, &token);
 	while (old_tok[j] != '\0')
 	{
 		new_tok[j] = old_tok[j];
@@ -94,7 +94,7 @@ char	*replace_env(t_input token, char *tok)
 
 	new_tok = malloc(1);
 	if (new_tok == NULL)
-		handle_mem_error(&token);
+		handle_fatal_error(MEMORY_ERROR, NULL, &token);
 	new_tok[0] = '\0';
 	i = 0;
 	while (tok[i] != '\0')
