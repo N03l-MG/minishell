@@ -77,25 +77,18 @@ char	**export_variable(char *var, t_input tok)
 	char	*content;
 
 	if (!var || !ft_strchr(var, '='))
-	{
-		handle_error(INVALID_INPUT, "export: invalid format", &tok);
-		return (tok.env);
-	}
+		return (handle_error(INVALID_INPUT,
+				"export: invalid format", &tok), tok.env);
 	var_name = get_var_name(var);
 	content = get_var_con(var);
 	if (!var_name || !content)
-	{
-		free_check_char(var_name);
-		free_check_char(content);
-		handle_fatal_error(MEMORY_ERROR, NULL, &tok);
-	}
+		return (free_check_char(var_name), free_check_char(content),
+			handle_fatal_error(MEMORY_ERROR, NULL, &tok), tok.env);
 	var_con = ft_strtrim(content, "\"'");
 	free(content);
 	if (!var_con)
-	{
-		free(var_name);
-		handle_fatal_error(MEMORY_ERROR, NULL, &tok);
-	}
+		return (free(var_name),
+			handle_fatal_error(MEMORY_ERROR, NULL, &tok), tok.env);
 	if (my_getenv(tok.env, var_name))
 		tok.env = replace_envvar(tok, var_name, var_con);
 	else

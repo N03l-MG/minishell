@@ -1,8 +1,0 @@
-main.c: Error!
-export.c: Error!
-execution.c: Error!
-redirections.c: Error!
-execution_utils.c: Error!
-path_construction.c: Error!
-token_trim.c: Error!
-validation.c: Error!

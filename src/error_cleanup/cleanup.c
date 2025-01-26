@@ -1,5 +1,21 @@
 #include "minishell.h"
 
+// static void	free_data(t_data *data)
+// {
+// 	if (!data)
+// 		return ;
+// 	if (data->cmd)
+// 	{
+// 		free(data->cmd);
+// 		data->cmd = NULL;
+// 	}
+// 	if (data->full_path)
+// 	{
+// 		free(data->full_path);
+// 		data->full_path = NULL;
+// 	}
+// }
+
 void	free_tokens(t_token **tokens, int count)
 {
 	int	i;
@@ -19,22 +35,6 @@ void	free_tokens(t_token **tokens, int count)
 	free(*tokens);
 	*tokens = NULL;
 }
-
-// static void	free_data(t_data *data)
-// {
-// 	if (!data)
-// 		return ;
-// 	if (data->cmd)
-// 	{
-// 		free(data->cmd);
-// 		data->cmd = NULL;
-// 	}
-// 	if (data->full_path)
-// 	{
-// 		free(data->full_path);
-// 		data->full_path = NULL;
-// 	}
-// }
 
 static void	free_heredoc_files(void)
 {

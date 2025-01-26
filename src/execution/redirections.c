@@ -35,21 +35,16 @@ void	get_redir(t_input tokens, int *cmd_start, int *cmd_end, t_file *files)
 	init_files(files);
 	while (i < *cmd_end)
 	{
-		if (tokens.tokens[i].type >= REDIR_IN
-			&& tokens.tokens[i].type <= REDIR_HEREDOC)
+		if (tokens.tokens[i].type >= REDIR_IN && tokens.tokens[i].type
+			<= REDIR_HEREDOC)
 		{
 			if (i + 1 >= *cmd_end)
-			{
-				handle_error(INVALID_INPUT, tokens.tokens[i].token, &tokens);
-				return ;
-			}
+				return (handle_error(INVALID_INPUT,
+						tokens.tokens[i].token, &tokens), (void)0);
 			handle_redir_type(tokens.tokens[i], tokens.tokens[i + 1], files);
 			if (tokens.tokens[i].type == REDIR_HEREDOC && !files->infile)
-			{
-				handle_error(INVALID_INPUT, tokens.tokens[i + 1].token,
-					&tokens);
-				return ;
-			}
+				return (handle_error(INVALID_INPUT,
+						tokens.tokens[i + 1].token, &tokens), (void)0);
 			tokens.tokens[i].type = END;
 			tokens.tokens[i + 1].type = END;
 			i += 2;

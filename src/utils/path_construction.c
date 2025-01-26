@@ -34,10 +34,7 @@ char	*resolve_command_path(const char *command)
 		return (ft_strdup(command));
 	path_env = getenv("PATH");
 	if (path_env == NULL)
-	{
-		handle_error(ENV_NOT_FOUND, "PATH", NULL);
-		return (NULL);
-	}
+		return (handle_error(ENV_NOT_FOUND, "PATH", NULL), NULL);
 	path = ft_strdup(path_env);
 	dir = ft_strtok(path, ":");
 	while (dir != NULL)
@@ -50,6 +47,5 @@ char	*resolve_command_path(const char *command)
 		}
 		dir = ft_strtok(NULL, ":");
 	}
-	free(path);
-	return (NULL);
+	return (free(path), NULL);
 }

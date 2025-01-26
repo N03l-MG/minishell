@@ -16,26 +16,23 @@ static int	check_valid_pipes(t_input tok)
 {
 	int	i;
 
-	i = -1;
+	i = 0;
 	while (++i < tok.token_count)
 	{
 		if (!tok.tokens[i].token)
 			continue ;
 		if (ft_strcmp(tok.tokens[i].token, "|") == 0)
 		{
-			if (i == 0 || i == tok.token_count - 1)
-				return (handle_error(INVALID_INPUT, tok.tokens[i].token, &tok));
-			if (i > 0 && tok.tokens[i - 1].token
-				&& ft_strcmp(tok.tokens[i - 1].token, "|") == 0)
+			if (i == 0 || i == tok.token_count - 1
+				|| (i > 0 && ft_strcmp(tok.tokens[i - 1].token, "|") == 0))
 				return (handle_error(INVALID_INPUT, tok.tokens[i].token, &tok));
 		}
-		if (tok.tokens[i].token && (ft_strcmp(tok.tokens[i].token, "<") == 0
-				|| ft_strcmp(tok.tokens[i].token, ">") == 0))
+		if (ft_strcmp(tok.tokens[i].token, "<") == 0
+			|| ft_strcmp(tok.tokens[i].token, ">") == 0)
 		{
-			if (i == tok.token_count - 1)
-				return (handle_error(INVALID_INPUT, tok.tokens[i].token, &tok));
-			if (tok.tokens[i + 1].token
-				&& ft_strcmp(tok.tokens[i + 1].token, "|") == 0)
+			if (i == tok.token_count - 1
+				|| (tok.tokens[i + 1].token
+					&& ft_strcmp(tok.tokens[i + 1].token, "|") == 0))
 				return (handle_error(INVALID_INPUT, tok.tokens[i].token, &tok));
 		}
 	}

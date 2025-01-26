@@ -81,4 +81,23 @@ typedef struct s_file
 	t_ttype	out_type;
 }	t_file;
 
+// Outstandinly embarassing.
+typedef struct s_parse_args
+{
+	int		cmd_start;
+	int		cmd_end;
+	t_input	tokens;
+	char	**cmd;
+	int		valid_tokens;
+}	t_parse_args;
+
+typedef struct s_process_args
+{
+	t_data	*data;
+	t_input	tokens;
+	int		cmd_start;
+	int		cmd_end;
+	int		*last_status;
+}	t_process_args;
+
 #endif

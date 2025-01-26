@@ -26,57 +26,56 @@ static void	cleanup_command(t_data *data)
 	}
 }
 
-static void	execute_command(t_data *data, t_file *files, t_input tokens,
-						int i, int *last_status)
+static void	execute_command(t_process_args args, t_file *files)
 {
 	pid_t	pid;
 
-	if (i < tokens.token_count && tokens.tokens[i].type == PIPE)
-		setup_pipe(data->pipe_fds);
+	if (args.cmd_end < args.tokens.token_count
+		&& args.tokens.tokens[args.cmd_end].type == PIPE)
+		setup_pipe(args.data->pipe_fds);
 	pid = fork();
 	if (pid == -1)
-		handle_error(FORK_ERROR, NULL, &tokens);
+		handle_error(FORK_ERROR, NULL, &args.tokens);
 	else if (pid == 0)
-		handle_child(data, (i == tokens.token_count), files, tokens.env);
+		handle_child(args.data, (args.cmd_end == args.tokens.token_count),
+			files, args.tokens.env);
 	else
 	{
-		handle_parent(data, &data->prev_fd, pid, (i == tokens.token_count));
-		if (i == tokens.token_count && WEXITSTATUS(data->status))
-			*last_status = WEXITSTATUS(data->status);
+		handle_parent(args.data, &args.data->prev_fd, pid,
+			(args.cmd_end == args.tokens.token_count));
+		if (args.cmd_end == args.tokens.token_count
+			&& WEXITSTATUS(args.data->status))
+			*args.last_status = WEXITSTATUS(args.data->status);
 	}
 }
 
-static void	process_command(t_data *data, t_input tokens, int cmd_start, 
-						int i, int *last_status)
+static void	process_command(t_process_args args)
 {
 	t_file	files;
 
-	get_redir(tokens, &cmd_start, &i, &files);
-	data->cmd = parse_command(tokens, cmd_start, i);
-	if (!data->cmd)
+	get_redir(args.tokens, &args.cmd_start, &args.cmd_end, &files);
+	args.data->cmd = parse_command(args.tokens, args.cmd_start, args.cmd_end);
+	if (!args.data->cmd && (files.infile || files.outfile))
 	{
-		if (files.infile || files.outfile)
-		{
-			data->cmd = malloc(2 * sizeof(char *));
-			data->cmd[0] = ft_strdup("cat");
-			data->cmd[1] = NULL;
-			data->full_path = resolve_command_path(data->cmd[0]);
-			execute_command(data, &files, tokens, i, last_status);
-		}
+		args.data->cmd = malloc(2 * sizeof(char *));
+		if (!args.data->cmd)
+			handle_fatal_error(MEMORY_ERROR, NULL, &args.tokens);
+		args.data->cmd[0] = ft_strdup("cat");
+		args.data->cmd[1] = NULL;
 	}
-	else
+	if (args.data->cmd && args.data->cmd[0])
 	{
-		data->full_path = resolve_command_path(data->cmd[0]);
-		if (!data->full_path)
+		args.data->full_path = resolve_command_path(args.data->cmd[0]);
+		if (!args.data->full_path)
 		{
-			handle_error(COMMAND_NOT_FOUND, data->cmd[0], &tokens);
-			if (i == tokens.token_count)
-				*last_status = 127;
+			handle_error(COMMAND_NOT_FOUND, args.data->cmd[0], &args.tokens);
+			if (args.cmd_end == args.tokens.token_count)
+				*args.last_status = 127;
 		}
 		else
-			execute_command(data, &files, tokens, i, last_status);
+			execute_command(args, &files);
 	}
-	cleanup_command(data);
+	cleanup_command(args.data);
 }
 
 void	execute_input(t_input tokens)
@@ -94,7 +93,8 @@ void	execute_input(t_input tokens)
 		cmd_start = i;
 		while (i < tokens.token_count && tokens.tokens[i].type != PIPE)
 			i++;
-		process_command(&data, tokens, cmd_start, i, &last_status);
+		process_command((t_process_args){&data, tokens, cmd_start,
+			i, &last_status});
 		if (i < tokens.token_count && tokens.tokens[i].type == PIPE)
 			i++;
 	}
