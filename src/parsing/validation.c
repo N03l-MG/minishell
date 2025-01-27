@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:21:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/24 09:38:25 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/27 13:22:04 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static bool	has_pipe(t_input tokens)
 int	validate_input(t_input *tokens)
 {
 	if (!tokens || !tokens->tokens || tokens->token_count == 0
-		|| check_quote_closed(tokens) != 0
+		|| tokens->quote_error == true
 		|| check_valid_pipes(*tokens) > 0)
 		return (1);
 	if (check_for_builtin(*tokens) && !has_pipe(*tokens))

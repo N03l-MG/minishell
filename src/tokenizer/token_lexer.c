@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 13:14:17 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/24 12:13:25 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/27 17:20:08 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,11 @@ static void	process_token(t_input *tok, int *index, const char *input, int *i)
 	if (!input[*i])
 		return ;
 	tok->tokens[*index].token = extract_token(input, i);
-	if (tok->tokens[*index].token[0] != '\'')
-		tok->tokens[*index].token
-			= replace_env(*tok, tok->tokens[*index].token);
-	tok->tokens[*index].token
-		= ft_tokentrim(tok->tokens[*index].token);
+	tok->tokens[*index].token = replace_env(*tok, tok->tokens[*index].token);
 	tok->tokens[*index].type
 		= get_token_type(tok->tokens[*index].token);
+	tok->tokens[*index].token
+		= ft_tokentrim(tok->tokens[*index].token);
 	(*index)++;
 }
 
@@ -81,14 +79,16 @@ static void	init_tokens(t_input *tok, int count)
 	}
 }
 
-t_input	create_tokens(const char *input, char **env_copy)
+t_input	create_tokens(const char *input, char **env_copy, int last_status)
 {
 	t_input	tok;
 	int		i;
 	int		index;
 
 	tok.env = env_copy;
+	tok.last_status = last_status;
 	tok.token_count = count_tokens(input);
+	tok.quote_error = check_unclosed_quotes(&tok, input);
 	tok.tokens = malloc(sizeof(t_token) * (tok.token_count + 1));
 	if (!tok.tokens)
 		handle_fatal_error(MEMORY_ERROR, NULL, &tok);

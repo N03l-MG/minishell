@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:44:32 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/24 12:15:38 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/27 17:02:23 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,12 @@ int	main(int ac, char **av, char **env)
 	signal(SIGINT, sig_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	env_copy = init_env(env);
+	tokens.last_status = 0;
 	while (true)
 	{
 		prompt = readline(TEAL "MINISHELL❯ " RESET);
 		if (prompt == NULL)
-		{
-			ft_fprintf(2, "Exiting...\n");
 			break ;
-		}
 		else
 		{
 			if (prompt[0] == '\0')
@@ -49,10 +47,16 @@ int	main(int ac, char **av, char **env)
 				free(prompt);
 				continue ;
 			}
-			tokens = create_tokens(prompt, env_copy);
+			if (get_and_reset_sigint())
+			{
+				tokens.last_status = 130;
+				free(prompt);
+				continue ;
+			}
+			tokens = create_tokens(prompt, env_copy, tokens.last_status);
 			add_history(prompt);
 			if (validate_input(&tokens) == 0)
-				execute_input(tokens);
+				execute_input(&tokens);
 			free(prompt);
 			free_tokens(&tokens.tokens, tokens.token_count - 1);
 			env_copy = tokens.env;

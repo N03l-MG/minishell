@@ -6,11 +6,11 @@
 #    By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/03 10:07:27 by jgraf             #+#    #+#              #
-#    Updated: 2025/01/17 13:21:56 by nmonzon          ###   ########.fr        #
+#    Updated: 2025/01/27 15:26:48 by nmonzon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-#					COMPILATION INFORMATION
+#														COMPILATION INFORMATION
 CC = cc
 FLAGS = -Wall -Wextra -Werror -Iinclude
 NAME = minishell
@@ -42,6 +42,7 @@ SRC_FILES = src/main.c $(EXEC_SRC) $(ENV_SRC) $(TOKENS_SRC) $(PARSING_SRC) \
 OBJ = $(SRC_FILES:.c=.o)
 
 #					MAKEFILE CODE
+
 all: $(LIB) $(NAME)
 
 $(LIB):
@@ -49,7 +50,7 @@ $(LIB):
 	git clone https://github.com/N03l-MG/libft.git libft
 	$(MAKE) -C libft
 
-$(NAME): $(OBJ) $(LIB) # 
+$(NAME): $(OBJ) $(LIB)
 	$(CC) $(FLAGS) -o $(NAME) $(OBJ) $(LIB) -lreadline -fsanitize=address
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
@@ -65,5 +66,7 @@ fclean: clean
 	rm libft/libft.a
 
 re: fclean all
+
+reclean: fclean all clean
 
 .PHONY: all clean fclean re

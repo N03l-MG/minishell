@@ -1,0 +1,51 @@
+[empty]
+pwd
+pwd | wc -c
+cd, pwd
+cd projects/minishell
+./minishell
+echo $SHLVL
+exit
+env
+export
+export VAR=test
+echo $VAR
+echo "This is a $VAR"
+echo '$VAR versus' " expanded $HOME"
+unset
+unset VAR
+echo $VAR, env
+echo ""
+echo "'"hi"'"
+echo ""hi""
+echo '$HOME$USER'"$HOME &&"  $USER'$USER' $HOME"$HOME"
+ls -la
+ls -l -a | wc > out
+cat out
+cat << end | wc -c
+<< EOF > in (write grep-able stuff)
+cat in
+< in grep [whatever] | wc -l | cut " " >> out
+cat out
+rm in out
+clear (test history)
+bruh (error)
+bruh | ls
+echo $? (0 expected)
+ls | bruh
+echo $? (127 expected)
+echo "bruh
+echo $? (1 expected)
+wc, ctrl+C
+echo $? (130 expected)
+wc | ls -l, ctrl+C
+echo $? ([some number] expected)
+cd ../projects/push_swap
+make
+make clean
+./push_swap [numbers] | ./checker [numbers]
+chmod -x push_swap
+./push_swap
+echo $? (126 expected)
+make fclean
+exit

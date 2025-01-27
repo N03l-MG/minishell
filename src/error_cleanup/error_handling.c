@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:39:02 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/24 11:09:59 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/27 16:33:15 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,11 @@ void	print_error(t_error error, char *context)
 int	handle_error(t_error error, char *context, t_input *tok)
 {
 	int		status;
-	char	*status_str;
 
 	status = get_error_status(error);
 	print_error(error, context);
 	if (tok)
-	{
-		status_str = ft_itoa(status);
-		tok->env = export_variable_sep("LASTSTATUS", status_str, *tok);
-		free(status_str);
-	}
+		tok->last_status = status;
 	return (status);
 }
 

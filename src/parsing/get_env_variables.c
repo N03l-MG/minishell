@@ -6,105 +6,96 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:02:01 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/17 14:44:07 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/27 15:58:00 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	get_len(char *str, int i)
+static char	*get_variable_content(t_input tok, char *input, int *i)
 {
-	while (str[i] != '\0' && (str[i] != '$' || !ft_isalpha(str[i + 1])))
-		i ++;
-	return (i);
-}
-
-static int	get_varlen(t_input t, char *str, int i, char *var_name)
-{
-	int	j;
-
-	j = 0;
-	while (ft_isalpha(str[i]))
-	{
-		var_name[j] = str[i];
-		i ++;
-		j ++;
-	}
-	var_name[j] = '\0';
-	if (my_getenv(t.env, var_name) != NULL)
-		return (ft_strlen(my_getenv(t.env, var_name)));
-	return (0);
-}
-
-static char	*copy_envvar(char *old_tok, char *tok, int *i, t_input t)
-{
-	char	*new_tok;
-	char	name[1024];
-	char	*con;
-	int		j;
-	int		v;
-
-	j = 0;
-	v = 0;
-	new_tok = malloc(ft_strlen(old_tok) + get_varlen(t, tok, *i, name) + 1);
-	if (new_tok == NULL)
-		handle_fatal_error(MEMORY_ERROR, NULL, &t);
-	con = my_getenv(t.env, name);
-	while (old_tok[j] != '\0')
-	{
-		new_tok[j] = old_tok[j];
-		j ++;
-	}
-	while (con != NULL && con[v] != '\0')
-		new_tok[j++] = con[v++];
-	(*i) += ft_strlen(name);
-	new_tok[j] = '\0';
-	return (free(old_tok), new_tok);
-}
-
-static char	*copy_string(char *old_tok, char *tok, int *i, t_input token)
-{
-	char	*new_tok;
+	char	result[4096];
 	int		j;
 
 	j = 0;
-	new_tok = malloc(ft_strlen(old_tok) + get_len(tok, *i) + 1);
-	if (new_tok == NULL)
-		handle_fatal_error(MEMORY_ERROR, NULL, &token);
-	while (old_tok[j] != '\0')
+	if (input[*i] == '?')
+		return ((*i)++, ft_strdup(ft_itoa(tok.last_status)));
+	while (ft_isalnum(input[*i]) || input[*i] == '_')
 	{
-		new_tok[j] = old_tok[j];
-		j ++;
+		result[j++] = input[(*i)++];
 	}
-	while (tok[*i] != '\0'
-		&& (tok[(*i)] != '$' || !ft_isalpha(tok[(*i) + 1])))
-	{
-		new_tok[j] = tok[*i];
-		j ++;
-		(*i)++;
-	}
-	new_tok[j] = '\0';
-	return (free(old_tok), new_tok);
+	result[j] = '\0';
+	if (my_getenv(tok.env, result) == NULL)
+		return (ft_strdup(""));
+	return (ft_strdup(my_getenv(tok.env, result)));
 }
 
-char	*replace_env(t_input token, char *tok)
+static char	*append_var(t_input tok, char *old_input, char *input, int *i)
 {
-	char	*new_tok;
+	char	*new_input;
+	char	*var_con;
+	int		j;
+
+	j = 0;
+	var_con = get_variable_content(tok, input, i);
+	new_input = malloc(ft_strlen(old_input) + ft_strlen(var_con) + 1);
+	while (old_input[j] != '\0')
+	{
+		new_input[j] = old_input[j];
+		j ++;
+	}
+	new_input[j] = '\0';
+	new_input = ft_strjoin(new_input, var_con);
+	return (free(var_con), free(old_input), new_input);
+}
+
+static char	*copy_until_var(char *old_input, char *input, int *i)
+{
+	char		new_input[4096];
+	static int	in_dquote = 0;
+	static int	in_squote = 0;
+	int			j;
+
+	j = 0;
+	while (old_input[j] != '\0')
+	{
+		new_input[j] = old_input[j];
+		j ++;
+	}
+	while (input[*i] != '\0')
+	{
+		if (input[*i] == '$' && !in_squote)
+			break ;
+		if (input[*i] == '"' && !in_squote)
+			in_dquote = !in_dquote;
+		if (input[*i] == '\'' && !in_dquote)
+			in_squote = !in_squote;
+		new_input[j++] = input[(*i)++];
+	}
+	new_input[j] = '\0';
+	return (free(old_input), ft_strdup(new_input));
+}
+
+char	*replace_env(t_input token, char *input)
+{
+	char	*new_input;
 	int		i;
 
-	new_tok = malloc(1);
-	if (new_tok == NULL)
-		handle_fatal_error(MEMORY_ERROR, NULL, &token);
-	new_tok[0] = '\0';
-	i = 0;
-	while (tok[i] != '\0')
+	new_input = malloc(1);
+	if (new_input == NULL)
 	{
-		new_tok = copy_string(new_tok, tok, &i, token);
-		if (tok[i] == '\0')
+		free(input);
+		handle_fatal_error(MEMORY_ERROR, NULL, &token);
+	}
+	new_input[0] = '\0';
+	i = 0;
+	while (input[i] != '\0')
+	{
+		new_input = copy_until_var(new_input, input, &i);
+		if (input[i] == '\0')
 			break ;
 		i ++;
-		if (tok[i - 1] == '$' && ft_isalpha(tok[i]))
-			new_tok = copy_envvar(new_tok, tok, &i, token);
+		new_input = append_var(token, new_input, input, &i);
 	}
-	return (free(tok), new_tok);
+	return (free(input), new_input);
 }

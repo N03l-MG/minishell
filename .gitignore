@@ -12,7 +12,7 @@
 
 # Folders
 .vs_code/
-tests/
+#tests/ for now...
 
 # MAC Finder
 .DS_Store

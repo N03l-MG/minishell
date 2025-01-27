@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:53:33 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/24 11:08:43 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/27 17:05:07 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,17 @@ char	*replace_and_add_new(char *repl, char *name, char *con, char *env);
 int		get_entry_number(char **environ);
 
 /*		Token management		*/
-t_input	create_tokens(const char *input, char **env_copy);
+t_input	create_tokens(const char *input, char **env_copy, int last_status);
 char	*ft_tokentrim(char *str);
 char	*replace_env(t_input token, char *tok);
-int		check_quote_closed(t_input *tokens);
+bool	check_unclosed_quotes(t_input *token, const char *input);
 char	*extract_token(const char *input, int *i);
 void	free_tokens(t_token **ptr, int x);
 
 /*	Shell functionality	*/
 int		validate_input(t_input *tokens);
 void	handle_redir(char *input_file, char *output_file, t_ttype out_type);
-void	execute_input(t_input tokens);
+void	execute_input(t_input *tokens);
 char	**init_env(char **environ);
 char	**add_envvar(t_input tok, char *name, char *con);
 char	**replace_envvar(t_input tok, char *name, char *con);
@@ -56,6 +56,7 @@ void	get_redir(t_input tokens, int *cmd_start, int *cmd_end, t_file *files);
 
 /*		Signals		*/
 void	sig_sigint(int sig);
+bool	get_and_reset_sigint(void);
 
 /*			Utils			*/
 int		ft_strcmp(const char *s1, const char *s2);

@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 08:14:13 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/20 16:03:23 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/27 15:43:59 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	update_pwd(t_input *tok)
 	if (getcwd(pwd, sizeof(pwd)) != NULL)
 	{
 		tok->env = export_variable_sep("PWD", pwd, *tok);
-		tok->env = export_variable_sep("LASTSTATUS", "0", *tok);
+		tok->last_status = 0;
 	}
 }
 

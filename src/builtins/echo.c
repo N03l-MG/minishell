@@ -6,37 +6,21 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 10:38:52 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/20 16:05:12 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/27 15:49:30 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	print_last_status(char **env)
-{
-	char	*status;
-
-	status = my_getenv(env, "LASTSTATUS");
-	printf("%s", status);
-}
-
-static void	print_token_content(char *token, char **env)
+static void	print_token_content(char *token)
 {
 	int	j;
 
 	j = 0;
 	while (token[j])
 	{
-		if (token[j] == '$' && token[j + 1] == '?')
-		{
-			print_last_status(env);
-			j += 2;
-		}
-		else
-		{
-			printf("%c", token[j]);
-			j++;
-		}
+		printf("%c", token[j]);
+		j++;
 	}
 }
 
@@ -49,7 +33,7 @@ static void	print_tokens(t_input tok, int start_idx)
 	{
 		if (tok.tokens[i].token)
 		{
-			print_token_content(tok.tokens[i].token, tok.env);
+			print_token_content(tok.tokens[i].token);
 			if (i < tok.token_count - 1)
 				printf(" ");
 		}
@@ -65,7 +49,7 @@ void	builtin_echo(t_input tok, int no_nl)
 	{
 		if (!no_nl)
 			printf("\n");
-		tok.env = export_variable_sep("LASTSTATUS", "0", tok);
+		tok.last_status = 0;
 		return ;
 	}
 	if (no_nl)
@@ -75,5 +59,5 @@ void	builtin_echo(t_input tok, int no_nl)
 	print_tokens(tok, start_idx);
 	if (!no_nl)
 		printf("\n");
-	tok.env = export_variable_sep("LASTSTATUS", "0", tok);
+	tok.last_status = 0;
 }

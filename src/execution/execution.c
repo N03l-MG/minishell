@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:03:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/24 11:16:30 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/27 16:54:38 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,74 +30,73 @@ static void	execute_command(t_process_args args, t_file *files)
 {
 	pid_t	pid;
 
-	if (args.cmd_end < args.tokens.token_count
-		&& args.tokens.tokens[args.cmd_end].type == PIPE)
+	if (args.cmd_end < args.tokens->token_count
+		&& args.tokens->tokens[args.cmd_end].type == PIPE)
 		setup_pipe(args.data->pipe_fds);
 	pid = fork();
 	if (pid == -1)
-		handle_error(FORK_ERROR, NULL, &args.tokens);
+		handle_error(FORK_ERROR, NULL, args.tokens);
 	else if (pid == 0)
-		handle_child(args.data, (args.cmd_end == args.tokens.token_count),
-			files, args.tokens.env);
+		handle_child(args.data, (args.cmd_end == args.tokens->token_count),
+			files, args.tokens->env);
 	else
 	{
 		handle_parent(args.data, &args.data->prev_fd, pid,
-			(args.cmd_end == args.tokens.token_count));
-		if (args.cmd_end == args.tokens.token_count
-			&& WEXITSTATUS(args.data->status))
-			*args.last_status = WEXITSTATUS(args.data->status);
+			(args.cmd_end == args.tokens->token_count));
+		if (args.cmd_end == args.tokens->token_count)
+		{
+			if (WIFSIGNALED(args.data->status))
+				args.tokens->last_status = 128 + WTERMSIG(args.data->status);
+			else if (WIFEXITED(args.data->status))
+				args.tokens->last_status = WEXITSTATUS(args.data->status);
+		}
 	}
 }
 
-static void	process_command(t_process_args args)
+static void	process_command(t_process_args *args)
 {
 	t_file	files;
 
-	get_redir(args.tokens, &args.cmd_start, &args.cmd_end, &files);
-	args.data->cmd = parse_command(args.tokens, args.cmd_start, args.cmd_end);
-	if (!args.data->cmd && (files.infile || files.outfile))
+	get_redir(*args->tokens, &args->cmd_start, &args->cmd_end, &files);
+	args->data->cmd = parse_command(*args->tokens, args->cmd_start, args->cmd_end);
+	if (!args->data->cmd && (files.infile || files.outfile))
 	{
-		args.data->cmd = malloc(2 * sizeof(char *));
-		if (!args.data->cmd)
-			handle_fatal_error(MEMORY_ERROR, NULL, &args.tokens);
-		args.data->cmd[0] = ft_strdup("cat");
-		args.data->cmd[1] = NULL;
+		args->data->cmd = malloc(2 * sizeof(char *));
+		if (!args->data->cmd)
+			handle_fatal_error(MEMORY_ERROR, NULL, args->tokens);
+		args->data->cmd[0] = ft_strdup("cat");
+		args->data->cmd[1] = NULL;
 	}
-	if (args.data->cmd && args.data->cmd[0])
+	if (args->data->cmd && args->data->cmd[0])
 	{
-		args.data->full_path = resolve_command_path(args.data->cmd[0]);
-		if (!args.data->full_path)
+		args->data->full_path = resolve_command_path(args->data->cmd[0]);
+		if (!args->data->full_path)
 		{
-			handle_error(COMMAND_NOT_FOUND, args.data->cmd[0], &args.tokens);
-			if (args.cmd_end == args.tokens.token_count)
-				*args.last_status = 127;
+			handle_error(COMMAND_NOT_FOUND, args->data->cmd[0], args->tokens);
+			if (args->cmd_end == args->tokens->token_count)
+				args->tokens->last_status = 127;
 		}
 		else
-			execute_command(args, &files);
+			execute_command(*args, &files);
 	}
-	cleanup_command(args.data);
+	cleanup_command(args->data);
 }
 
-void	execute_input(t_input tokens)
+void	execute_input(t_input *tokens)
 {
 	t_data	data;
 	int		i;
 	int		cmd_start;
-	int		last_status;
 
 	i = 0;
 	data.prev_fd = -1;
-	last_status = 0;
-	while (i < tokens.token_count)
+	while (i < tokens->token_count)
 	{
 		cmd_start = i;
-		while (i < tokens.token_count && tokens.tokens[i].type != PIPE)
+		while (i < tokens->token_count && tokens->tokens[i].type != PIPE)
 			i++;
-		process_command((t_process_args){&data, tokens, cmd_start,
-			i, &last_status});
-		if (i < tokens.token_count && tokens.tokens[i].type == PIPE)
+		process_command(&(t_process_args){&data, tokens, cmd_start, i});
+		if (i < tokens->token_count && tokens->tokens[i].type == PIPE)
 			i++;
 	}
-	tokens.env = export_variable_sep("LASTSTATUS", ft_itoa(last_status),
-			tokens);
 }

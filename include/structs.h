@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 13:52:14 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/24 10:56:56 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/27 16:41:29 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ typedef struct s_input
 	char	**env;
 	t_token	*tokens;
 	int		token_count;
+	bool	quote_error;
+	int		last_status;
 }	t_input;
 
 typedef struct s_quote
@@ -94,10 +96,9 @@ typedef struct s_parse_args
 typedef struct s_process_args
 {
 	t_data	*data;
-	t_input	tokens;
+	t_input	*tokens;
 	int		cmd_start;
 	int		cmd_end;
-	int		*last_status;
 }	t_process_args;
 
 #endif

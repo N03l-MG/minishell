@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:16:35 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/20 16:18:03 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/27 17:19:25 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@ char	*my_getenv(char **env, char *name)
 	while (env[i] != NULL)
 	{
 		if (ft_strncmp(env[i], name, ft_strlen(name)) == 0)
-			return (env[i] + ft_strlen(name) + 1);
+		{
+			if (env[i][ft_strlen(name)] == '=')
+				return (env[i] + ft_strlen(name) + 1);
+			return (NULL);
+		}
 		i ++;
 	}
 	return (NULL);
@@ -36,7 +40,7 @@ void	print_envs(t_input *tok)
 		printf("%s\n", tok->env[i]);
 		i ++;
 	}
-	tok->env = export_variable_sep("LASTSTATUS", "0", *tok);
+	tok->last_status = 0;
 }
 
 void	print_sorted_env(char **env)
