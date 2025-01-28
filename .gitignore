@@ -11,8 +11,8 @@
 *.lib
 
 # Folders
-.vs_code/
-#tests/ for now...
+.vscode/
+tests/
 
 # MAC Finder
 .DS_Store

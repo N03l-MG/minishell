@@ -6,21 +6,23 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 14:20:20 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/27 15:18:43 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/28 15:21:19 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // Allowed by the subject!
-static volatile sig_atomic_t g_sigint_received = 0;
+static volatile sig_atomic_t	g_sigint_received = 0;
 
 void	sig_sigint(int sig)
 {
 	(void)sig;
 	g_sigint_received = 1;
-	ft_fprintf(STDERR_FILENO, "\n");
 	rl_replace_line("", 0);
+	ft_fprintf(STDERR_FILENO, "\n");
+	if (waitpid(-1, NULL, WNOHANG) == 0)
+		return ;
 	rl_on_new_line();
 	rl_redisplay();
 }

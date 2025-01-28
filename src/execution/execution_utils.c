@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 13:33:19 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/27 11:05:20 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/28 13:36:29 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	**parse_part_2(t_parse_args args)
 	return (args.cmd);
 }
 
-char	**parse_command(t_input tokens, int cmd_start, int cmd_end)
+char	**parse_cmd(t_input tokens, int cmd_start, int cmd_end)
 {
 	char			**cmd;
 	int				valid_tokens;

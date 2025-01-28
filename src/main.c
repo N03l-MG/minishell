@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:44:32 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/27 17:02:23 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/28 16:57:08 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,15 @@ int	main(int ac, char **av, char **env)
 	tokens.last_status = 0;
 	while (true)
 	{
-		prompt = readline(TEAL "MINISHELL❯ " RESET);
+		prompt = readline(TEAL "MINISHELL ❯ " RESET);
 		if (prompt == NULL)
 			break ;
 		else
 		{
+			if (get_and_reset_sigint())
+				tokens.last_status = 130;
 			if (prompt[0] == '\0')
 			{
-				free(prompt);
-				continue ;
-			}
-			if (get_and_reset_sigint())
-			{
-				tokens.last_status = 130;
 				free(prompt);
 				continue ;
 			}

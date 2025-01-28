@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:39:02 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/27 16:33:15 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/28 14:47:10 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 static char	*get_error_message(t_error error)
 {
 	static char	*messages[] = {
-	[ENV_NOT_FOUND] = "Environment variable not found",
-	[COMMAND_NOT_FOUND] = "Command not found",
-	[INVALID_INPUT] = "Invalid input",
-	[INVALID_FILE] = "No such file or directory",
-	[PIPE_ERROR] = "Pipe failure",
-	[FORK_ERROR] = "Fork failure",
-	[EXEC_ERROR] = "Failed to execute command",
-	[MEMORY_ERROR] = "Memory allocation failed",
-	[PERMISSION_ERROR] = "Permission denied",
-	[SYNTAX_ERROR] = "Syntax error"
+	[ENV_NOT_FOUND] = RED "Environment variable not found" RESET,
+	[COMMAND_NOT_FOUND] = RED "Command not found" RESET,
+	[INVALID_INPUT] = RED "Invalid input" RESET,
+	[INVALID_FILE] = RED "No such file or directory" RESET,
+	[PIPE_ERROR] = RED "Pipe failure" RESET,
+	[FORK_ERROR] = RED "Fork failure" RESET,
+	[EXEC_ERROR] = RED "Failed to execute command" RESET,
+	[MEMORY_ERROR] = RED "Memory allocation failed" RESET,
+	[PERMISSION_ERROR] = RED "Permission denied" RESET,
+	[SYNTAX_ERROR] = RED "Syntax error" RESET
 	};
 
 	return (messages[error]);

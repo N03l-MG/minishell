@@ -25,10 +25,22 @@ cat out
 cat << end | wc -c
 << EOF > in (write grep-able stuff)
 cat in
-< in grep [whatever] | wc -l | cut " " >> out
+< in grep [whatever] | wc -c -l | xargs >> out
 cat out
 rm in out
 clear (test history)
+>
+<
+>>
+<<
+|
+| ls
+||
+|||||
+>>><><<><<<><<<>><
+|<>|<>|<>|<>|<>><<>|<>|<>|<>|<>
+ls |
+> f
 bruh (error)
 bruh | ls
 echo $? (0 expected)
@@ -39,13 +51,10 @@ echo $? (1 expected)
 wc, ctrl+C
 echo $? (130 expected)
 wc | ls -l, ctrl+C
-echo $? ([some number] expected)
-cd ../projects/push_swap
+echo $? (130 expected)
+find src -type f -exec wc -l {} + | awk '{s+=$1} END {print s}'
+cd ../push_swap
 make
-make clean
 ./push_swap [numbers] | ./checker [numbers]
-chmod -x push_swap
-./push_swap
-echo $? (126 expected)
 make fclean
 exit

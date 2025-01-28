@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:53:33 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/27 17:05:07 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/28 16:55:07 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 # include "libs.h"
 # include "structs.h"
 
-# define TEAL "\033[0;36m"
-# define RED "\033[0;31m"
-# define RESET "\033[0m"
+# define TEAL "\001\033[0;36m\002"
+# define RED "\001\033[0;31m\002"
+# define RESET "\001\033[0m\002"
 
 /*			FUNCTION PROTOTYPES		*/
 
@@ -47,7 +47,7 @@ char	*my_getenv(char **env, char *name);
 
 /*	Execution functions	*/
 void	set_i(int *i, t_input *tokens);
-char	**parse_command(t_input tokens, int cmd_start, int cmd_end);
+char	**parse_cmd(t_input tokens, int cmd_start, int cmd_end);
 void	setup_pipe(int *pipe_fds);
 void	handle_child(t_data *data, int is_last, t_file *files, char **env);
 void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last);
@@ -75,7 +75,7 @@ int		count_tokens(const char *input);
 int		execute_builtin(t_input *tokens);
 void	execute_builtin_piped(char **cmd, char **env);
 void	change_dir(t_input *tok, char *path);
-void	builtin_echo(t_input tok, int no_nl);
+void	builtin_echo(t_input *tok, int no_nl);
 void	print_working_dir(t_input *tok);
 void	print_envs(t_input *tok);
 void	print_sorted_env(char **env);

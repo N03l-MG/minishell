@@ -6,34 +6,49 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:21:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/27 13:22:04 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/28 15:04:08 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static int	check_valid_redir(t_input tok, int i)
+{
+	if (i == tok.token_count - 1)
+		return (handle_error(SYNTAX_ERROR, "newline", &tok));
+	if (!tok.tokens[i + 1].token)
+		return (handle_error(SYNTAX_ERROR, "newline", &tok));
+	if (tok.tokens[i + 1].token[0] == '|'
+		|| tok.tokens[i + 1].token[0] == '<'
+		|| tok.tokens[i + 1].token[0] == '>')
+		return (handle_error(SYNTAX_ERROR, tok.tokens[i + 1].token, &tok));
+	return (0);
+}
+
 static int	check_valid_pipes(t_input tok)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
+	if (tok.tokens[0].token && tok.tokens[0].token[0] == '|')
+		return (handle_error(SYNTAX_ERROR, "|", &tok));
 	while (++i < tok.token_count)
 	{
 		if (!tok.tokens[i].token)
 			continue ;
-		if (ft_strcmp(tok.tokens[i].token, "|") == 0)
+		if (tok.tokens[i].token[0] == '|')
 		{
-			if (i == 0 || i == tok.token_count - 1
-				|| (i > 0 && ft_strcmp(tok.tokens[i - 1].token, "|") == 0))
-				return (handle_error(INVALID_INPUT, tok.tokens[i].token, &tok));
+			if (i == tok.token_count - 1)
+				return (handle_error(SYNTAX_ERROR, "|", &tok));
+			if (i > 0 && tok.tokens[i - 1].token[0] == '|')
+				return (handle_error(SYNTAX_ERROR, "||", &tok));
+			if (tok.tokens[i + 1].token && tok.tokens[i + 1].token[0] == '|')
+				return (handle_error(SYNTAX_ERROR, "||", &tok));
 		}
-		if (ft_strcmp(tok.tokens[i].token, "<") == 0
-			|| ft_strcmp(tok.tokens[i].token, ">") == 0)
+		else if (tok.tokens[i].token[0] == '<' || tok.tokens[i].token[0] == '>')
 		{
-			if (i == tok.token_count - 1
-				|| (tok.tokens[i + 1].token
-					&& ft_strcmp(tok.tokens[i + 1].token, "|") == 0))
-				return (handle_error(INVALID_INPUT, tok.tokens[i].token, &tok));
+			if (check_valid_redir(tok, i) != 0)
+				return (1);
 		}
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:03:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/27 16:54:38 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/28 13:36:15 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	process_command(t_process_args *args)
 	t_file	files;
 
 	get_redir(*args->tokens, &args->cmd_start, &args->cmd_end, &files);
-	args->data->cmd = parse_command(*args->tokens, args->cmd_start, args->cmd_end);
+	args->data->cmd = parse_cmd(*args->tokens, args->cmd_start, args->cmd_end);
 	if (!args->data->cmd && (files.infile || files.outfile))
 	{
 		args->data->cmd = malloc(2 * sizeof(char *));

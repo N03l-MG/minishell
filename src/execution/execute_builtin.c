@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 14:24:45 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/27 11:05:22 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/28 12:31:52 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	handle_echo(t_input *tokens)
 		if (ft_strcmp(tokens->tokens[1].token, "-n") == 0)
 			has_n_flag = 1;
 	}
-	builtin_echo(*tokens, has_n_flag);
+	builtin_echo(tokens, has_n_flag);
 }
 
 static void	handle_cd(t_input *tokens)
