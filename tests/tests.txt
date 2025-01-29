@@ -1,7 +1,8 @@
-[empty]
+
 pwd
 pwd | wc -c
-cd, pwd
+cd
+pwd
 cd projects/minishell
 ./minishell
 echo $SHLVL
@@ -14,7 +15,7 @@ echo "This is a $VAR"
 echo '$VAR versus' " expanded $HOME"
 unset
 unset VAR
-echo $VAR, env
+echo $VAR
 echo ""
 echo "'"hi"'"
 echo ""hi""
@@ -23,12 +24,23 @@ ls -la
 ls -l -a | wc > out
 cat out
 cat << end | wc -c
-<< EOF > in (write grep-able stuff)
+hi there
+this is a file
+!
+end
+<< EOF>in
+word
+not
+nord
+wornod
+	word
+w ord
+no#$%#$
+EOF
 cat in
-< in grep [whatever] | wc -c -l | xargs >> out
+< in grep "word" |wc -c -l| xargs >> out
 cat out
 rm in out
-clear (test history)
 >
 <
 >>
@@ -40,19 +52,23 @@ clear (test history)
 >>><><<><<<><<<>><
 |<>|<>|<>|<>|<>><<>|<>|<>|<>|<>
 ls |
-> f
-bruh (error)
+cat f
+rm f
+bruh
 bruh | ls
 echo $? (0 expected)
 ls | bruh
 echo $? (127 expected)
 echo "bruh
 echo $? (1 expected)
-wc, ctrl+C
-echo $? (130 expected)
-wc | ls -l, ctrl+C
-echo $? (130 expected)
 find src -type f -exec wc -l {} + | awk '{s+=$1} END {print s}'
+exit
+wc
+^C
+echo $? (130 expected)
+wc | ls -l
+^C
+echo $? (130 expected)
 cd ../push_swap
 make
 ./push_swap [numbers] | ./checker [numbers]

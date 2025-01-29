@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:39:02 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/28 14:47:10 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/29 14:41:50 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static char	*get_error_message(t_error error)
 	[EXEC_ERROR] = RED "Failed to execute command" RESET,
 	[MEMORY_ERROR] = RED "Memory allocation failed" RESET,
 	[PERMISSION_ERROR] = RED "Permission denied" RESET,
-	[SYNTAX_ERROR] = RED "Syntax error" RESET
+	[SYNTAX_ERROR] = RED "Parse error" RESET
 	};
 
 	return (messages[error]);
@@ -41,7 +41,7 @@ static int	get_error_status(t_error error)
 	[FORK_ERROR] = 1,
 	[EXEC_ERROR] = 126,
 	[MEMORY_ERROR] = 1,
-	[PERMISSION_ERROR] = 1,
+	[PERMISSION_ERROR] = 126,
 	[SYNTAX_ERROR] = 1
 	};
 

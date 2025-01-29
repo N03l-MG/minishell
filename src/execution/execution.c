@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:03:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/28 13:36:15 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/29 16:42:04 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,10 @@ static void	process_command(t_process_args *args)
 			if (args->cmd_end == args->tokens->token_count)
 				args->tokens->last_status = 127;
 		}
-		else
+		else if (!access(args->data->full_path, X_OK))
 			execute_command(*args, &files);
+		else
+			handle_error(PERMISSION_ERROR, args->data->cmd[0], args->tokens);
 	}
 	cleanup_command(args->data);
 }
