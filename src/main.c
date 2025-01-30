@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:44:32 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/29 18:53:44 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/30 16:24:19 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	main(int ac, char **av, char **env)
 	char	*prompt;
 	t_input	tokens;
 	char	**env_copy;
+	bool	test = true; // delete for submission
 
 	(void)ac, (void)av;
 	signal(SIGINT, sig_sigint);
@@ -37,16 +38,22 @@ int	main(int ac, char **av, char **env)
 	tokens.last_status = 0;
 	while (true)
 	{
-		prompt = readline(TEAL "MINISHELL❯ " RESET);
-		// if (isatty(fileno(stdin)))
-		// 	prompt = readline("");
-		// else
-		// {
-		// 	char *line;
-		// 	line = get_next_line(fileno(stdin));
-		// 	prompt = ft_strtrim(line, "\n");
-		// 	free(line);
-		// }
+		if (test)
+		{
+			if (isatty(fileno(stdin)))
+				prompt = readline("");
+			else
+			{
+				char  *line;
+				line = get_next_line(fileno(stdin));
+				if (line == NULL)
+					break;
+				prompt = ft_strtrim(line, "\n");
+				free(line);
+			}
+		}
+		else
+			prompt = readline(TEAL "MINISHELL❯ " RESET);
 		if (prompt == NULL)
 			break ;
 		else
@@ -70,3 +77,20 @@ int	main(int ac, char **av, char **env)
 	free_env(tokens.env);
 	return (EXIT_SUCCESS);
 }
+
+// TESTER BLOCK //
+	// if (test)
+	// {
+	// 	if (isatty(fileno(stdin)))
+	// 		prompt = readline("");
+	// 	else
+	// 	{
+	// 		char  *line;
+	// 		line = get_next_line(fileno(stdin));
+	// 		if (line == NULL)
+	// 			break;
+	// 		prompt = ft_strtrim(line, "\n");
+	// 		free(line);
+	// 	}
+	// }
+	// else
