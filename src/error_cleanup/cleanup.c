@@ -83,11 +83,11 @@ static void	free_input(t_input *tokens)
 	}
 }
 
-void	clean_exit(int status, t_input *tokens)
+void	clean_exit(t_input *tokens)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	free_input(tokens);
 	free_heredoc_files();
-	exit(status);
+	exit(tokens->last_status);
 }

@@ -20,6 +20,8 @@
 # define RED "\001\033[0;31m\002"
 # define RESET "\001\033[0m\002"
 
+# define TEST true
+
 /*			FUNCTION PROTOTYPES		*/
 
 char	**add_envvar_pre(char **env, char *name, char *con);
@@ -88,6 +90,6 @@ void	print_error(t_error error, char *context);
 int		handle_error(t_error error, char *context, t_input *tok);
 void	handle_fatal_error(t_error error, char *context, t_input *tokens);
 void	free_env(char **env);
-void	clean_exit(int status, t_input *tokens);
+void	clean_exit(t_input *tokens);
 
 #endif

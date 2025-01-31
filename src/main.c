@@ -29,7 +29,6 @@ int	main(int ac, char **av, char **env)
 	char	*prompt;
 	t_input	tokens;
 	char	**env_copy;
-	bool	test = false; // delete for submission
 
 	(void)ac, (void)av;
 	signal(SIGINT, sig_sigint);
@@ -38,7 +37,7 @@ int	main(int ac, char **av, char **env)
 	tokens.last_status = 0;
 	while (true)
 	{
-		if (test)
+		if (TEST)
 		{
 			if (isatty(fileno(stdin)))
 				prompt = readline("");

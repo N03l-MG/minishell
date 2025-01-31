@@ -76,10 +76,14 @@ static void	process_command(t_process_args *args)
 			if (args->cmd_end == args->tokens->token_count)
 				args->tokens->last_status = 127;
 		}
-		else if (!access(args->data->full_path, X_OK))
-			execute_command(*args, &files);
-		else
+		else if (access(args->data->full_path, X_OK) != 0)
+		{
 			handle_error(PERMISSION_ERROR, args->data->cmd[0], args->tokens);
+			if (args->cmd_end == args->tokens->token_count)
+				args->tokens->last_status = 126;
+		}
+		else
+			execute_command(*args, &files);
 	}
 	cleanup_command(args->data);
 }
@@ -92,6 +96,7 @@ void	execute_input(t_input *tokens)
 
 	i = 0;
 	data.prev_fd = -1;
+	data.tokens = tokens;
 	while (i < tokens->token_count)
 	{
 		cmd_start = i;

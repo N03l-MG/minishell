@@ -67,13 +67,14 @@ int	handle_error(t_error error, char *context, t_input *tok)
 	print_error(error, context);
 	if (tok)
 		tok->last_status = status;
+	errno = status;
 	return (status);
 }
 
 void	handle_fatal_error(t_error error, char *context, t_input *tokens)
 {
 	handle_error(error, context, tokens);
-	clean_exit(EXIT_FAILURE, tokens);
+	clean_exit(tokens);
 }
 
 // void	handle_mem_error(t_input *tokens)

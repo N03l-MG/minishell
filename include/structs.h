@@ -74,6 +74,7 @@ typedef struct s_data
 	char	**cmd;
 	char	*full_path;
 	int		status;
+	t_input	*tokens;
 }	t_data;
 
 typedef struct s_file

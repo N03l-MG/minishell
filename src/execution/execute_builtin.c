@@ -55,7 +55,7 @@ int	execute_builtin(t_input *tokens)
 		return (1);
 	cmd = tokens->tokens[0].token;
 	if (ft_strcmp(cmd, "exit") == 0)
-		clean_exit(EXIT_SUCCESS, tokens);
+		clean_exit(tokens);
 	if (ft_strcmp(cmd, "cd") == 0)
 		handle_cd(tokens);
 	else if (ft_strcmp(cmd, "echo") == 0)
