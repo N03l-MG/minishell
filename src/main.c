@@ -29,7 +29,7 @@ int	main(int ac, char **av, char **env)
 	char	*prompt;
 	t_input	tokens;
 	char	**env_copy;
-	bool	test = true; // delete for submission
+	bool	test = false; // delete for submission
 
 	(void)ac, (void)av;
 	signal(SIGINT, sig_sigint);

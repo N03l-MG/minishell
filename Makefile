@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-#														COMPILATION INFORMATION
+#					COMPILATION INFORMATION
 CC = cc
 FLAGS = -Wall -Wextra -Werror -Iinclude
 NAME = minishell
@@ -50,8 +50,8 @@ $(LIB):
 	git clone https://github.com/N03l-MG/libft.git libft
 	$(MAKE) -C libft
 
-$(NAME): $(OBJ) $(LIB)
-	$(CC) $(FLAGS) -o $(NAME) $(OBJ) $(LIB) -lreadline -fsanitize=address
+$(NAME): $(OBJ) $(LIB) # -fsanitize=address
+	$(CC) $(FLAGS) -o $(NAME) $(OBJ) $(LIB) -lreadline 
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
@@ -67,6 +67,13 @@ fclean: clean
 
 re: fclean all
 
-reclean: fclean all clean
+.NOTPARALLEL:
+.FORCE:
 
-.PHONY: all clean fclean re
+reclean: re .FORCE
+	$(MAKE) clean
+
+allclean: all .FORCE
+	$(MAKE) clean
+
+.PHONY: all clean fclean re reclean allclean .FORCE
