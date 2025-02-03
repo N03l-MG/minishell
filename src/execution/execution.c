@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:03:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/29 16:42:04 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/03 16:35:08 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void	execute_input(t_input *tokens)
 
 	i = 0;
 	data.prev_fd = -1;
-	data.tokens = tokens;
 	while (i < tokens->token_count)
 	{
 		cmd_start = i;

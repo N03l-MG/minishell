@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 13:14:17 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/27 17:20:08 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/03 16:44:44 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	process_token(t_input *tok, int *index, const char *input, int *i)
 	skip_env_replace = false;
 	if (*index > 0 && tok->tokens[*index - 1].type == REDIR_HEREDOC)
 		skip_env_replace = true;
-	while (input[*i] == ' ')
+	while (input[*i] == ' ' || input[*i] == '\t')
 		(*i)++;
 	if (!input[*i])
 		return ;

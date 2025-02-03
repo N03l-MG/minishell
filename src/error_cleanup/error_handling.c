@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:39:02 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/29 14:41:50 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/03 17:10:43 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ static int	get_error_status(t_error error)
 	[INVALID_FILE] = 1,
 	[PIPE_ERROR] = 1,
 	[FORK_ERROR] = 1,
-	[EXEC_ERROR] = 126,
+	[EXEC_ERROR] = 127,
 	[MEMORY_ERROR] = 1,
 	[PERMISSION_ERROR] = 126,
-	[SYNTAX_ERROR] = 1
+	[SYNTAX_ERROR] = 2
 	};
 
 	return (status[error]);

@@ -22,10 +22,7 @@ static void	execute_child(t_data *data, char **env)
 	else
 	{
 		if (execve(data->full_path, data->cmd, env) == -1)
-		{
-			handle_error(EXEC_ERROR, data->cmd[0], data->tokens);
-			exit(data->tokens->last_status);
-		}
+			handle_error(EXEC_ERROR, data->cmd[0], NULL);
 	}
 }
 

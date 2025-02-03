@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:02:01 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/28 16:36:14 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/03 16:41:21 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static char	*get_variable_content(t_input tok, char *input, int *i)
 	int		j;
 
 	j = 0;
+	(*i)++;
 	if (input[*i] == '?')
 		return ((*i)++, ft_strdup(ft_itoa(tok.last_status)));
 	if (!ft_isalnum(input[*i]) && input[*i] != '_')
@@ -49,7 +50,15 @@ static char	*append_var(t_input tok, char *old_input, char *input, int *i)
 	return (free(var_con), free(old_input), new_input);
 }
 
-static char	*copy_until_var(char *old_input, char *input, int *i, int res_stat)
+static void	toggle_quotes(int *in_dquote, int *in_squote, char c)
+{
+	if (c == '"' && !*in_squote)
+		*in_dquote = !*in_dquote;
+	if (c == '\'' && !*in_dquote)
+		*in_squote = !*in_squote;
+}
+
+static char	*copy_until_var(char *old_input, char *input, int *i, bool res_stat)
 {
 	char		new_input[4096];
 	static int	in_dquote = 0;
@@ -69,26 +78,25 @@ static char	*copy_until_var(char *old_input, char *input, int *i, int res_stat)
 	}
 	while (input[*i] != '\0')
 	{
+		if (input[*i] == '$' && !in_squote && !in_dquote
+			&& (input[*i + 1] == '"' || input[*i + 1] == '\''))
+			(*i)++;
 		if (input[*i] == '$' && !in_squote)
 			break ;
-		if (input[*i] == '"' && !in_squote)
-			in_dquote = !in_dquote;
-		if (input[*i] == '\'' && !in_dquote)
-			in_squote = !in_squote;
+		toggle_quotes(&in_dquote, &in_squote, input[*i]);
 		new_input[j++] = input[(*i)++];
 	}
-	new_input[j] = '\0';
-	return (free(old_input), ft_strdup(new_input));
+	return (new_input[j] = '\0', free(old_input), ft_strdup(new_input));
 }
 
 char	*replace_env(t_input token, char *input)
 {
 	char	*new_input;
 	int		i;
-	int		reset_static;
+	bool	reset_static;
 
 	new_input = malloc(1);
-	reset_static = 1;
+	reset_static = true;
 	if (new_input == NULL)
 	{
 		free(input);
@@ -99,10 +107,9 @@ char	*replace_env(t_input token, char *input)
 	while (input[i] != '\0')
 	{
 		new_input = copy_until_var(new_input, input, &i, reset_static);
-		reset_static = 0;
+		reset_static = false;
 		if (input[i] == '\0')
 			break ;
-		i ++;
 		new_input = append_var(token, new_input, input, &i);
 	}
 	return (free(input), new_input);

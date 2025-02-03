@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:03:24 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/27 11:05:29 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/03 16:22:33 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,51 @@ static void	free_input(t_input *tokens)
 	}
 }
 
+static int	exit_atoi(char *str)
+{
+	int		i;
+	int		sign;
+	long	result;
+	int		sign_count;
+
+	i = 0;
+	sign = 1;
+	result = 0;
+	sign_count = 0;
+	while (str[i] == ' ' || str[i] == '\t')
+		i ++;
+	while (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i++] == '-')
+			sign = -1;
+		sign_count ++;
+	}
+	if (sign_count > 1)
+		return (255);
+	while (str[i] != '\0' && ft_isdigit(str[i]))
+		result = result * 10 + (str[i++] - '0');
+	if (str[i] != '\0')
+		return (255);
+	return ((int)(result * sign));
+}
+
 void	clean_exit(t_input *tokens)
 {
+	int	status;
+
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	free_input(tokens);
 	free_heredoc_files();
-	exit(tokens->last_status);
+	if (tokens->token_count >= 2)
+	{
+		if (tokens->tokens[1].token[0] == '\0')
+			tokens->last_status = 255;
+		else
+			tokens->last_status = exit_atoi(tokens->tokens[1].token);
+	}
+	while (tokens->last_status < 0)
+		tokens->last_status += 256;
+	status = tokens->last_status;
+	free_input(tokens);
+	exit(status);
 }

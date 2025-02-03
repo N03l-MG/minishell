@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 13:52:14 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/29 14:00:22 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/03 16:35:21 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ typedef struct s_data
 	char	**cmd;
 	char	*full_path;
 	int		status;
-	t_input	*tokens;
 }	t_data;
 
 typedef struct s_file

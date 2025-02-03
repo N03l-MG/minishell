@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 16:42:26 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/27 11:05:32 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/03 16:18:39 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,7 @@ char	**replace_envvar(t_input tok, char *name, char *con)
 	int		i;
 	char	*replacement;
 
-	i = 0;
-	while (ft_strncmp(tok.env[i], name, ft_strlen(name)) != 0
-		&& tok.env[i] != NULL)
-		i ++;
-	if (tok.env[i] == NULL)
-		return (add_envvar(tok, name, con));
+	i = my_getenv_index(tok.env, name);
 	replacement = malloc(ft_strlen(name) + ft_strlen(con) + 2);
 	if (replacement == NULL)
 		handle_fatal_error(MEMORY_ERROR, NULL, &tok);

@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 08:14:13 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/27 15:43:59 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/03 16:14:03 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,6 @@
 
 static int	check_path_access(char *path, t_input *tok)
 {
-	if (!path || path[0] == '\0')
-	{
-		handle_error(INVALID_INPUT, "cd: path required", tok);
-		return (0);
-	}
 	if (access(path, F_OK) != 0)
 	{
 		handle_error(INVALID_FILE, path, tok);
@@ -38,6 +33,8 @@ static void	update_pwd(t_input *tok)
 
 	if (getcwd(pwd, sizeof(pwd)) != NULL)
 	{
+		tok->env = export_variable_sep("OLDPWD",
+				my_getenv(tok->env, "PWD"), *tok);
 		tok->env = export_variable_sep("PWD", pwd, *tok);
 		tok->last_status = 0;
 	}

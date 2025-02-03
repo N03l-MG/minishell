@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:53:33 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/28 16:55:07 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/03 17:07:21 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,10 @@ int		count_tokens(const char *input);
 int		execute_builtin(t_input *tokens);
 void	execute_builtin_piped(char **cmd, char **env);
 void	change_dir(t_input *tok, char *path);
-void	builtin_echo(t_input *tok, int no_nl);
+void	builtin_echo(t_input *tok, int no_nl, int start_idx);
 void	print_working_dir(t_input *tok);
 void	print_envs(t_input *tok);
+int		my_getenv_index(char **env, char *name);
 void	print_sorted_env(char **env);
 char	**export_variable(char *var, t_input tok);
 char	**export_variable_sep(char *var, char *con, t_input tok);
