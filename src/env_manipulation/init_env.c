@@ -17,7 +17,7 @@ void	free_env(char **env)
 	int	i;
 
 	i = 0;
-	while (i < get_entry_number(env))
+	while (env[i]) 
 	{
 		free(env[i]);
 		i++;
@@ -62,7 +62,7 @@ char	**init_env(char **environ)
 {
 	char	**env;
 
-	env = malloc(sizeof(char *) * (get_entry_number(environ) + 3));
+	env = malloc(sizeof(char *) * (get_entry_number(environ) + 2));
 	if (!env)
 		handle_fatal_error(MEMORY_ERROR, NULL, NULL);
 	env = init_env_vars(env, environ);

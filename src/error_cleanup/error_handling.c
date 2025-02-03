@@ -67,7 +67,6 @@ int	handle_error(t_error error, char *context, t_input *tok)
 	print_error(error, context);
 	if (tok)
 		tok->last_status = status;
-	errno = status;
 	return (status);
 }
 

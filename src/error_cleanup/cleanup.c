@@ -35,7 +35,7 @@ void	free_tokens(t_token **tokens, int count)
 	if (!tokens || !*tokens)
 		return ;
 	i = 0;
-	while (i <= count)
+	while (i < count)
 	{
 		if ((*tokens)[i].token)
 		{

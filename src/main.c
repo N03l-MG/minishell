@@ -74,7 +74,7 @@ int	main(int ac, char **av, char **env)
 		}
 	}
 	free_env(tokens.env);
-	return (EXIT_SUCCESS);
+	return (tokens.last_status);
 }
 
 // TESTER BLOCK //

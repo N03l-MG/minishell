@@ -38,7 +38,8 @@ char	*handle_specials(const char *input, int start, int *i)
 {
 	char	*tmp;
 
-	if (is_special_char(input[start]) && input[start] != ' ')
+	if (is_special_char(input[start]) && input[start] != ' '
+		&& input[start] != '\t')
 	{
 		if (input[start] == '>' && input[start + 1] == '>')
 		{
@@ -69,7 +70,7 @@ int	count_tokens(const char *input)
 	i = 0;
 	while (input[i])
 	{
-		while (input[i] == ' ')
+		while (input[i] == ' ' || input[i] == '\t')
 			i++;
 		if (!input[i])
 			break ;

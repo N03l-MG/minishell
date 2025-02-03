@@ -17,15 +17,18 @@ static char	**unset_envvar(t_input tok, char **environ, char *name)
 	char	**env;
 	int		i;
 	int		j;
+	int		name_len;
 
 	env = malloc(sizeof(char *) * get_entry_number(environ));
 	if (env == NULL)
 		handle_fatal_error(MEMORY_ERROR, NULL, &tok);
 	i = 0;
 	j = 0;
+	name_len = ft_strlen(name);
 	while (environ[i] != NULL)
 	{
-		if (ft_strncmp(environ[i], name, ft_strlen(name)) == 0)
+		if (ft_strncmp(environ[i], name, ft_strlen(name)) == 0
+			&& environ[i][name_len] == '=')
 		{
 			i ++;
 			continue ;

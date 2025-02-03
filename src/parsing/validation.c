@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:21:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/29 15:14:43 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/01/28 15:04:08 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 static int	check_valid_redir(t_input *tok, int i)
 {
 	if (i == tok->token_count - 1)
-		return (handle_error(SYNTAX_ERROR, tok->tokens[0].token, tok));
+		return (handle_error(SYNTAX_ERROR, "newline", tok));
 	if (!tok->tokens[i + 1].token)
-		return (handle_error(SYNTAX_ERROR, tok->tokens[0].token, tok));
+		return (handle_error(SYNTAX_ERROR, "newline", tok));
 	if (tok->tokens[i + 1].token[0] == '|'
 		|| tok->tokens[i + 1].token[0] == '<'
 		|| tok->tokens[i + 1].token[0] == '>')

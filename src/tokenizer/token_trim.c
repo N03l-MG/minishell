@@ -12,6 +12,23 @@
 
 #include "minishell.h"
 
+static int	quote_shananigans(char *str, int *in_dquote, int *in_squote, int *i)
+{
+	if (str[*i] == '"' && !*in_squote)
+	{
+		*in_dquote = !*in_dquote;
+		(*i)++;
+		return (1);
+	}
+	if (str[*i] == '\'' && !*in_dquote)
+	{
+		*in_squote = !*in_squote;
+		(*i)++;
+		return (1);
+	}
+	return (0);
+}
+
 char	*ft_tokentrim(char *str)
 {
 	char	*result;
@@ -29,22 +46,8 @@ char	*ft_tokentrim(char *str)
 		return (NULL);
 	while (str[i] != '\0')
 	{
-		if (str[i] == '"' && !in_squote)
-		{
-			in_dquote = !in_dquote;
-			if (!in_dquote && str[i + 1] == '"')
-				in_dquote = 1;
-			i++;
+		if (quote_shananigans(str, &in_dquote, &in_squote, &i) == 1)
 			continue ;
-		}
-		if (str[i] == '\'' && !in_dquote)
-		{
-			in_squote = !in_squote;
-			if (!in_squote && str[i + 1] == '\'')
-				in_squote = 1;
-			i++;
-			continue ;
-		}
 		result[j++] = str[i++];
 	}
 	result[j] = '\0';
