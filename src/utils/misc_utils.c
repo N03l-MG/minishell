@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:53:58 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/27 11:04:26 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/04 14:43:26 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,16 @@ char	*ft_strndup(const char *s, size_t n)
 		return (NULL);
 	ft_strlcpy(result, s, len + 1);
 	return (result);
+}
+
+int	check_valid_export_unset(char *var_name)
+{
+	int	i;
+
+	i = 0;
+	while (ft_isalnum(var_name[i]) || var_name[i] == '_')
+		i++;
+	if (var_name[i] == '\0')
+		return (1);
+	return (0);
 }

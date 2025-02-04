@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:53:33 by jgraf             #+#    #+#             */
-/*   Updated: 2025/02/03 17:07:21 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/04 14:44:07 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	free_tokens(t_token **ptr, int x);
 
 /*	Shell functionality	*/
 int		validate_input(t_input *tokens);
-void	handle_redir(char *input_file, char *output_file, t_ttype out_type);
+void	handle_redir(char *input_file, char *output_file, t_ttype out_type, t_input *tok);
 void	execute_input(t_input *tokens);
 char	**init_env(char **environ);
 char	**add_envvar(t_input tok, char *name, char *con);
@@ -82,9 +82,10 @@ void	print_working_dir(t_input *tok);
 void	print_envs(t_input *tok);
 int		my_getenv_index(char **env, char *name);
 void	print_sorted_env(char **env);
-char	**export_variable(char *var, t_input tok);
+char	**export_variable(char *var, t_input *tok);
 char	**export_variable_sep(char *var, char *con, t_input tok);
-char	**unset_variable(char *var, t_input tok);
+char	**unset_variable(char *var, t_input *tok);
+int		check_valid_export_unset(char *var_name);
 
 /*	Error Handling		*/
 void	print_error(t_error error, char *context);

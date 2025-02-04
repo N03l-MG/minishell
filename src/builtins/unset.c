@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:46:22 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/27 11:05:39 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/04 14:43:50 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,18 @@ static char	**unset_envvar(t_input tok, char **environ, char *name)
 	return (env);
 }
 
-char	**unset_variable(char *var_name, t_input tok)
+char	**unset_variable(char *var_name, t_input *tok)
 {
 	char	**env;
 
-	if (my_getenv(tok.env, var_name) == NULL)
-		return (tok.env);
-	env = unset_envvar(tok, tok.env, var_name);
-	free_env(tok.env);
+	if (!check_valid_export_unset(var_name))
+	{
+		handle_error(INVALID_INPUT, var_name, tok);
+		return (tok->env);
+	}
+	if (my_getenv(tok->env, var_name) == NULL)
+		return (tok->env);
+	env = unset_envvar(*tok, tok->env, var_name);
+	free_env(tok->env);
 	return (env);
 }

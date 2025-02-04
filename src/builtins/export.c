@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:46:50 by jgraf             #+#    #+#             */
-/*   Updated: 2025/01/27 11:05:43 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/04 14:47:57 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,32 +70,31 @@ static char	*get_var_con(char *str)
 	return (var);
 }
 
-char	**export_variable(char *var, t_input tok)
+char	**export_variable(char *var, t_input *tok)
 {
 	char	*var_name;
 	char	*var_con;
 	char	*content;
 
-	if (!var || !ft_strchr(var, '='))
-		return (handle_error(INVALID_INPUT,
-				"export: invalid format", &tok), tok.env);
 	var_name = get_var_name(var);
 	content = get_var_con(var);
 	if (!var_name || !content)
 		return (free_check_char(var_name), free_check_char(content),
-			handle_fatal_error(MEMORY_ERROR, NULL, &tok), tok.env);
+			handle_fatal_error(MEMORY_ERROR, NULL, tok), tok->env);
+	if (!check_valid_export_unset(var_name))
+		return (handle_error(INVALID_INPUT, var, tok), tok->env);
 	var_con = ft_strtrim(content, "\"'");
 	free(content);
 	if (!var_con)
 		return (free(var_name),
-			handle_fatal_error(MEMORY_ERROR, NULL, &tok), tok.env);
-	if (my_getenv(tok.env, var_name))
-		tok.env = replace_envvar(tok, var_name, var_con);
+			handle_fatal_error(MEMORY_ERROR, NULL, tok), tok->env);
+	if (my_getenv(tok->env, var_name))
+		tok->env = replace_envvar(*tok, var_name, var_con);
 	else
-		tok.env = add_envvar(tok, var_name, var_con);
+		tok->env = add_envvar(*tok, var_name, var_con);
 	free(var_name);
 	free(var_con);
-	return (tok.env);
+	return (tok->env);
 }
 
 char	**export_variable_sep(char *var, char *con, t_input tok)

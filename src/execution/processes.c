@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:05:06 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/27 11:05:07 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/04 14:09:45 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	execute_child(t_data *data, char **env)
 	else
 	{
 		if (execve(data->full_path, data->cmd, env) == -1)
-			handle_error(EXEC_ERROR, data->cmd[0], NULL);
+			handle_error(EXEC_ERROR, data->cmd[0], data->tokens);
 	}
 }
 
@@ -39,7 +39,7 @@ void	handle_child(t_data *data, int is_last, t_file *files, char **env)
 		dup2(data->pipe_fds[1], STDOUT_FILENO);
 		close(data->pipe_fds[1]);
 	}
-	handle_redir(files->infile, files->outfile, files->out_type);
+	handle_redir(files->infile, files->outfile, files->out_type, data->tokens);
 	if (files->infile && strncmp(files->infile, "/tmp/.heredoc_", 13) == 0)
 	{
 		unlink(files->infile);

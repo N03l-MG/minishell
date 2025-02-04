@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:03:47 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/27 11:05:01 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/04 14:24:43 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	get_redir(t_input tokens, int *cmd_start, int *cmd_end, t_file *files)
 	}
 }
 
-void	handle_redir(char *input_file, char *output_file, t_ttype out_type)
+void	handle_redir(char *input_file, char *output_file, t_ttype out_type, t_input *tok)
 {
 	int	fd;
 	int	flags;
@@ -75,7 +75,10 @@ void	handle_redir(char *input_file, char *output_file, t_ttype out_type)
 	{
 		fd = open(input_file, O_RDONLY);
 		if (fd == -1)
-			handle_error(INVALID_FILE, input_file, NULL);
+		{
+			handle_error(INVALID_FILE, input_file, tok);
+			exit(1);
+		}
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
@@ -88,7 +91,10 @@ void	handle_redir(char *input_file, char *output_file, t_ttype out_type)
 			flags |= O_TRUNC;
 		fd = open(output_file, flags, 0644);
 		if (fd == -1)
-			handle_error(INVALID_FILE, output_file, NULL);
+		{
+			handle_error(INVALID_FILE, output_file, tok);
+			exit(1);
+		}
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}

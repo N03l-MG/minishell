@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 14:24:45 by jgraf             #+#    #+#             */
-/*   Updated: 2025/02/03 16:29:51 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/04 14:40:07 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	handle_export(t_input *tokens)
 	{
 		while (tokens->tokens[i].token != NULL)
 		{
-			tokens->env = export_variable(tokens->tokens[i].token, *tokens);
+			tokens->env = export_variable(tokens->tokens[i].token, tokens);
 			i ++;
 		}
 	}
@@ -75,7 +75,7 @@ static void	handle_unset(t_input *tokens)
 	{
 		while (tokens->tokens[i].token != NULL)
 		{
-			tokens->env = unset_variable(tokens->tokens[i].token, *tokens);
+			tokens->env = unset_variable(tokens->tokens[i].token, tokens);
 			i ++;
 		}
 	}

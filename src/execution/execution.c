@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:03:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/03 16:35:08 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/04 15:18:53 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static void	execute_command(t_process_args args, t_file *files)
 			(args.cmd_end == args.tokens->token_count));
 		if (args.cmd_end == args.tokens->token_count)
 		{
+			waitpid(pid, &args.data->status, 0);
 			if (WIFSIGNALED(args.data->status))
 				args.tokens->last_status = 128 + WTERMSIG(args.data->status);
 			else if (WIFEXITED(args.data->status))
@@ -71,17 +72,9 @@ static void	process_command(t_process_args *args)
 	{
 		args->data->full_path = resolve_command_path(args->data->cmd[0]);
 		if (!args->data->full_path)
-		{
 			handle_error(COMMAND_NOT_FOUND, args->data->cmd[0], args->tokens);
-			if (args->cmd_end == args->tokens->token_count)
-				args->tokens->last_status = 127;
-		}
 		else if (access(args->data->full_path, X_OK) != 0)
-		{
 			handle_error(PERMISSION_ERROR, args->data->cmd[0], args->tokens);
-			if (args->cmd_end == args->tokens->token_count)
-				args->tokens->last_status = 126;
-		}
 		else
 			execute_command(*args, &files);
 	}
@@ -96,6 +89,7 @@ void	execute_input(t_input *tokens)
 
 	i = 0;
 	data.prev_fd = -1;
+	data.tokens = tokens;
 	while (i < tokens->token_count)
 	{
 		cmd_start = i;
