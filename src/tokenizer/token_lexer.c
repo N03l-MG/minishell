@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 13:14:17 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/03 16:44:44 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/04 15:37:01 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char	*extract_quoted(const char *input, int *i, bool *in_quotes,
 		}
 		else if (*in_quotes && input[*i] == *quote_char)
 			*in_quotes = false;
-		else if (!*in_quotes && is_special_char(input[*i]))
+		else if (!*in_quotes && is_special_char(input[*i]) && input[*i] != '\t')
 			break ;
 		len++;
 		(*i)++;
@@ -102,7 +102,7 @@ t_input	create_tokens(const char *input, char **env_copy, int last_status)
 	init_tokens(&tok, tok.token_count);
 	i = 0;
 	index = 0;
-	while (input[i] == ' ')
+	while (input[i] == ' ' || input[i] == '\t')
 		i++;
 	while (input[i] && index < tok.token_count)
 		process_token(&tok, &index, input, &i);

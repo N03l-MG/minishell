@@ -6,14 +6,14 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 13:52:14 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/04 13:50:25 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/04 17:04:04 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-/*			ENUM			*/
+// ================== ENUMS ================== //
 
 typedef enum e_ttype
 {
@@ -42,7 +42,7 @@ typedef enum e_error
 	SYNTAX_ERROR
 }	t_error;
 
-/*			STRUCTS			*/
+// ================= STRUCTS ================= //
 
 typedef struct s_token
 {
