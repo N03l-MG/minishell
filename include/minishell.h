@@ -21,7 +21,10 @@
 # define TEAL "\001\033[0;36m\002"
 # define RED "\001\033[0;31m\002"
 # define RESET "\001\033[0m\002"
-# define TEST true
+
+# ifndef TEST
+#  define TEST false
+# endif
 
 // ================ PROTOTYPES =============== //
 

@@ -25,29 +25,29 @@ static int	check_valid_redir(t_input *tok, int i)
 	return (0);
 }
 
-static int	check_valid_pipes(t_input *tok)
+static int	check_valid_pipes(t_input *t)
 {
 	int	i;
 
 	i = -1;
-	if (tok->tokens[0].token && tok->tokens[0].token[0] == '|')
-		return (handle_error(SYNTAX_ERROR, "|", tok));
-	while (++i < tok->token_count)
+	if (t->tokens[0].token && t->tokens[0].token[0] == '|')
+		return (handle_error(SYNTAX_ERROR, "|", t));
+	while (++i < t->token_count)
 	{
-		if (!tok->tokens[i].token)
+		if (!t->tokens[i].token)
 			continue ;
-		if (tok->tokens[i].token[0] == '|')
+		if (t->tokens[i].token[0] == '|')
 		{
-			if (i == tok->token_count - 1)
-				return (handle_error(SYNTAX_ERROR, "|", tok));
-			if (i > 0 && tok->tokens[i - 1].token[0] == '|')
-				return (handle_error(SYNTAX_ERROR, "||", tok));
-			if (tok->tokens[i + 1].token && tok->tokens[i + 1].token[0] == '|')
-				return (handle_error(SYNTAX_ERROR, "||", tok));
+			if (i == t->token_count - 1)
+				return (handle_error(SYNTAX_ERROR, "|", t));
+			if (i > 0 && t->tokens[i - 1].token[0] == '|')
+				return (handle_error(SYNTAX_ERROR, "||", t));
+			if (t->tokens[i + 1].token && t->tokens[i + 1].token[0] == '|')
+				return (handle_error(SYNTAX_ERROR, "||", t));
 		}
-		else if (tok->tokens[i].token[0] == '<' || tok->tokens[i].token[0] == '>')
+		else if (t->tokens[i].token[0] == '<' || t->tokens[i].token[0] == '>')
 		{
-			if (check_valid_redir(tok, i) != 0)
+			if (check_valid_redir(t, i) != 0)
 				return (1);
 		}
 	}

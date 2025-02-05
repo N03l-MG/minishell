@@ -15,6 +15,10 @@ CC = cc
 FLAGS = -Wall -Wextra -Werror -Iinclude
 NAME = minishell
 
+GREEN = \033[0;32m
+RED = \033[0;31m
+RESET = \033[0m
+
 #					SOURCE AND OBJECT FILES
 LIB = libft/libft.a
 SRC_DIR = src
@@ -51,19 +55,23 @@ $(LIB):
 	$(MAKE) -C libft
 
 $(NAME): $(OBJ) $(LIB) # -fsanitize=address
-	$(CC) $(FLAGS) -o $(NAME) $(OBJ) $(LIB) -lreadline
+	@$(CC) $(FLAGS) -o $(NAME) $(OBJ) $(LIB) -lreadline
+	@printf "$(GREEN)Successfully compiled: $(RESET)%s\n" $(NAME)
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(FLAGS) -c $< -o $@
+	@printf "$(GREEN)Compiling: $(RESET)%s\n" $(notdir $<)
+	@$(CC) $(FLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ)
-	$(MAKE) -C libft clean
+	@rm -f $(OBJ)
+	@$(MAKE) -C libft clean
+	@printf "$(GREEN)Cleaned object files$(RESET)\n"
 
 fclean: clean
-	rm -f $(NAME)
-	rm libft/libft.a
+	@rm -f $(NAME)
+	@rm libft/libft.a
+	@printf "$(GREEN)Cleaned everything$(RESET)\n"
 
 re: fclean all
 
