@@ -32,9 +32,9 @@ static void	minishell(char **env_copy, t_input *tokens)
 			}
 			*tokens = create_tokens(prompt, env_copy, tokens->last_status);
 			add_history(prompt);
+			free(prompt);
 			if (validate_input(tokens) == 0)
 				execute_input(tokens);
-			free(prompt);
 			free_tokens(&tokens->tokens, tokens->token_count - 1);
 			env_copy = tokens->env;
 		}

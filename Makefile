@@ -12,7 +12,7 @@
 
 #					COMPILATION INFORMATION
 CC = cc
-FLAGS = -Wall -Wextra -Werror -Iinclude -g #-fsanitize=address
+FLAGS = -Wall -Wextra -Werror -Iinclude -g -fsanitize=address
 NAME = minishell
 
 GREEN = \033[0;32m

@@ -86,7 +86,7 @@ static void	init_tokens(t_input *tok, int count)
 	}
 }
 
-t_input	create_tokens(const char *input, char **env_copy, int last_status)
+t_input	create_tokens(char *input, char **env_copy, int last_status)
 {
 	t_input	tok;
 	int		i;

@@ -54,7 +54,7 @@ char	**replace_envvar(t_input tok, char *name, char *con);
 int		get_entry_number(char **environ);
 
 // --------------- Tokenizing --------------- //
-t_input	create_tokens(const char *input, char **env_copy, int last_status);
+t_input	create_tokens(char *input, char **env_copy, int last_status);
 t_ttype	get_token_type(const char *str);
 char	*ft_tokentrim(char *str);
 char	*extract_token(const char *input, int *i);
@@ -69,7 +69,6 @@ int		validate_input(t_input *tokens);
 // --------------- Execution ---------------- //
 void	execute_input(t_input *tokens);
 int		execute_builtin(t_input *tokens);
-void	execute_builtin_piped(char **cmd, char **env);
 void	handle_child(t_data *data, int is_last, t_file *files, char **env);
 void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last);
 
