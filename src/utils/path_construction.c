@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_construction.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:04:38 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/04 15:26:49 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/05 16:24:04 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static char	*try_raw_path(const char *command)
 		errno = EISDIR;
 		return (NULL);
 	}
-	if (access(command, X_OK) != 0)
+	if (access(command, F_OK) != 0)
 		return (NULL);
 	return (ft_strdup(command));
 }

@@ -6,13 +6,13 @@
 #    By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/03 10:07:27 by jgraf             #+#    #+#              #
-#    Updated: 2025/02/05 14:34:11 by nmonzon          ###   ########.fr        #
+#    Updated: 2025/02/05 17:52:27 by nmonzon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #					COMPILATION INFORMATION
 CC = cc
-FLAGS = -Wall -Wextra -Werror -Iinclude
+FLAGS = -Wall -Wextra -Werror -Iinclude -g #-fsanitize=address
 NAME = minishell
 
 GREEN = \033[0;32m
@@ -54,7 +54,7 @@ $(LIB):
 	git clone https://github.com/N03l-MG/libft.git libft
 	$(MAKE) -C libft
 
-$(NAME): $(OBJ) $(LIB) # -fsanitize=address
+$(NAME): $(OBJ) $(LIB)
 	@$(CC) $(FLAGS) -o $(NAME) $(OBJ) $(LIB) -lreadline
 	@printf "$(GREEN)Successfully compiled: $(RESET)%s\n" $(NAME)
 
