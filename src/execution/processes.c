@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:05:06 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/04 14:09:45 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/05 14:23:38 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,27 @@ static void	execute_child(t_data *data, char **env)
 {
 	if (is_builtin(data->cmd[0]))
 	{
-		execute_builtin_piped(data->cmd, env);
-		exit(EXIT_SUCCESS);
+		if (ft_strcmp(data->cmd[0], "echo") == 0)
+			handle_echo(data->tokens);
+		else if (ft_strcmp(data->cmd[0], "pwd") == 0)
+			print_working_dir(data->tokens);
+		else if (ft_strcmp(data->cmd[0], "env") == 0)
+			print_envs(data->tokens);
+		else if (ft_strcmp(data->cmd[0], "cd") == 0)
+			handle_cd(data->tokens);
+		else if (ft_strcmp(data->cmd[0], "export") == 0)
+			handle_export(data->tokens);
+		else if (ft_strcmp(data->cmd[0], "unset") == 0)
+			handle_unset(data->tokens);
+		exit(data->tokens->last_status);
 	}
 	else
 	{
 		if (execve(data->full_path, data->cmd, env) == -1)
+		{
 			handle_error(EXEC_ERROR, data->cmd[0], data->tokens);
+			exit(data->tokens->last_status);
+		}
 	}
 }
 

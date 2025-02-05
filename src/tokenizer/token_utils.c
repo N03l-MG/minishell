@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:04:09 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/27 11:04:10 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/05 12:33:58 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ t_ttype	get_token_type(const char *str)
 	if (!strcmp(str, ">"))
 		return (REDIR_OUT);
 	if (!strcmp(str, ">>"))
-		return (REDIR_APPEND);
+		return (APPEND);
 	if (!strcmp(str, "<<"))
-		return (REDIR_HEREDOC);
+		return (HEREDOC);
 	return (STRING);
 }
 

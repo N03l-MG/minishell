@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:46:50 by jgraf             #+#    #+#             */
-/*   Updated: 2025/02/04 14:47:57 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/05 15:22:59 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,19 @@ char	**export_variable(char *var, t_input *tok)
 {
 	char	*var_name;
 	char	*var_con;
-	char	*content;
 
 	var_name = get_var_name(var);
-	content = get_var_con(var);
-	if (!var_name || !content)
-		return (free_check_char(var_name), free_check_char(content),
+	var_con = get_var_con(var);
+	if (var_con == NULL)
+		return (free_check_char(var_con), free_check_char(var_name), tok->env);
+	if (var_name == NULL)
+		return (free_check_char(var_name), free_check_char(var_con),
 			handle_fatal_error(MEMORY_ERROR, NULL, tok), tok->env);
+	if (var_name[0] == '\0')
+		return (free(var_name),
+			handle_error(INVALID_INPUT, var, tok), tok->env);
 	if (!check_valid_export_unset(var_name))
 		return (handle_error(INVALID_INPUT, var, tok), tok->env);
-	var_con = ft_strtrim(content, "\"'");
-	free(content);
 	if (!var_con)
 		return (free(var_name),
 			handle_fatal_error(MEMORY_ERROR, NULL, tok), tok->env);

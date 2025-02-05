@@ -6,7 +6,7 @@
 #    By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/03 10:07:27 by jgraf             #+#    #+#              #
-#    Updated: 2025/02/03 13:05:04 by nmonzon          ###   ########.fr        #
+#    Updated: 2025/02/05 14:34:11 by nmonzon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ EXEC_SRC_DIR = src/execution
 ERROR_SRC_DIR = src/error_cleanup
 
 EXEC_SRC := $(addprefix $(EXEC_SRC_DIR)/, execution.c execution_utils.c execute_builtin.c \
-                                        execute_builtin_pipe.c redirections.c heredoc.c processes.c)
+                                        redirections.c heredoc.c processes.c)
 ENV_SRC := $(addprefix $(ENV_SRC_DIR)/, env_prechanges.c init_env.c update_env.c)
 TOKENS_SRC := $(addprefix $(TOKEN_SRC_DIR)/, token_lexer.c token_trim.c token_utils.c)
 PARSING_SRC := $(addprefix $(PARSING_SRC_DIR)/, get_env_variables.c validation.c)

@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:39:02 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/04 13:30:29 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/05 12:36:08 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,28 +75,3 @@ void	handle_fatal_error(t_error error, char *context, t_input *tokens)
 	handle_error(error, context, tokens);
 	clean_exit(tokens);
 }
-
-// void	handle_mem_error(t_input *tokens)
-// {
-// 	ft_fprintf(2, "Fatal Error: Memory allocation failed!\n");
-// 	free_allocated(NULL, tokens, MEMORY_ERROR);
-// 	exit(EXIT_FAILURE);
-// }
-
-// void	free_allocated(t_data *data, t_input *tokens, t_error error)
-// {
-// 	if (error == MEMORY_ERROR || error == EXEC_ERROR)
-// 		free_tokens(&tokens->tokens, tokens->token_count);
-// 	if (data->cmd && data->full_path)
-// 	{
-// 		free(data->cmd);
-// 		free(data->full_path);
-// 	}
-// }
-
-// void	clean_exit(int status, t_input *tokens)
-// {
-// 	free_env(tokens->env);
-// 	free_tokens(&tokens->tokens, tokens->token_count);
-// 	exit(status);
-// }

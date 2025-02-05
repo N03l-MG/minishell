@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:03:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/04 17:07:41 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/05 15:26:13 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,10 @@ static void	process_command(t_process_args *args)
 	if (args->data->cmd && args->data->cmd[0])
 	{
 		args->data->full_path = resolve_command_path(args->data->cmd[0]);
-		if (!args->data->full_path)
+		if (!args->data->full_path && !is_builtin(args->data->cmd[0]))
 			handle_error(COMMAND_NOT_FOUND, args->data->cmd[0], args->tokens);
-		else if (access(args->data->full_path, X_OK) != 0)
+		else if (access(args->data->full_path, X_OK) != 0
+			&& !is_builtin(args->data->cmd[0]))
 			handle_error(PERMISSION_ERROR, args->data->cmd[0], args->tokens);
 		else
 			execute_command(*args, &files);

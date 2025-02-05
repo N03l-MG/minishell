@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 13:52:14 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/04 17:04:04 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/05 12:31:23 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ typedef enum e_ttype
 	PIPE,
 	REDIR_IN,
 	REDIR_OUT,
-	REDIR_APPEND,
-	REDIR_HEREDOC,
+	APPEND,
+	HEREDOC,
 	SEMICOLON,
 	END
 }	t_ttype;

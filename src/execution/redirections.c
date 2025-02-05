@@ -12,23 +12,23 @@
 
 #include "minishell.h"
 
-static void	handle_redir_type(t_token token, t_token next_token, t_file *files)
+static void	redir_type(t_token token, t_token next, t_file *files)
 {
-	if (token.type == REDIR_OUT || token.type == REDIR_APPEND)
+	if (token.type == REDIR_OUT || token.type == APPEND)
 	{
-		files->outfile = next_token.token;
+		files->outfile = next.token;
 		files->out_type = token.type;
 	}
 	else if (token.type == REDIR_IN)
-		files->infile = next_token.token;
-	else if (token.type == REDIR_HEREDOC)
+		files->infile = next.token;
+	else if (token.type == HEREDOC)
 	{
 		if (files->infile)
 		{
 			unlink(files->infile);
 			free(files->infile);
 		}
-		files->infile = handle_heredoc(next_token.token);
+		files->infile = handle_heredoc(next.token);
 	}
 }
 
@@ -39,7 +39,7 @@ static void	init_files(t_file *files)
 	files->out_type = REDIR_OUT;
 }
 
-void	get_redir(t_input tokens, int *cmd_start, int *cmd_end, t_file *files)
+void	get_redir(t_input tok, int *cmd_start, int *cmd_end, t_file *files)
 {
 	int	i;
 
@@ -47,18 +47,18 @@ void	get_redir(t_input tokens, int *cmd_start, int *cmd_end, t_file *files)
 	init_files(files);
 	while (i < *cmd_end)
 	{
-		if (tokens.tokens[i].type >= REDIR_IN && tokens.tokens[i].type
-			<= REDIR_HEREDOC)
+		if (tok.tokens[i].type >= REDIR_IN && tok.tokens[i].type
+			<= HEREDOC)
 		{
 			if (i + 1 >= *cmd_end)
 				return (handle_error(INVALID_INPUT,
-						tokens.tokens[i].token, &tokens), (void)0);
-			handle_redir_type(tokens.tokens[i], tokens.tokens[i + 1], files);
-			if (tokens.tokens[i].type == REDIR_HEREDOC && !files->infile)
+						tok.tokens[i].token, &tok), (void)0);
+			redir_type(tok.tokens[i], tok.tokens[i + 1], files);
+			if (tok.tokens[i].type == HEREDOC && !files->infile)
 				return (handle_error(INVALID_INPUT,
-						tokens.tokens[i + 1].token, &tokens), (void)0);
-			tokens.tokens[i].type = END;
-			tokens.tokens[i + 1].type = END;
+						tok.tokens[i + 1].token, &tok), (void)0);
+			tok.tokens[i].type = END;
+			tok.tokens[i + 1].type = END;
 			i += 2;
 		}
 		else
@@ -66,36 +66,38 @@ void	get_redir(t_input tokens, int *cmd_start, int *cmd_end, t_file *files)
 	}
 }
 
-void	handle_redir(char *input_file, char *output_file, t_ttype out_type, t_input *tok)
+static void	handle_redir_out(char *out, t_input *tok, t_ttype out_type)
 {
 	int	fd;
-	int	flags;
 
-	if (input_file)
+	if (out_type == APPEND)
+		fd = open(out, O_CREAT | O_WRONLY | O_APPEND, 0644);
+	else
+		fd = open(out, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (fd == -1)
 	{
-		fd = open(input_file, O_RDONLY);
+		handle_error(INVALID_FILE, out, tok);
+		exit(1);
+	}
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
+}
+
+void	handle_redir(char *in, char *out, t_ttype out_type, t_input *tok)
+{
+	int	fd;
+
+	if (in)
+	{
+		fd = open(in, O_RDONLY);
 		if (fd == -1)
 		{
-			handle_error(INVALID_FILE, input_file, tok);
+			handle_error(INVALID_FILE, in, tok);
 			exit(1);
 		}
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
-	if (output_file)
-	{
-		flags = O_CREAT | O_WRONLY;
-		if (out_type == REDIR_APPEND)
-			flags |= O_APPEND;
-		else
-			flags |= O_TRUNC;
-		fd = open(output_file, flags, 0644);
-		if (fd == -1)
-		{
-			handle_error(INVALID_FILE, output_file, tok);
-			exit(1);
-		}
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
+	if (out)
+		handle_redir_out(out, tok, out_type);
 }

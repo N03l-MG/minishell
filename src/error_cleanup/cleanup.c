@@ -6,27 +6,11 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:03:24 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/03 16:22:33 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/05 12:36:16 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// static void	free_data(t_data *data)
-// {
-// 	if (!data)
-// 		return ;
-// 	if (data->cmd)
-// 	{
-// 		free(data->cmd);
-// 		data->cmd = NULL;
-// 	}
-// 	if (data->full_path)
-// 	{
-// 		free(data->full_path);
-// 		data->full_path = NULL;
-// 	}
-// }
 
 void	free_tokens(t_token **tokens, int count)
 {

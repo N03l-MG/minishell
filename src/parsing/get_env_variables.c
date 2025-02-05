@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env_variables.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:02:01 by jgraf             #+#    #+#             */
-/*   Updated: 2025/02/03 16:41:21 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/05 13:03:11 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,18 @@ static char	*append_var(t_input tok, char *old_input, char *input, int *i)
 	return (free(var_con), free(old_input), new_input);
 }
 
-static void	toggle_quotes(int *in_dquote, int *in_squote, char c)
+static int	toggle_quotes(int *in_dquote, int *in_squote, char *input, int *i)
 {
-	if (c == '"' && !*in_squote)
+	if (input[*i] == '$' && !*in_squote && !*in_dquote
+		&& (input[*i + 1] == '"' || input[*i + 1] == '\''))
+		(*i)++;
+	if (input[*i] == '$' && !*in_squote)
+		return (0);
+	if (input[*i] == '"' && !*in_squote)
 		*in_dquote = !*in_dquote;
-	if (c == '\'' && !*in_dquote)
+	if (input[*i] == '\'' && !*in_dquote)
 		*in_squote = !*in_squote;
+	return (1);
 }
 
 static char	*copy_until_var(char *old_input, char *input, int *i, bool res_stat)
@@ -78,12 +84,8 @@ static char	*copy_until_var(char *old_input, char *input, int *i, bool res_stat)
 	}
 	while (input[*i] != '\0')
 	{
-		if (input[*i] == '$' && !in_squote && !in_dquote
-			&& (input[*i + 1] == '"' || input[*i + 1] == '\''))
-			(*i)++;
-		if (input[*i] == '$' && !in_squote)
+		if (toggle_quotes(&in_dquote, &in_squote, input, i) == 0)
 			break ;
-		toggle_quotes(&in_dquote, &in_squote, input[*i]);
 		new_input[j++] = input[(*i)++];
 	}
 	return (new_input[j] = '\0', free(old_input), ft_strdup(new_input));

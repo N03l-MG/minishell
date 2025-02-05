@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:53:33 by jgraf             #+#    #+#             */
-/*   Updated: 2025/02/04 17:03:00 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/05 15:41:35 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,21 @@
 # define RED "\001\033[0;31m\002"
 # define RESET "\001\033[0m\002"
 
-# ifndef TEST
-#  define TEST false
-# endif
-
 // ================ PROTOTYPES =============== //
 
 // ---------------- Builtins ---------------- //
 void	change_dir(t_input *tok, char *path);
+void	handle_cd(t_input *tokens);
 void	builtin_echo(t_input *tok, int no_nl, int start_idx);
+void	handle_echo(t_input *tokens);
 void	print_working_dir(t_input *tok);
 void	print_envs(t_input *tok);
 int		my_getenv_index(char **env, char *name);
 char	**export_variable(char *var, t_input *tok);
 char	**export_variable_sep(char *var, char *con, t_input tok);
+void	handle_export(t_input *tokens);
 char	**unset_variable(char *var, t_input *tok);
+void	handle_unset(t_input *tokens);
 
 // ------------- Builtins Utils ------------- //
 bool	is_builtin(const char *cmd);

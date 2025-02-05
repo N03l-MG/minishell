@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 13:33:19 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/28 13:36:29 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/05 12:35:39 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	parse_part_1(int cmd_start, int cmd_end, t_input tokens)
 	{
 		if (tokens.tokens[i].type == REDIR_IN
 			|| tokens.tokens[i].type == REDIR_OUT
-			|| tokens.tokens[i].type == REDIR_APPEND)
+			|| tokens.tokens[i].type == APPEND)
 		{
 			i++;
 			continue ;
@@ -53,7 +53,7 @@ char	**parse_part_2(t_parse_args args)
 	{
 		if (args.tokens.tokens[i].type == REDIR_IN
 			|| args.tokens.tokens[i].type == REDIR_OUT
-			|| args.tokens.tokens[i].type == REDIR_APPEND)
+			|| args.tokens.tokens[i].type == APPEND)
 		{
 			i++;
 			continue ;
