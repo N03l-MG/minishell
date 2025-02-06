@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:39:02 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/05 12:36:08 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/06 13:01:44 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,5 @@ int	handle_error(t_error error, char *context, t_input *tok)
 void	handle_fatal_error(t_error error, char *context, t_input *tokens)
 {
 	handle_error(error, context, tokens);
-	clean_exit(tokens);
+	clean_exit(tokens, NULL);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:53:33 by jgraf             #+#    #+#             */
-/*   Updated: 2025/02/05 15:41:35 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/06 15:22:35 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 void	change_dir(t_input *tok, char *path);
 void	handle_cd(t_input *tokens);
 void	builtin_echo(t_input *tok, int no_nl, int start_idx);
-void	handle_echo(t_input *tokens);
+void	handle_echo(t_input *tokens, int start);
 void	print_working_dir(t_input *tok);
 void	print_envs(t_input *tok);
 int		my_getenv_index(char **env, char *name);
@@ -54,7 +54,7 @@ char	**replace_envvar(t_input tok, char *name, char *con);
 int		get_entry_number(char **environ);
 
 // --------------- Tokenizing --------------- //
-t_input	create_tokens(char *input, char **env_copy, int last_status);
+t_input	create_tokens(const char *input, char **env_copy, int last_status);
 t_ttype	get_token_type(const char *str);
 char	*ft_tokentrim(char *str);
 char	*extract_token(const char *input, int *i);
@@ -91,7 +91,7 @@ char	*ft_strndup(const char *s, size_t n);
 bool	is_special_char(char c);
 int		count_tokens(const char *input);
 void	build_path(char *full_path, const char *path, const char *cmd);
-char	*resolve_command_path(const char *command);
+char	*resolve_command_path(char **env, const char *command);
 void	free_check_char(char *str);
 
 // ----------- Errors and Cleanup ----------- //
@@ -100,6 +100,8 @@ int		handle_error(t_error error, char *context, t_input *tok);
 void	handle_fatal_error(t_error error, char *context, t_input *tokens);
 void	free_env(char **env);
 void	free_tokens(t_token **ptr, int x);
-void	clean_exit(t_input *tokens);
+void	free_cmd_array(char **cmd);
+void	cleanup_command(t_data *data);
+void	clean_exit(t_input *tokens, t_data *data);
 
 #endif

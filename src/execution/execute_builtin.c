@@ -6,19 +6,19 @@
 /*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 14:24:45 by jgraf             #+#    #+#             */
-/*   Updated: 2025/02/05 16:26:05 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/02/06 15:09:12 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_echo(t_input *tokens)
+void	handle_echo(t_input *tokens, int start)
 {
 	int	i;
 	int	j;
 	int	has_n_flag;
 
-	i = 1;
+	i = start + 1;
 	has_n_flag = 0;
 	if (tokens->token_count > 1)
 	{
@@ -93,11 +93,11 @@ int	execute_builtin(t_input *tokens)
 		return (1);
 	cmd = tokens->tokens[0].token;
 	if (ft_strcmp(cmd, "exit") == 0)
-		clean_exit(tokens);
+		clean_exit(tokens, NULL);
 	if (ft_strcmp(cmd, "cd") == 0)
 		handle_cd(tokens);
 	else if (ft_strcmp(cmd, "echo") == 0)
-		handle_echo(tokens);
+		handle_echo(tokens, 0);
 	else if (ft_strcmp(cmd, "pwd") == 0)
 		print_working_dir(tokens);
 	else if (ft_strcmp(cmd, "env") == 0)

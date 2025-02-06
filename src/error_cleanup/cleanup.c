@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:03:24 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/05 12:36:16 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/06 14:53:16 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	free_tokens(t_token **tokens, int count)
 	if (!tokens || !*tokens)
 		return ;
 	i = 0;
-	while (i < count)
+	while (i <= count)
 	{
 		if ((*tokens)[i].token)
 		{
@@ -95,7 +95,7 @@ static int	exit_atoi(char *str)
 	return ((int)(result * sign));
 }
 
-void	clean_exit(t_input *tokens)
+void	clean_exit(t_input *tokens, t_data *data)
 {
 	int	status;
 
@@ -113,5 +113,7 @@ void	clean_exit(t_input *tokens)
 		tokens->last_status += 256;
 	status = tokens->last_status;
 	free_input(tokens);
+	if (data != NULL)
+		cleanup_command(data);
 	exit(status);
 }

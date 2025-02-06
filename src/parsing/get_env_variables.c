@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 08:02:01 by jgraf             #+#    #+#             */
-/*   Updated: 2025/02/05 16:26:15 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/02/06 15:24:36 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,20 @@
 static char	*get_variable_content(t_input tok, char *input, int *i)
 {
 	char	result[4096];
+	char	*status_str;
+	char	*ret;
 	int		j;
 
 	j = 0;
 	(*i)++;
 	if (input[*i] == '?')
-		return ((*i)++, ft_strdup(ft_itoa(tok.last_status)));
+	{
+		(*i)++;
+		status_str = ft_itoa(tok.last_status);
+		ret = ft_strdup(status_str);
+		free(status_str);
+		return (ret);
+	}
 	if (!ft_isalnum(input[*i]) && input[*i] != '_')
 		return (ft_strdup("$"));
 	while (ft_isalnum(input[*i]) || input[*i] == '_')
@@ -34,6 +42,7 @@ static char	*get_variable_content(t_input tok, char *input, int *i)
 static char	*append_var(t_input tok, char *old_input, char *input, int *i)
 {
 	char	*new_input;
+	char	*newer_input;
 	char	*var_con;
 	int		j;
 
@@ -46,8 +55,9 @@ static char	*append_var(t_input tok, char *old_input, char *input, int *i)
 		j ++;
 	}
 	new_input[j] = '\0';
-	new_input = ft_strjoin(new_input, var_con);
-	return (free(var_con), free(old_input), new_input);
+	newer_input = ft_strjoin(new_input, var_con);
+	free(new_input);
+	return (free(var_con), free(old_input), newer_input);
 }
 
 static int	toggle_quotes(int *in_dquote, int *in_squote, char *input, int *i)

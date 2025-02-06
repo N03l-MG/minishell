@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+         #
+#    By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/03 10:07:27 by jgraf             #+#    #+#              #
-#    Updated: 2025/02/05 17:52:27 by nmonzon          ###   ########.fr        #
+#    Updated: 2025/02/06 14:53:02 by jgraf            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #					COMPILATION INFORMATION
 CC = cc
-FLAGS = -Wall -Wextra -Werror -Iinclude -g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -Iinclude
 NAME = minishell
 
 GREEN = \033[0;32m
@@ -50,8 +50,6 @@ OBJ = $(SRC_FILES:.c=.o)
 all: $(LIB) $(NAME)
 
 $(LIB):
-	rm -rf libft
-	git clone https://github.com/N03l-MG/libft.git libft
 	$(MAKE) -C libft
 
 $(NAME): $(OBJ) $(LIB)

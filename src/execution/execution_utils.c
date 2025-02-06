@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 13:33:19 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/05 12:35:39 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/06 13:55:05 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,9 @@ char	**parse_part_2(t_parse_args args)
 
 char	**parse_cmd(t_input tokens, int cmd_start, int cmd_end)
 {
-	char			**cmd;
-	int				valid_tokens;
+	char	**cmd;
+	int		valid_tokens;
+	char	**result;
 
 	valid_tokens = parse_part_1(cmd_start, cmd_end, tokens);
 	if (valid_tokens == 0)
@@ -81,10 +82,15 @@ char	**parse_cmd(t_input tokens, int cmd_start, int cmd_end)
 	cmd = malloc((valid_tokens + 1) * sizeof(char *));
 	if (!cmd)
 		return (NULL);
-	cmd = parse_part_2((t_parse_args){cmd_start, cmd_end, tokens,
+	result = parse_part_2((t_parse_args){cmd_start, cmd_end, tokens,
 			cmd, valid_tokens});
-	cmd[valid_tokens] = NULL;
-	return (cmd);
+	if (!result)
+	{
+		free_cmd_array(cmd);
+		return (NULL);
+	}
+	result[valid_tokens] = NULL;
+	return (result);
 }
 
 void	setup_pipe(int *pipe_fds)

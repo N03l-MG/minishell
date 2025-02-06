@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:04:38 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/05 16:24:04 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/02/06 12:38:35 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static char	*try_raw_path(const char *command)
 	return (ft_strdup(command));
 }
 
-char	*resolve_command_path(const char *command)
+char	*resolve_command_path(char **env, const char *command)
 {
 	char		*path_env;
 	char		*path;
@@ -60,7 +60,7 @@ char	*resolve_command_path(const char *command)
 
 	if (ft_strchr(command, '/'))
 		return (try_raw_path(command));
-	path_env = getenv("PATH");
+	path_env = my_getenv(env, "PATH");
 	if (path_env == NULL)
 		return (handle_error(ENV_NOT_FOUND, "PATH", NULL), NULL);
 	path = ft_strdup(path_env);

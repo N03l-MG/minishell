@@ -3,21 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:05:06 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/05 14:23:38 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/06 15:21:57 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_cmd_array(char **cmd)
+{
+	int	i;
+
+	if (!cmd)
+		return ;
+	i = 0;
+	while (cmd[i])
+	{
+		free(cmd[i]);
+		i++;
+	}
+	free(cmd);
+}
 
 static void	execute_child(t_data *data, char **env)
 {
 	if (is_builtin(data->cmd[0]))
 	{
 		if (ft_strcmp(data->cmd[0], "echo") == 0)
-			handle_echo(data->tokens);
+			handle_echo(data->tokens, data->cmd_start);
 		else if (ft_strcmp(data->cmd[0], "pwd") == 0)
 			print_working_dir(data->tokens);
 		else if (ft_strcmp(data->cmd[0], "env") == 0)
@@ -28,16 +43,10 @@ static void	execute_child(t_data *data, char **env)
 			handle_export(data->tokens);
 		else if (ft_strcmp(data->cmd[0], "unset") == 0)
 			handle_unset(data->tokens);
-		exit(data->tokens->last_status);
 	}
-	else
-	{
-		if (execve(data->full_path, data->cmd, env) == -1)
-		{
-			handle_error(EXEC_ERROR, data->cmd[0], data->tokens);
-			exit(data->tokens->last_status);
-		}
-	}
+	else if (execve(data->full_path, data->cmd, env) == -1)
+		handle_error(EXEC_ERROR, data->cmd[0], data->tokens);
+	clean_exit(data->tokens, data);
 }
 
 void	handle_child(t_data *data, int is_last, t_file *files, char **env)
