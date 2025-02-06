@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:03:49 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/06 15:23:26 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/02/06 20:02:40 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,32 @@ static void	execute_command(t_process_args args, t_file *files)
 	}
 }
 
+static void	handle_lone_redir(t_file files, t_process_args *args)
+{
+	int	fd;
+
+	if (files.infile)
+	{
+		fd = open(files.infile, O_RDONLY);
+		if (fd == -1)
+		{
+			handle_error(INVALID_FILE, files.infile, args->tokens);
+			return ;
+		}
+		close(fd);
+	}
+	if (files.outfile)
+	{
+		fd = open(files.outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd != -1)
+			close(fd);
+	}
+	if (files.infile)
+		free(files.infile);
+	if (files.outfile)
+		free(files.outfile);
+}
+
 static void	process_command(t_process_args *args)
 {
 	t_file	files;
@@ -62,11 +88,8 @@ static void	process_command(t_process_args *args)
 	args->data->cmd = parse_cmd(*args->tokens, args->cmd_start, args->cmd_end);
 	if (!args->data->cmd && (files.infile || files.outfile))
 	{
-		args->data->cmd = malloc(2 * sizeof(char *));
-		if (!args->data->cmd)
-			handle_fatal_error(MEMORY_ERROR, NULL, args->tokens);
-		args->data->cmd[0] = ft_strdup("cat");
-		args->data->cmd[1] = NULL;
+		handle_lone_redir(files, args);
+		return ;
 	}
 	if (args->data->cmd && args->data->cmd[0])
 	{

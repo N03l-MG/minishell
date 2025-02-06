@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:16:35 by jgraf             #+#    #+#             */
-/*   Updated: 2025/02/05 16:25:39 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/02/06 18:59:20 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,22 +44,25 @@ int	my_getenv_index(char **env, char *name)
 
 void	print_envs(t_input *tok)
 {
-	int	i;
+	int		i;
+	char	*equals_pos;
 
 	i = 0;
 	while (tok->env[i] != NULL)
 	{
-		printf("%s\n", tok->env[i]);
-		i ++;
+		equals_pos = ft_strchr(tok->env[i], '=');
+		if (equals_pos && *(equals_pos + 1) != '\0')
+			printf("%s\n", tok->env[i]);
+		i++;
 	}
 	tok->last_status = 0;
 }
 
-void	print_sorted_env(char **env)
+static void	sort_envs(char **env)
 {
+	int		len;
 	int		i;
 	int		j;
-	int		len;
 	char	*tmp;
 
 	len = 0;
@@ -79,7 +82,28 @@ void	print_sorted_env(char **env)
 			}
 		}
 	}
+}
+
+void	print_sorted_env(char **env)
+{
+	int		i;
+	char	*equals_pos;
+
+	sort_envs(env);
 	i = -1;
 	while (env[++i])
-		printf("%s\n", env[i]);
+	{
+		equals_pos = ft_strchr(env[i], '=');
+		if (equals_pos)
+		{
+			*equals_pos = '\0';
+			if (*(equals_pos + 1) != '\0')
+				printf("declare -x %s=\"%s\"\n", env[i], equals_pos + 1);
+			else
+				printf("declare -x %s\n", env[i]);
+			*equals_pos = '=';
+		}
+		else
+			printf("declare -x %s\n", env[i]);
+	}
 }

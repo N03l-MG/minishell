@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 21:24:57 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/01/27 11:05:11 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/06 16:47:04 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,29 @@ static void	cleanup_heredoc(char *filename, int fd)
 	}
 }
 
-static int	write_heredoc_content(int fd, char *delimiter)
+static int	write_heredoc_content(t_input *tok, int fd, char *delimiter)
 {
 	char	*line;
+	char	*line_exp;
 
 	while (true)
 	{
 		line = readline("heredoc> ");
-		if (!line || ft_strcmp(line, delimiter) == 0)
+		line_exp = replace_env(*tok, line);
+		if (line_exp == NULL)
+			handle_fatal_error(MEMORY_ERROR, NULL, tok);
+		if (!line_exp || ft_strcmp(line_exp, delimiter) == 0)
 		{
-			free(line);
+			free(line_exp);
 			return (0);
 		}
-		ft_putendl_fd(line, fd);
-		free(line);
+		ft_putendl_fd(line_exp, fd);
+		free(line_exp);
 	}
 	return (1);
 }
 
-char	*handle_heredoc(char *delimiter)
+char	*handle_heredoc(t_input *tok, char *delimiter)
 {
 	char	*filename;
 	int		fd;
@@ -73,7 +77,7 @@ char	*handle_heredoc(char *delimiter)
 		cleanup_heredoc(filename, -1);
 		return (NULL);
 	}
-	if (write_heredoc_content(fd, delimiter) != 0)
+	if (write_heredoc_content(tok, fd, delimiter) != 0)
 	{
 		cleanup_heredoc(filename, fd);
 		return (NULL);

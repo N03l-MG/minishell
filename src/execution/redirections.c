@@ -6,21 +6,23 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:03:47 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/04 14:24:43 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/02/06 19:40:39 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	redir_type(t_token token, t_token next, t_file *files)
+static void	redir_type(t_input *tok, t_token token, t_token next, t_file *files)
 {
 	if (token.type == REDIR_OUT || token.type == APPEND)
 	{
-		files->outfile = next.token;
+		files->outfile = ft_strdup(next.token);
+		if (!files->outfile)
+			handle_fatal_error(MEMORY_ERROR, NULL, tok);
 		files->out_type = token.type;
 	}
 	else if (token.type == REDIR_IN)
-		files->infile = next.token;
+		files->infile = ft_strdup(next.token);
 	else if (token.type == HEREDOC)
 	{
 		if (files->infile)
@@ -28,7 +30,7 @@ static void	redir_type(t_token token, t_token next, t_file *files)
 			unlink(files->infile);
 			free(files->infile);
 		}
-		files->infile = handle_heredoc(next.token);
+		files->infile = handle_heredoc(tok, next.token);
 	}
 }
 
@@ -53,7 +55,7 @@ void	get_redir(t_input tok, int *cmd_start, int *cmd_end, t_file *files)
 			if (i + 1 >= *cmd_end)
 				return (handle_error(INVALID_INPUT,
 						tok.tokens[i].token, &tok), (void)0);
-			redir_type(tok.tokens[i], tok.tokens[i + 1], files);
+			redir_type(&tok, tok.tokens[i], tok.tokens[i + 1], files);
 			if (tok.tokens[i].type == HEREDOC && !files->infile)
 				return (handle_error(INVALID_INPUT,
 						tok.tokens[i + 1].token, &tok), (void)0);

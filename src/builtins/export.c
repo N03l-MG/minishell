@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:46:50 by jgraf             #+#    #+#             */
-/*   Updated: 2025/02/05 16:25:41 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/02/06 20:03:56 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,15 @@ static char	*get_var_name(char *str)
 
 	i = 0;
 	len = 0;
-	while (str[len] != '=')
-	{
-		if (str[len] == '\0')
-			return (NULL);
-		len ++;
-	}
+	while (str[len] != '=' && str[len] != '\0')
+		len++;
 	var = malloc(len + 1);
 	if (var == NULL)
 		return (NULL);
-	while (str[i] != '=')
+	while (i < len)
 	{
 		var[i] = str[i];
-		i ++;
+		i++;
 	}
 	var[i] = '\0';
 	return (var);
@@ -54,7 +50,7 @@ static char	*get_var_con(char *str)
 	while (str[len] != '=')
 	{
 		if (str[len++] == '\0')
-			return (NULL);
+			return (ft_strdup(""));
 	}
 	i = len + 1;
 	len = 0;
@@ -74,29 +70,27 @@ char	**export_variable(char *var, t_input *tok)
 {
 	char	*var_name;
 	char	*var_con;
+	char	*temp;
 
 	var_name = get_var_name(var);
-	var_con = get_var_con(var);
-	if (var_con == NULL)
-		return (free_check_char(var_con), free_check_char(var_name), tok->env);
-	if (var_name == NULL)
-		return (free_check_char(var_name), free_check_char(var_con),
-			handle_fatal_error(MEMORY_ERROR, NULL, tok), tok->env);
+	if (ft_strchr(var, '='))
+		var_con = get_var_con(var);
+	else
+	{
+		temp = ft_strjoin(var, "=");
+		var_con = ft_strdup("");
+		free(temp);
+	}
 	if (var_name[0] == '\0')
 		return (free(var_name),
 			handle_error(INVALID_INPUT, var, tok), tok->env);
 	if (!check_valid_export_unset(var_name))
 		return (handle_error(INVALID_INPUT, var, tok), tok->env);
-	if (!var_con)
-		return (free(var_name),
-			handle_fatal_error(MEMORY_ERROR, NULL, tok), tok->env);
 	if (my_getenv(tok->env, var_name))
 		tok->env = replace_envvar(*tok, var_name, var_con);
 	else
 		tok->env = add_envvar(*tok, var_name, var_con);
-	free(var_name);
-	free(var_con);
-	return (tok->env);
+	return (free(var_name), free(var_con), tok->env);
 }
 
 char	**export_variable_sep(char *var, char *con, t_input tok)
