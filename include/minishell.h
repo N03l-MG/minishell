@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 07:53:33 by jgraf             #+#    #+#             */
-/*   Updated: 2025/02/06 15:22:35 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/02/06 16:46:09 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last);
 void	set_i(int *i, t_input *tokens);
 char	**parse_cmd(t_input tokens, int cmd_start, int cmd_end);
 void	setup_pipe(int *pipe_fds);
-char	*handle_heredoc(char *delimiter);
+char	*handle_heredoc(t_input *tok, char *delimiter);
 void	get_redir(t_input tokens, int *cmd_start, int *cmd_end, t_file *files);
 void	handle_redir(char *infile, char *outfile, t_ttype ttype, t_input *tok);
 

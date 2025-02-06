@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:05:06 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/02/06 15:21:57 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/02/06 21:49:04 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,10 @@ static void	execute_child(t_data *data, char **env)
 			handle_export(data->tokens);
 		else if (ft_strcmp(data->cmd[0], "unset") == 0)
 			handle_unset(data->tokens);
+		free_cmd_array(data->cmd);
+		if (data->full_path)
+			free(data->full_path);
+		exit(data->tokens->last_status);
 	}
 	else if (execve(data->full_path, data->cmd, env) == -1)
 		handle_error(EXEC_ERROR, data->cmd[0], data->tokens);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 14:24:45 by jgraf             #+#    #+#             */
-/*   Updated: 2025/02/06 15:09:12 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/02/06 21:26:09 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,28 +40,41 @@ void	handle_echo(t_input *tokens, int start)
 
 void	handle_cd(t_input *tokens)
 {
-	if (tokens->token_count == 1
-		|| ft_strcmp(tokens->tokens[1].token, "~") == 0)
+	int	i;
+
+	i = 0;
+	while (i < tokens->token_count
+		&& ft_strcmp(tokens->tokens[i].token, "cd") != 0)
+		i++;
+	if (i + 1 >= tokens->token_count
+		|| ft_strcmp(tokens->tokens[i + 1].token, "~") == 0)
 		change_dir(tokens, my_getenv(tokens->env, "HOME"));
-	else if (ft_strcmp(tokens->tokens[1].token, "-") == 0)
+	else if (ft_strcmp(tokens->tokens[i + 1].token, "-") == 0)
 		change_dir(tokens, my_getenv(tokens->env, "OLDPWD"));
 	else
-		change_dir(tokens, tokens->tokens[1].token);
+		change_dir(tokens, tokens->tokens[i + 1].token);
 }
 
 void	handle_export(t_input *tokens)
 {
 	int	i;
+	int	cmd_pos;
 
-	i = 1;
-	if (tokens->token_count > 1 && tokens->tokens[1].type == STRING)
+	i = 0;
+	while (i < tokens->token_count
+		&& ft_strcmp(tokens->tokens[i].token, "export") != 0)
+		i++;
+	cmd_pos = i;
+	if (cmd_pos + 1 < tokens->token_count
+		&& tokens->tokens[cmd_pos + 1].type == STRING)
 	{
-		while (tokens->tokens[i].token != NULL)
+		i = cmd_pos + 1;
+		while (i < tokens->token_count && tokens->tokens[i].token != NULL)
 		{
 			if (tokens->tokens[i].type != STRING)
 				break ;
 			tokens->env = export_variable(tokens->tokens[i].token, tokens);
-			i ++;
+			i++;
 		}
 	}
 	else
@@ -71,16 +84,23 @@ void	handle_export(t_input *tokens)
 void	handle_unset(t_input *tokens)
 {
 	int	i;
+	int	cmd_pos;
 
-	i = 1;
-	if (tokens->token_count > 1 && tokens->tokens[1].type == STRING)
+	i = 0;
+	while (i < tokens->token_count
+		&& ft_strcmp(tokens->tokens[i].token, "unset") != 0)
+		i++;
+	cmd_pos = i;
+	if (cmd_pos + 1 < tokens->token_count
+		&& tokens->tokens[cmd_pos + 1].type == STRING)
 	{
-		while (tokens->tokens[i].token != NULL)
+		i = cmd_pos + 1;
+		while (i < tokens->token_count && tokens->tokens[i].token != NULL)
 		{
 			if (tokens->tokens[i].type != STRING)
 				break ;
 			tokens->env = unset_variable(tokens->tokens[i].token, tokens);
-			i ++;
+			i++;
 		}
 	}
 }
