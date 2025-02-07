@@ -47,6 +47,8 @@ static int	write_heredoc_content(t_input *tok, int fd, char *delimiter)
 	while (true)
 	{
 		line = readline("heredoc> ");
+		if (line == NULL)
+			return (0);
 		line_exp = replace_env(*tok, line);
 		if (line_exp == NULL)
 			handle_fatal_error(MEMORY_ERROR, NULL, tok);

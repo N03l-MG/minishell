@@ -54,23 +54,14 @@ char	*extract_token(const char *input, int *i)
 
 static void	process_token(t_input *tok, int *index, const char *input, int *i)
 {
-	bool	skip_env_replace;
-
-	skip_env_replace = false;
-	if (*index > 0 && tok->tokens[*index - 1].type == HEREDOC)
-		skip_env_replace = true;
 	while (input[*i] == ' ' || input[*i] == '\t')
 		(*i)++;
 	if (!input[*i])
 		return ;
 	tok->tokens[*index].token = extract_token(input, i);
-	if (!skip_env_replace)
-		tok->tokens[*index].token
-			= replace_env(*tok, tok->tokens[*index].token);
-	tok->tokens[*index].type
-		= get_token_type(tok->tokens[*index].token);
-	tok->tokens[*index].token
-		= ft_tokentrim(tok->tokens[*index].token);
+	tok->tokens[*index].token = replace_env(*tok, tok->tokens[*index].token);
+	tok->tokens[*index].type = get_token_type(tok->tokens[*index].token);
+	tok->tokens[*index].token = ft_tokentrim(tok->tokens[*index].token);
 	(*index)++;
 }
 
