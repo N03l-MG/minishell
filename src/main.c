@@ -12,6 +12,9 @@
 
 #include "minishell.h"
 
+/// @brief: Main shell runtime loop. Parses, validates and executes input.
+/// @param: char **env_copy - runtime copy of the environment variables.
+/// @param: t_input *tokens - struct containing all the tokens and global data.
 static void	minishell(char **env_copy, t_input *tokens)
 {
 	char	*prompt;

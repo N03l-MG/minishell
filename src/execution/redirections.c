@@ -30,7 +30,7 @@ static void	redir_type(t_input *tok, t_token token, t_token next, t_file *files)
 			unlink(files->infile);
 			free(files->infile);
 		}
-		files->infile = handle_heredoc(tok, next.token);
+		files->infile = handle_heredoc(tok, next.raw_token);
 	}
 }
 

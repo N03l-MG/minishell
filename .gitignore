@@ -1,5 +1,5 @@
 
-####### GITIGNORE for 42 #######
+####### Generic Gitignore for Minishell #######
 
 # Objects
 *.o

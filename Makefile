@@ -10,13 +10,16 @@
 #                                                                              #
 # **************************************************************************** #
 
+# This project was done in collaboration with Jacob Graf (jgraf)
+# The work was split between us and the project would be nowhere without his help.
+# Check out his github: https://github.com/Cimex404
+
 #					COMPILATION INFORMATION
 CC = cc
-FLAGS = -Wall -Wextra -Werror -Iinclude
+FLAGS = -Wall -Wextra -Werror -Iinclude #-g -fsanitize=address
 NAME = minishell
 
 GREEN = \033[0;32m
-RED = \033[0;31m
 RESET = \033[0m
 
 #					SOURCE AND OBJECT FILES
@@ -73,6 +76,7 @@ fclean: clean
 
 re: fclean all
 
+# Some special rules I added for automatic object cleaning. Makes testing easier.
 .NOTPARALLEL:
 .FORCE:
 

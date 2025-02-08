@@ -26,6 +26,11 @@ void	free_tokens(t_token **tokens, int count)
 			free((*tokens)[i].token);
 			(*tokens)[i].token = NULL;
 		}
+		if ((*tokens)[i].raw_token)
+		{
+			free((*tokens)[i].raw_token);
+			(*tokens)[i].raw_token = NULL;
+		}
 		i++;
 	}
 	free(*tokens);
@@ -57,7 +62,7 @@ static void	free_input(t_input *tokens)
 		return ;
 	if (tokens->tokens)
 	{
-		free_tokens(&tokens->tokens, tokens->token_count);
+		free_tokens(&tokens->tokens, tokens->token_count - 1);
 		tokens->tokens = NULL;
 	}
 	if (tokens->env)

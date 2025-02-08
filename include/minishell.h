@@ -13,16 +13,21 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+// Contains all library includes (including my libft)
 # include "libs.h"
+// Contains all structs and enums used in the project
 # include "structs.h"
 
 // ================== REDEFS ================= //
+// For custom prompt and error colors
 
 # define TEAL "\001\033[0;36m\002"
 # define RED "\001\033[0;31m\002"
 # define RESET "\001\033[0m\002"
 
 // ================ PROTOTYPES =============== //
+// These are orgnaized by their rough purpose rather than their actual file
+// location. This is to make it easier to find functions based on what they do.
 
 // ---------------- Builtins ---------------- //
 void	change_dir(t_input *tok, char *path);

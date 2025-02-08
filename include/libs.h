@@ -13,15 +13,21 @@
 #ifndef LIBS_H
 # define LIBS_H
 
+// My libft with all of its functions plus my fprintf and get_next_line
 # include "../libft/include/libft.h"
+
+// Some C standard libraries
 # include <stdio.h>
 # include <signal.h>
 # include <errno.h>
 # include <string.h>
+
+// Libraries Specific to minishell related utilities
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/stat.h>
 
+// Linux compatibility for waitpid (minishell was developed on MacOS and Ubuntu)
 # ifdef __linux__
 #  include <wait.h>
 # endif

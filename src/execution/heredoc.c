@@ -42,23 +42,26 @@ static void	cleanup_heredoc(char *filename, int fd)
 static int	write_heredoc_content(t_input *tok, int fd, char *delimiter)
 {
 	char	*line;
-	char	*line_exp;
+	char	*expanded_line;
 
 	while (true)
 	{
 		line = readline("heredoc> ");
-		if (line == NULL)
+		if (!line)
 			return (0);
-		line_exp = replace_env(*tok, line);
-		if (line_exp == NULL)
-			handle_fatal_error(MEMORY_ERROR, NULL, tok);
-		if (!line_exp || ft_strcmp(line_exp, delimiter) == 0)
+		if (ft_strcmp(line, delimiter) == 0)
 		{
-			free(line_exp);
+			free(line);
 			return (0);
 		}
-		ft_putendl_fd(line_exp, fd);
-		free(line_exp);
+		expanded_line = replace_env(*tok, line);
+		if (!expanded_line)
+		{
+			free(line);
+			handle_fatal_error(MEMORY_ERROR, NULL, tok);
+		}
+		ft_putendl_fd(expanded_line, fd);
+		free(expanded_line);
 	}
 	return (1);
 }

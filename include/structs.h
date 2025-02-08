@@ -15,6 +15,7 @@
 
 // ================== ENUMS ================== //
 
+// Enum for the different token types
 typedef enum e_ttype
 {
 	STRING,
@@ -23,10 +24,10 @@ typedef enum e_ttype
 	REDIR_OUT,
 	APPEND,
 	HEREDOC,
-	SEMICOLON,
 	END
 }	t_ttype;
 
+// Enum used for error handling and lookup
 typedef enum e_error
 {
 	ENV_NOT_FOUND,
@@ -43,13 +44,18 @@ typedef enum e_error
 }	t_error;
 
 // ================= STRUCTS ================= //
+// Some structs (usually labled as "storage" structs) are solely
+// for contining variables. This is because of the 4 argument limit in the norm.
 
+// Struct for each token conataining its type and actual string
 typedef struct s_token
 {
 	t_ttype	type;
 	char	*token;
+	char	*raw_token;
 }	t_token;
 
+// Struct used for sotring the tokens for each input cycle and some global data
 typedef struct s_input
 {
 	char	**env;
@@ -59,6 +65,7 @@ typedef struct s_input
 	int		last_status;
 }	t_input;
 
+// Quote related storage struct
 typedef struct s_quote
 {
 	int	x;
@@ -67,6 +74,7 @@ typedef struct s_quote
 	int	squote;
 }	t_quote;
 
+// Execution related storage struct
 typedef struct s_data
 {
 	int		prev_fd;
@@ -78,6 +86,7 @@ typedef struct s_data
 	int		cmd_start;
 }	t_data;
 
+// Struct for file redirection
 typedef struct s_file
 {
 	char	*infile;
@@ -85,7 +94,7 @@ typedef struct s_file
 	t_ttype	out_type;
 }	t_file;
 
-// Outstandinly embarassing.
+// Command parsing data storage struct
 typedef struct s_parse_args
 {
 	int		cmd_start;
@@ -95,6 +104,7 @@ typedef struct s_parse_args
 	int		valid_tokens;
 }	t_parse_args;
 
+// Storage struct for process execution
 typedef struct s_process_args
 {
 	t_data	*data;

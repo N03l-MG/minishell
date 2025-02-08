@@ -59,8 +59,9 @@ static void	process_token(t_input *tok, int *index, const char *input, int *i)
 	if (!input[*i])
 		return ;
 	tok->tokens[*index].token = extract_token(input, i);
-	tok->tokens[*index].token = replace_env(*tok, tok->tokens[*index].token);
+	tok->tokens[*index].raw_token = ft_strdup(tok->tokens[*index].token);
 	tok->tokens[*index].type = get_token_type(tok->tokens[*index].token);
+	tok->tokens[*index].token = replace_env(*tok, tok->tokens[*index].token);
 	tok->tokens[*index].token = ft_tokentrim(tok->tokens[*index].token);
 	(*index)++;
 }
