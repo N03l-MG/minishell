@@ -19,7 +19,7 @@ Our goals for minishell were to fulfil the basic requirements. Due to the scale 
 	- `echo` - Prints a string or series of strings after it until a pipe or redirection. Can handle double and/or single quotes and environment variable expansion with `$`.
 	- `env` - Prints the environment variables in the current runtime, excluding those with an empty value.
 	- `export` - Takes one or multiple arguments to add variables to the current environment. Any invalid syntax will be ignored and when ran with no arguments it will print an alphabetically sorted list of all existing environment variables including those with an empty value.
-	- `unset` - Takes one or multiple arguments to removed variables from the current environment. Much like export, invalid syntax or variables are ignored. Running with no arguments will do nothing.
+	- `unset` - Takes one or multiple arguments to remove variables from the current environment. Much like export, invalid syntax or variables are ignored. Running with no arguments will do nothing.
 	- `exit` - Exits the shell. Can take numeric or string arguments. If ran with no arguments, it will exit the shell with the last status received from an execution. If ran with any number, it will exit with said number cast as an unsigned byte (0-255). If ran with any string, it will default exit with 255.
 - **Variable Expansion:**
 	Using `$` before a string will automatically replace it with its corresponding value if it is an existing environment variable. This works with double quotes as well, merging multiple strings as a single token and performing expansion, and works with single quotes doing the same but ignoring the expansion. The last exit status can also be accessed with `$?`.
@@ -53,7 +53,7 @@ The shell executable will be in the directory `$HOME/bin` and added automaticall
 NOTE: This installer does _not_ work for Fish! Additionally, the project depends on my [libft](https://github.com/N03l-MG/libft) which is added as a submodule.
 
 ## Tokenization Notes
-Most complex shell use an abstract syntax tree (AST) to store the user input, which allows for the handling of operation precedence. In our case however, due to the absence of logical ANDs or ORs, we did not see this as a necessary parsing method. Instead we parse sequentially into a dynamic array of tokens and execute in order. While inflexible, this is very performant and simple compared to other kinds of parsing and data structures.
+Most complex shells use an abstract syntax tree (AST) to store the user input, which allows for the handling of operation precedence. In our case however, due to the absence of logical ANDs or ORs, we did not see this as a necessary parsing method. Instead we parse sequentially into a dynamic array of tokens and execute in order. While inflexible, this is very performant and simple compared to other kinds of parsing and data structures.
 
 In the future I may go on to change the tokenization to use an AST and handle the bonus operators, but this depends entirely on my availability.
 
