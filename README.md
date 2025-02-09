@@ -49,7 +49,7 @@ git clone --recurse-submodules https://github.com/N03l-MG/minishell.git && cd mi
 ```
 
 The shell executable will be in the directory `$HOME/bin` and added automatically to your .bashrc or .zshrc. Simply run `minishell` to use it!
-
+DEPENDENCIES: c-compiler, make, git, bash (naturally).
 NOTE: This installer does _not_ work for Fish! Additionally, the project depends on my [libft](https://github.com/N03l-MG/libft) which is added as a submodule.
 
 ## Tokenization Notes
