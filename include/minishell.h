@@ -75,7 +75,7 @@ int		validate_input(t_input *tokens);
 void	execute_input(t_input *tokens);
 int		execute_builtin(t_input *tokens);
 void	handle_child(t_data *data, int is_last, t_file *files, char **env);
-void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last);
+void	handle_parent(t_data *data, int *prev_fd, int is_last);
 
 // ------------- Execution Utils ------------ //
 void	set_i(int *i, t_input *tokens);

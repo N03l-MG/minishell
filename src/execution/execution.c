@@ -41,7 +41,7 @@ static void	execute_command(t_process_args args, t_file *files)
 			files, args.tokens->env);
 	else
 	{
-		handle_parent(args.data, &args.data->prev_fd, pid,
+		handle_parent(args.data, &args.data->prev_fd,
 			(args.cmd_end == args.tokens->token_count));
 		if (args.cmd_end == args.tokens->token_count)
 		{

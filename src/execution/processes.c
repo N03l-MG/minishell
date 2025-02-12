@@ -75,7 +75,7 @@ void	handle_child(t_data *data, int is_last, t_file *files, char **env)
 	execute_child(data, env);
 }
 
-void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last)
+void	handle_parent(t_data *data, int *prev_fd, int is_last)
 {
 	if (!is_last)
 		close(data->pipe_fds[1]);
@@ -85,5 +85,4 @@ void	handle_parent(t_data *data, int *prev_fd, pid_t pid, int is_last)
 		*prev_fd = data->pipe_fds[0];
 	else
 		*prev_fd = -1;
-	waitpid(pid, &data->status, 0);
 }
