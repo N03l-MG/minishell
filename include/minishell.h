@@ -78,12 +78,12 @@ void	handle_child(t_data *data, int is_last, t_file *files, char **env);
 void	handle_parent(t_data *data, int *prev_fd, int is_last);
 
 // ------------- Execution Utils ------------ //
-void	set_i(int *i, t_input *tokens);
 char	**parse_cmd(t_input tokens, int cmd_start, int cmd_end);
 void	setup_pipe(int *pipe_fds);
 char	*handle_heredoc(t_input *tok, char *delimiter);
 void	get_redir(t_input tokens, int *cmd_start, int *cmd_end, t_file *files);
 void	handle_redir(char *infile, char *outfile, t_ttype ttype, t_input *tok);
+void	assign_final_status(t_data data, t_input *tokens);
 
 // ---------------- Signals ----------------- //
 void	sig_sigint(int sig);

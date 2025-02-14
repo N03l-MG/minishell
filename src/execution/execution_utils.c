@@ -12,13 +12,6 @@
 
 #include "minishell.h"
 
-void	set_i(int *i, t_input *tokens)
-{
-	while (*i < tokens->token_count
-		&& ft_strcmp(tokens->tokens[*i].token, "|") != 0)
-		(*i)++;
-}
-
 int	parse_part_1(int cmd_start, int cmd_end, t_input tokens)
 {
 	int	i;
@@ -97,4 +90,20 @@ void	setup_pipe(int *pipe_fds)
 {
 	if (pipe(pipe_fds) == -1)
 		handle_error(PIPE_ERROR, NULL, NULL);
+}
+
+void	assign_final_status(t_data data, t_input *tokens)
+{
+	int	j;
+	int	status;
+
+	j = -1;
+	while (++j < data.pid_count)
+	{
+		if (tokens->last_status == 127 || tokens->last_status == 126)
+			break ;
+		waitpid(data.pids[j], &status, 0);
+		if (WIFEXITED(status))
+			tokens->last_status = WEXITSTATUS(status);
+	}
 }

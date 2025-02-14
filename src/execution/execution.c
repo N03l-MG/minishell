@@ -41,16 +41,10 @@ static void	execute_command(t_process_args args, t_file *files)
 			files, args.tokens->env);
 	else
 	{
+		args.data->pids[args.data->pid_count++] = pid;
 		handle_parent(args.data, &args.data->prev_fd,
 			(args.cmd_end == args.tokens->token_count));
-		if (args.cmd_end == args.tokens->token_count)
-		{
-			waitpid(pid, &args.data->status, 0);
-			if (WIFSIGNALED(args.data->status))
-				args.tokens->last_status = 128 + WTERMSIG(args.data->status);
-			else if (WIFEXITED(args.data->status))
-				args.tokens->last_status = WEXITSTATUS(args.data->status);
-		}
+		args.tokens->last_status = 0;
 	}
 }
 
@@ -113,10 +107,11 @@ void	execute_input(t_input *tokens)
 	int		cmd_start;
 
 	i = 0;
-	if (tokens->tokens[0].token[0] == '\0')
-		return ;
 	data.prev_fd = -1;
 	data.tokens = tokens;
+	data.pid_count = 0;
+	if (tokens->tokens[0].token[0] == '\0')
+		return ;
 	while (i < tokens->token_count)
 	{
 		cmd_start = i;
@@ -127,4 +122,5 @@ void	execute_input(t_input *tokens)
 		if (i < tokens->token_count && tokens->tokens[i].type == PIPE)
 			i++;
 	}
+	assign_final_status(data, tokens);
 }

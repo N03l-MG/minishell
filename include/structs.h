@@ -84,6 +84,8 @@ typedef struct s_data
 	int		status;
 	t_input	*tokens;
 	int		cmd_start;
+	pid_t	pids[1024];
+	int		pid_count;
 }	t_data;
 
 // Struct for file redirection
