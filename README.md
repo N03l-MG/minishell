@@ -25,8 +25,8 @@ Our goals for minishell were to fulfil the basic requirements. Due to the scale 
 	Using `$` before a string will automatically replace it with its corresponding value if it is an existing environment variable. This works with double quotes as well, merging multiple strings as a single token and performing expansion, and works with single quotes doing the same but ignoring the expansion. The last exit status can also be accessed with `$?`.
 - **Signal Handling:**
 	Multiple signals are handled and update the status accordingly. 
-	- `Ctrl-\` has been disabled by default.
-	- `Crtl+D` types a null prompt which exits the shell. It can also be used to exit a heredoc early or close a pending cat, grep, wc or any other command dependent on input.
+	- `Ctrl+\` has been disabled by default.
+	- `Ctrl+D` types a null prompt which exits the shell. It can also be used to exit a heredoc early or close a pending cat, grep, wc or any other command dependent on input.
 	- `Ctrl+C` Interrupts a currently running process and skips the current prompt.
 - **Redirections:**
 	All types of redirections from Bash have been implemented and behave identically.
